@@ -1,0 +1,12 @@
+Package: pestr
+Title: Extracting data on pests from EPPO database
+Version: 0.0.0.9000
+Authors@R: person("Michal Jan", "Czyz", email = "m.czyz.j@gmail.com",
+  role = c("aut", "cre"))
+Description: Set of tools to extract data on pests from EPPO database and to
+    put them into tables with human readable format. Those function use EPPO 
+    databes API, thus you first need to free register on https://data.eppo.int
+Depends: R (>= 3.4.3)
+License: MIT
+Encoding: UTF-8
+LazyData: true
