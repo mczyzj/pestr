@@ -27,7 +27,7 @@ Checks if database file exist in directory, if it is outdated, and
 \description{
 \code{eppo_databse_check} checks if there is a file \emph{eppocodes.sqlite}
 and informs user if it is outdated and should be downloaded.
-\code{eppo.database.download} downloads database in SQLite format directly.
+\code{eppo_database_download} downloads database in SQLite format directly.
 \code{eppo_databse_connect} allows user to conect to SQLite database
 downloaded from EPPO Data Services.
 }
