@@ -1,3 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+devHelpers\
+eppocodes.sqlite
+eppocodes.zip
+tests\testthat\eppocodes.sqlite
