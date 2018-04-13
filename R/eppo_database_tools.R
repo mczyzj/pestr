@@ -73,6 +73,7 @@ eppo_database_connect <- function(filepath = getwd(),
 #'    names. Last data frame contains also column with preferred (binary),
 #'    codeland (two letter character with language code), and EPPOcode.
 #' @name eppo_organism_names
+#' @export
 NULL
 
 eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
