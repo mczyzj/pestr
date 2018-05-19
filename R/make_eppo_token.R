@@ -10,6 +10,7 @@
 #' \url{https://data.eppo.int/}
 #' @export
 create_eppo_token <- function(x) {
+  eppo_token <- NULL
   character_token <- as.character(x)
   if (grepl('[^a-f0-9]', character_token)) {
     warning('Token contains forbiden characters')

@@ -6,6 +6,7 @@
 #' from EPPO Data Services API for selected pest names.
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @import dplyr
 #' @docType package
 #' @name pestr

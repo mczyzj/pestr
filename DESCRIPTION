@@ -14,8 +14,10 @@ Imports:
     jsonlite,
     magrittr,
     RCurl,
+    rlang,
     RSQLite,
-    tidyr
+    tidyr,
+    utils
 Suggest:
     DT,
     testthat,

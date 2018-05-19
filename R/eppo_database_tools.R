@@ -1,6 +1,6 @@
 #' EPPO Data Services Database connection tools
 #'
-#' \code{eppo_databse_check} checks if there is a file \emph{eppocodes.sqlite}
+#' \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 #' and informs user if it is outdated and should be downloaded.
 #' \code{eppo_database_download} downloads database in SQLite format directly.
 #' \code{eppo_databse_connect} allows user to conect to SQLite database
@@ -33,8 +33,9 @@ eppo_database_check <- function(filepath = getwd(),
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
   zipfile <- paste0(filepath, '/', 'eppocodes.zip')
-  download.file('https://data.eppo.int/files/sqlite.zip', destfile = zipfile)
-  unzip(zipfile, overwrite = T)
+  utils::download.file('https://data.eppo.int/files/sqlite.zip',
+                       destfile = zipfile)
+  utils::unzip(zipfile, overwrite = T)
 }
 
 #' @rdname eppo_database
@@ -72,7 +73,7 @@ eppo_database_connect <- function(filepath = getwd(),
 #'    codeids, and data frame containing all names matching codeids of preffered
 #'    names. Last data frame contains also column with preferred (binary),
 #'    codeland (two letter character with language code), and EPPOcode.
-#' @name eppo_organism_names
+#' @name eppo_names_tables
 #' @export
 NULL
 
@@ -102,18 +103,18 @@ eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
                            FROM t_names WHERE codeid IN (',
                            paste(unique(names_in_DB$codeid), collapse = ', '),
                            ')')) %>%
-    filter(status == 'A')
+    filter(.data$status == 'A')
 
 
   return(list(exist_in_DB     = data.frame(names_in_DB),
               not_in_DB       = names_vector[test_list %>%
                                                sapply(length) == 0],
               pref_names = data.frame(all_names %>%
-                                        filter(preferred == 1) %>%
-                                        select(codeid, fullname) %>%
+                                        filter(.data$preferred == 1) %>%
+                                        select(.data$codeid, .data$fullname) %>%
                                         left_join(EPPOcodes, by = 'codeid')),
               all_associated_names  = data.frame(all_names %>%
-                                                   select(-status) %>%
+                                                   select(-.data$status) %>%
                                                    left_join(EPPOcodes,
                                                              by = 'codeid'))))
 }
