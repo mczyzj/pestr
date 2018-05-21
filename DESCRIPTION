@@ -11,9 +11,7 @@ Depends: R (>= 3.4.3)
 Imports:
     DBI,
     dplyr,
-    jsonlite,
     magrittr,
-    RCurl,
     rlang,
     RSQLite,
     tidyr,
