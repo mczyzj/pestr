@@ -4,4 +4,3 @@
 devHelpers\
 eppocodes.sqlite
 eppocodes.zip
-tests\testthat\eppocodes.sqlite
