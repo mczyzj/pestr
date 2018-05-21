@@ -25,8 +25,20 @@ test_that("Test that f creates correct long data frame", {
 })
 
 test_that("Test that f creates correct condensed data frame", {
-  testing_names <- eppo_names_tables('Xylella')
+  testing_names <- eppo_names_tables(c('Xylella', 'Cydia packardi'))
   result_names <- eppo_tabletools_names(testing_names)
-
+  cydia_test <- testing_names[[4]] %>%
+    dplyr::filter(eppocode == 'LASPPA', preferred == 0) %>%
+    dplyr::mutate(Other = ifelse(codelang == 'la', 'Synonym', 'Other languages')) %>%
+    dplyr::arrange(desc(Other), fullname) %>%
+    dplyr::select(fullname, Other) %>%
+    dplyr::group_by(Other) %>%
+    dplyr::mutate(Other_names = paste(fullname, collapse = ', ')) %>%
+    dplyr::mutate(Other_names = paste(Other, Other_names, sep = ': ')) %>%
+    dplyr::ungroup() %>%
+    dplyr::distinct(Other_names) %>%
+    dplyr::mutate(Other_names = paste(Other_names, collapse = '; ')) %>%
+    dplyr::distinct()
+  expect_equal(result_names[[2]][1,4], cydia_test[[1]])
 })
 

@@ -44,6 +44,7 @@ eppo_tabletools_names <- function(names_tables) {
 
   for (i in 1:length(temp_table$data)) {
     temp_table$data[[i]] %>%
+      arrange(desc(.data$Name_type), .data$Other_names) %>%
       group_by(.data$Name_type) %>%
       mutate(temp_names = paste(.data$Other_names, collapse = ', ')) %>%
       distinct(.data$temp_names) %>%
