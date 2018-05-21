@@ -1,6 +1,6 @@
 Package: pestr
 Title: Extracting Data on Pests from EPPO Database
-Version: 0.0.0.9000
+Version: 0.1.0.9000
 Authors@R: person("Michal Jan", "Czyz", email = "m.czyz.j@gmail.com",
   role = c("aut", "cre"))
 Description: Set of tools to extract data on pests from EPPO Data Services and
