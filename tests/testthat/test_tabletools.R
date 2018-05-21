@@ -24,3 +24,9 @@ test_that("Test that f creates correct long data frame", {
                c('Other languages', 'Preferred', 'Synonym'))
 })
 
+test_that("Test that f creates correct condensed data frame", {
+  testing_names <- eppo_names_tables('Xylella')
+  result_names <- eppo_tabletools_names(testing_names)
+
+})
+

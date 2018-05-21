@@ -11,3 +11,4 @@
 #' @docType package
 #' @name pestr
 NULL
+utils::globalVariables(c("."))
