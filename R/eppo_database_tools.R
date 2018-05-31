@@ -60,7 +60,10 @@ eppo_database_connect <- function(filepath = getwd(),
 #' \code{eppo_names_table} checks if string (names or parts of the names)
 #' provided by user match any name in the EPPO database. If strings match any
 #' name in database, data frame with all names matching codeid, as well as
-#' preferred (binary), language and EPPOcode is returned.
+#' preferred (binary), language and EPPOcode is returned. In order to use
+#' functions: \code{eppo_tabletools_names}, \code{eppo_tabletools_cat},
+#' \code{eppo_tabletools_hosts} or \code{eppo_tabletools_distribution}, you need
+#' to run this function first.
 #'
 #' @param names_vector A vector with organism names (or part of the names) to be
 #'    checked for existence in EPPO SQLite Database.

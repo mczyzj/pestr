@@ -12,14 +12,15 @@ Imports:
     DBI,
     dplyr,
     magrittr,
+    pryr,
     rlang,
     RSQLite,
     tidyr,
     utils
 Suggest:
     DT,
-    testthat,
-    roxygen2
+    roxygen2,
+    testthat
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
