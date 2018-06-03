@@ -65,3 +65,25 @@ eppo_tabletools_names <- function(names_tables) {
   return(list(long_table = preferred_table,
               compact_table))
 }
+
+#' @rdname eppo_tabletools
+#' @export
+eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
+  if (!all(class(token) == c('pestr_token', 'character'))) {
+    message('Your token argument is not of pestr_token class.
+            Please provide token created with create_eppo_token function')
+  }
+
+  eppocodes <- names_tables[[3]]$eppocode
+  hosts_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
+                    eppocodes, '/hosts', token)
+  setNames(vector("list", length(eppocodes)), eppocodes)
+  hosts_download <- lapply(hosts_urls,
+                           function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  names(hosts_download) <- eppocodes
+  hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x))
+  compact_table <- data.frame()
+  return(list(long_table = hosts_table,
+                compact_table))
+
+}

@@ -11,8 +11,10 @@ Depends: R (>= 3.3.0)
 Imports:
     DBI,
     dplyr,
+    jsonlite,
     magrittr,
     pryr,
+    RCurl,
     rlang,
     RSQLite,
     tidyr,

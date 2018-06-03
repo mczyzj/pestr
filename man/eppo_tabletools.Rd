@@ -3,9 +3,12 @@
 \name{eppo_tabletools}
 \alias{eppo_tabletools}
 \alias{eppo_tabletools_names}
+\alias{eppo_tabletools_hosts}
 \title{EPPO table manipulation tools}
 \usage{
 eppo_tabletools_names(names_tables)
+
+eppo_tabletools_hosts(names_tables, token = eppo_token)
 }
 \arguments{
 \item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}

@@ -1,7 +1,10 @@
 context("EPPO tabletools functions")
 library(pestr)
 
-test_that("Test that f returns correct structure from database", {
+#eppo_tabletools_names = names f
+#eppo_tabletools_hosts = hosts f
+
+test_that("Test that names f returns correct structure from database", {
   testing_names <- eppo_names_tables('Xylella')
   result_names <- eppo_tabletools_names(testing_names)
 
@@ -10,7 +13,7 @@ test_that("Test that f returns correct structure from database", {
   expect_is(result_names[[2]], 'data.frame')
 })
 
-test_that("Test that f creates correct long data frame", {
+test_that("Test that names f creates correct long data frame", {
   testing_names <- eppo_names_tables('Xylella')
   result_names <- eppo_tabletools_names(testing_names)
   expect_equal(sort(unique(result_names[[1]]$Preferred_name)),
@@ -24,7 +27,7 @@ test_that("Test that f creates correct long data frame", {
                c('Other languages', 'Preferred', 'Synonym'))
 })
 
-test_that("Test that f creates correct condensed data frame", {
+test_that("Test that names f creates correct condensed data frame", {
   testing_names <- eppo_names_tables(c('Xylella', 'Cydia packardi'))
   result_names <- eppo_tabletools_names(testing_names)
   cydia_test <- testing_names[[4]] %>%
@@ -42,3 +45,39 @@ test_that("Test that f creates correct condensed data frame", {
   expect_equal(result_names[[2]][1,4], cydia_test[[1]])
 })
 
+test_that("Test that hosts f checks if parsed arguments are of proper class", {
+  testing_names <- eppo_names_tables('Xylella')
+  create_eppo_token('abc123')
+  expect_message(eppo_tabletools_hosts(testing_names, 'some chars'),
+                 'Please provide token created with create_eppo_token function')
+})
+
+test_that("Test that hosts f returns correct structure from database", {
+  testing_names <- eppo_names_tables('Xylella')
+  create_eppo_token('abc123')
+  result_hosts <- eppo_tabletools_hosts(testing_names)
+
+  expect_is(result_hosts, 'list')
+  expect_is(result_hosts[[1]], 'list')
+  expect_is(result_hosts[[2]], 'data.frame')
+})
+
+test_that("Test that hosts f works correctly", {
+  testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta'))
+  create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94')
+  eppocodes <- testing_names[[3]]$eppocode
+  api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
+  testing_urls <- paste0(api_url,
+                         eppocodes,
+                         '/hosts',
+                         eppo_token)
+  testing_hosts <- lapply(testing_urls,
+                          function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  names(testing_hosts) <- eppocodes
+
+  expect_equal(eppo_tabletools_hosts(testing_names, eppo_token)[[1]],
+               lapply(testing_hosts, dplyr::bind_rows))
+
+#  testing_names <- eppo_names_tables('Cydia packardi')
+#  expect_equal()
+})
