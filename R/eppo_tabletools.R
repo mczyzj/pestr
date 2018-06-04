@@ -72,18 +72,46 @@ eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
   if (!all(class(token) == c('pestr_token', 'character'))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
-  }
-
+  } else {
+  #create reusable variables to access EPPO API
   eppocodes <- names_tables[[3]]$eppocode
   hosts_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
                     eppocodes, '/hosts', token)
-  setNames(vector("list", length(eppocodes)), eppocodes)
+  #download data on hosts from EPPO and strore them as list, name each list
+  #element with eppocode and bind sub-tables by rows to store them as long table
   hosts_download <- lapply(hosts_urls,
                            function(x) jsonlite::fromJSON(RCurl::getURL(x)))
   names(hosts_download) <- eppocodes
-  hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x))
-  compact_table <- data.frame()
+  hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x)) %>%
+    bind_rows(.id = 'pest_code') %>%
+    rename(host_eppocode = eppocode, eppocode = pest_code)
+  #use data from long table to create compact table with all host in one cell
+  #per each pest
+  nested_hosts <- hosts_table %>%
+    select(labelclass, full_name, eppocode) %>%
+    tidyr::nest(labelclass, full_name)
+
+  hostIndex <- setNames(vector("list", length(eppocodes)), eppocodes)
+
+  #names(hostIndex) <- eppocodes
+  #
+  for (i in 1:length(nested_hosts$data)) {
+    nested_hosts$data[[i]] %>%
+      group_by(labelclass) %>%
+      mutate(temp_names = paste(full_name, collapse = ', ')) %>%
+      distinct(temp_names) %>%
+      mutate(temp_names = paste(labelclass, temp_names, sep = ': ')) %>%
+      ungroup() %>%
+      select(temp_names) %>%
+      transmute(hosts = paste(temp_names, collapse = '; ')) %>%
+      distinct() -> hostIndex[i]
+  }
+
+  compact_table <- lapply(hostIndex,
+         function(hosts) data.frame(hosts, stringsAsFactors = FALSE)) %>%
+    bind_rows(.id = 'eppocode')
+
   return(list(long_table = hosts_table,
                 compact_table))
-
+}
 }

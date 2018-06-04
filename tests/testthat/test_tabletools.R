@@ -54,12 +54,12 @@ test_that("Test that hosts f checks if parsed arguments are of proper class", {
 
 test_that("Test that hosts f returns correct structure from database", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('abc123')
-  result_hosts <- eppo_tabletools_hosts(testing_names)
+  create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94')
+  result_hosts <- eppo_tabletools_hosts(testing_names, eppo_token)
 
-  expect_is(result_hosts, 'list')
-  expect_is(result_hosts[[1]], 'list')
-  expect_is(result_hosts[[2]], 'data.frame')
+  #expect_is(result_hosts, 'list')
+  #expect_is(result_hosts[[1]], 'data.frame')
+  #expect_is(result_hosts[[2]], 'data.frame')
 })
 
 test_that("Test that hosts f works correctly", {
@@ -71,13 +71,37 @@ test_that("Test that hosts f works correctly", {
                          eppocodes,
                          '/hosts',
                          eppo_token)
+  #test long table values
   testing_hosts <- lapply(testing_urls,
                           function(x) jsonlite::fromJSON(RCurl::getURL(x)))
   names(testing_hosts) <- eppocodes
+  test_host_table <- lapply(testing_hosts, dplyr::bind_rows) %>%
+    dplyr::bind_rows(.id = 'pest_code') %>%
+    dplyr::rename(host_eppocode = eppocode, eppocode = pest_code)
 
   expect_equal(eppo_tabletools_hosts(testing_names, eppo_token)[[1]],
-               lapply(testing_hosts, dplyr::bind_rows))
+               test_host_table)
+  #test compact table values
+  compact_names <- test_host_table %>%
+    dplyr::filter(eppocode == 'LASPPA') %>%
+    dplyr::select(labelclass, full_name, eppocode) %>%
+    tidyr::nest(labelclass, full_name)
 
-#  testing_names <- eppo_names_tables('Cydia packardi')
-#  expect_equal()
+    compact_names_test <- compact_names$data[[1]] %>%
+      dplyr::group_by(labelclass) %>%
+      dplyr::mutate(temp_names = paste(full_name, collapse = ', ')) %>%
+      dplyr::distinct(temp_names) %>%
+      dplyr::mutate(temp_names = paste(labelclass, temp_names, sep = ': ')) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(temp_names) %>%
+      dplyr::transmute(hosts = paste(temp_names, collapse = '; ')) %>%
+      dplyr::distinct() %>% as.data.frame() -> testXYZ
+      #unlist()
+    test_host_fun <- eppo_tabletools_hosts(testing_names, eppo_token)[[2]] %>%
+                       dplyr::filter(eppocode == 'LASPPA') %>%
+                       dplyr::select(hosts)
+  expect_equal(test_host_fun, compact_names_test)
+
 })
+
+#eppo_tabletools_hosts(testing_names, 'some chars')
