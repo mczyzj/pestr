@@ -68,7 +68,7 @@ eppo_tabletools_names <- function(names_tables) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
+eppo_tabletools_hosts <- function(names_tables, token) {
   if (!all(class(token) == c('pestr_token', 'character'))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
@@ -84,12 +84,12 @@ eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
   names(hosts_download) <- eppocodes
   hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x)) %>%
     bind_rows(.id = 'pest_code') %>%
-    rename(host_eppocode = eppocode, eppocode = pest_code)
+    rename(host_eppocode = .data$eppocode, eppocode = .data$pest_code)
   #use data from long table to create compact table with all host in one cell
   #per each pest
   nested_hosts <- hosts_table %>%
-    select(labelclass, full_name, eppocode) %>%
-    tidyr::nest(labelclass, full_name)
+    select(.data$labelclass, .data$full_name, .data$eppocode) %>%
+    tidyr::nest(.data$labelclass, .data$full_name)
 
   hostIndex <- setNames(vector("list", length(eppocodes)), eppocodes)
 
@@ -97,13 +97,16 @@ eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
   #
   for (i in 1:length(nested_hosts$data)) {
     nested_hosts$data[[i]] %>%
-      group_by(labelclass) %>%
-      mutate(temp_names = paste(full_name, collapse = ', ')) %>%
-      distinct(temp_names) %>%
-      mutate(temp_names = paste(labelclass, temp_names, sep = ': ')) %>%
+      group_by(.data$labelclass) %>%
+      mutate(temp_names = paste(.data$full_name,
+                                collapse = ', ')) %>%
+      distinct(.data$temp_names) %>%
+      mutate(temp_names = paste(.data$labelclass,
+                                .data$temp_names,
+                                sep = ': ')) %>%
       ungroup() %>%
-      select(temp_names) %>%
-      transmute(hosts = paste(temp_names, collapse = '; ')) %>%
+      select(.data$temp_names) %>%
+      transmute(hosts = paste(.data$temp_names, collapse = '; ')) %>%
       distinct() -> hostIndex[i]
   }
 
@@ -113,5 +116,19 @@ eppo_tabletools_hosts <- function(names_tables, token = eppo_token) {
 
   return(list(long_table = hosts_table,
                 compact_table))
+}
+}
+
+#' @rdname eppo_tabletools
+#' @export
+eppo_tabletools_cat <- function(names_tables, token) {
+  if (!all(class(token) == c('pestr_token', 'character'))) {
+    message('Your token argument is not of pestr_token class.
+            Please provide token created with create_eppo_token function')
+  } else {
+    cat_table <- data.frame()
+    compact_table <- data.frame()
+    return(list(long_table = cat_table,
+              compact_table))
 }
 }

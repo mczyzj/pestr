@@ -53,16 +53,20 @@ test_that("Test that hosts f checks if parsed arguments are of proper class", {
 })
 
 test_that("Test that hosts f returns correct structure from database", {
+  skip_on_travis()
+  skip_on_cran()
   testing_names <- eppo_names_tables('Xylella')
   create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94')
   result_hosts <- eppo_tabletools_hosts(testing_names, eppo_token)
 
-  #expect_is(result_hosts, 'list')
-  #expect_is(result_hosts[[1]], 'data.frame')
-  #expect_is(result_hosts[[2]], 'data.frame')
+  expect_is(result_hosts, 'list')
+  expect_is(result_hosts[[1]], 'data.frame')
+  expect_is(result_hosts[[2]], 'data.frame')
 })
 
 test_that("Test that hosts f works correctly", {
+  skip_on_travis()
+  skip_on_cran()
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta'))
   create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94')
   eppocodes <- testing_names[[3]]$eppocode
@@ -105,3 +109,23 @@ test_that("Test that hosts f works correctly", {
 })
 
 #eppo_tabletools_hosts(testing_names, 'some chars')
+test_that("Test that categorization f checks if parsed arguments
+          are of proper class", {
+  testing_names <- eppo_names_tables('Xylella')
+  create_eppo_token('abc123')
+  expect_message(eppo_tabletools_cat(testing_names, 'some chars'),
+                 'Please provide token created with create_eppo_token function')
+})
+
+test_that("Test that categorization f returns correct structure
+          from database", {
+  skip_on_travis()
+  skip_on_cran()
+  testing_names <- eppo_names_tables('Xylella')
+  create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94')
+  result_cat <- eppo_tabletools_cat(testing_names, eppo_token)
+
+  expect_is(result_cat, 'list')
+  expect_is(result_cat[[1]], 'data.frame')
+  expect_is(result_cat[[2]], 'data.frame')
+})
