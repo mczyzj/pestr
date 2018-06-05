@@ -6,6 +6,7 @@
 \alias{eppo_tabletools_hosts}
 \alias{eppo_tabletools_cat}
 \alias{eppo_tabletools_taxo}
+\alias{eppo_tabletools_distri}
 \title{EPPO table manipulation tools}
 \usage{
 eppo_tabletools_names(names_tables)
@@ -15,6 +16,8 @@ eppo_tabletools_hosts(names_tables, token)
 eppo_tabletools_cat(names_tables, token)
 
 eppo_tabletools_taxo(names_tables, token)
+
+eppo_tabletools_distri(names_tables)
 }
 \arguments{
 \item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}
@@ -33,6 +36,8 @@ List containing two data frames. First is in a long format, and each
 and synonyms -- of pests.
 \code{eppo_tabletools_hosts} creates table with hosts of pests.
 \code{eppo_tabletools_cat} creates table with categorization of pests.
-\code{eppo_tabletools_taxo} creates table with taxonomy of pests. All
-functions return both long tables and compact, human friendly tables
+\code{eppo_tabletools_taxo} creates table with taxonomy of pests.
+\code{eppo_tabletools_distri} creates table with distribution of pests --
+continent and country level only.
+All functions return both long tables and compact, human friendly tables
 }

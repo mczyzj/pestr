@@ -7,7 +7,6 @@ R functions to deal with EPPO API
 
 TODO:
 
-* Web scraping
 * Full table functions
 * Code comments
 * Encrypt token to make more test using TravisCI

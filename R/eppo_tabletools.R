@@ -4,8 +4,10 @@
 #' and synonyms -- of pests.
 #' \code{eppo_tabletools_hosts} creates table with hosts of pests.
 #' \code{eppo_tabletools_cat} creates table with categorization of pests.
-#' \code{eppo_tabletools_taxo} creates table with taxonomy of pests. All
-#' functions return both long tables and compact, human friendly tables
+#' \code{eppo_tabletools_taxo} creates table with taxonomy of pests.
+#' \code{eppo_tabletools_distri} creates table with distribution of pests --
+#' continent and country level only.
+#' All functions return both long tables and compact, human friendly tables
 #'
 #' @param names_tables A list of tables created via {\link{eppo_names_tables}}.
 #' @param token An object containing EPPO API token created via
@@ -208,17 +210,53 @@ eppo_tabletools_taxo <- function(names_tables, token) {
                                 taxonomy = rep(NA, length(eppocodes)),
                                 stringsAsFactors = FALSE)
 
-    for (i in 1:length(eppocodes)) {
-      if(taxo_tables[[i]][1, 3] == 'Animalia') {
-        compact_table[i, 2] <- taxo_tables[[i]][2, 3]
-      } else if (taxo_tables[[i]][1, 3] == 'Viruses and viroids'){
-        compact_table[i, 2] <- taxo_tables[[i]][2, 3]
+    for (j in 1:length(taxo_tables)) {
+      if(taxo_tables[[j]][1, 3] == 'Animalia') {
+        compact_table[j, 2] <- taxo_tables[[j]][2, 3]
+      } else if (taxo_tables[[j]][1, 3] == 'Viruses and viroids'){
+        compact_table[j, 2] <- taxo_tables[[j]][2, 3]
       } else {
-        compact_table[i, 2] <- taxo_tables[[i]][1, 3]
+        compact_table[j, 2] <- taxo_tables[[j]][1, 3]
       }
     }
 
     return(list(list_table = taxo_tables,
                 compact_table = compact_table))
   }
+}
+
+#' @rdname eppo_tabletools
+#' @export
+eppo_tabletools_distri <- function(names_tables) {
+  eppocodes <- names_tables[[3]]$eppocode
+  distri_urls <- paste0('https://gd.eppo.int/taxon/',
+                       eppocodes,'/download/distribution_csv')
+
+  distri_lists <- setNames(vector("list", length(eppocodes)), eppocodes)
+  for (i in 1:length(distri_lists)) {
+    distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
+                                     header = T, stringsAsFactors = F)
+  }
+
+  compact_table <- distri_lists %>%
+    bind_rows(.id = 'eppocode') %>%
+    filter(!grepl("Absent", .data$Status)) %>%
+    select('eppocode', 'continent', 'country') %>%
+    group_by(.data$eppocode, .data$continent) %>%
+    mutate(distribution = paste(.data$country,
+                                collapse = ', ')) %>%
+    mutate(distribution = paste(.data$continent,
+                                .data$distribution,
+                                sep = ': ')) %>%
+    ungroup() %>%
+    select('eppocode', 'distribution') %>%
+    distinct() %>%
+    group_by(.data$eppocode) %>%
+    mutate(distribution = paste(.data$distribution,
+                                       collapse = '; ')) %>%
+    distinct() %>%
+    ungroup()
+
+  return(list(list_table = distri_lists,
+         compact_table = compact_table))
 }

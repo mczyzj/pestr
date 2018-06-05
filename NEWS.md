@@ -1,3 +1,10 @@
+# pestr 0.5.0
+
+## New functions
+
+* `eppo_tabletools_distri` -- takes result of `eppo_names_tables()` and creates
+table with distribution of pests (continent and country level)
+
 # pestr 0.4.0
 
 ## New functions

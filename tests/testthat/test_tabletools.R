@@ -196,12 +196,12 @@ test_that("Test that taxonomy f returns correct structure
           from database", {
   skip_on_travis()
   skip_on_cran()
-  #skip('Only for use locally with proper token.') #comment out to test
+  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
                                      'Plasmodiophora brassicae', 'Abies alba',
                                      'Pantoea stewartii', 'Globodera pallida',
                                      'Phialophora cinerescens'))
-  create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94') #provide token before using test
+  create_eppo_token('') #provide token before using test
   result_taxo <- eppo_tabletools_taxo(testing_names, eppo_token)
 
   expect_is(result_taxo, 'list')
@@ -243,4 +243,54 @@ test_that("Test that categorization f works correctly", {
   skip('not working see coment above')
   expect_equal(taxo_tables[[2]], test_taxon_names)
 
+})
+
+test_that("Test that distribution f returns correct structure
+          from database", {
+  testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
+                                       'Plasmodiophora brassicae', 'Abies alba',
+                                       'Pantoea stewartii', 'Globodera pallida',
+                                       'Phialophora cinerescens'))
+  result_distri <- eppo_tabletools_distri(testing_names)
+
+  expect_is(result_distri, 'list')
+  expect_is(result_distri[[1]], 'list')
+  expect_is(result_distri[[2]], 'data.frame')
+})
+
+test_that("Test that distribution f returns correct values
+          from database", {
+  testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
+                                       'Plasmodiophora brassicae', 'Abies alba',
+                                       'Pantoea stewartii', 'Globodera pallida',
+                                       'Phialophora cinerescens'))
+  eppocodes <- testing_names[[3]]$eppocode
+  distri_urls <- paste0('https://gd.eppo.int/taxon/',
+                         eppocodes,'/download/distribution_csv')
+
+  distri_lists <- setNames(vector("list", length(eppocodes)), eppocodes)
+  for (i in 1:length(distri_lists)) {
+       distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
+                                               header = T, stringsAsFactors = F)
+  }
+
+  testing_distri_df <- distri_lists %>%
+    dplyr::bind_rows(.id = 'eppocode') %>%
+    dplyr::filter(!grepl("Absent", Status)) %>%
+    dplyr::select('eppocode', 'continent', 'country') %>%
+    dplyr::group_by(eppocode, continent) %>%
+    dplyr::mutate(distribution = paste(country, collapse = ', ')) %>%
+    dplyr::mutate(distribution = paste(continent, distribution, sep = ': ')) %>%
+    dplyr::ungroup() %>%
+    dplyr::select('eppocode', 'distribution') %>%
+    dplyr::distinct() %>%
+    dplyr::group_by(eppocode) %>%
+    dplyr::mutate(distribution = paste(distribution, collapse = '; ')) %>%
+    dplyr::distinct() %>%
+    dplyr::ungroup()
+
+  testing_distri <- eppo_tabletools_distri(testing_names)
+
+  expect_equal(testing_distri[[1]], distri_lists)
+  expect_equal(testing_distri[[2]], testing_distri_df)
 })
