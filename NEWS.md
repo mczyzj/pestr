@@ -1,3 +1,15 @@
+# pestr 0.4.0
+
+## New functions
+
+* `eppo_tabletools_cat()` -- takes result of `eppo_names_tables()` and creates
+table with categorization of each pest
+
+## Bug fixes
+
+Fixed bug in `eppo_tabletools_hosts()` function. Now it returns correct values,
+in compact table.
+
 # pestr 0.3.0
 
 ## New functions
@@ -32,3 +44,6 @@ table with proper formating (names etc.) on long or condensed format
 * Code comments
 * Additional tests (?)
 * Encrypt EPPO API token so test could run also on TravisCI
+* Test for `eppo_tabletools_taxo` breaks -- function does not return correct
+values (namely tabel has only one row with NA) for compact table, however when
+run manually everything is O.K.
