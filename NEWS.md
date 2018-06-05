@@ -1,3 +1,10 @@
+# pestr 0.3.0
+
+## New functions
+
+* `eppo_tabletools_cat()` -- takes result of `eppo_names_tables()` and creates
+table with categorization of each pest
+
 # pestr 0.2.0
 
 ## New functions

@@ -1,6 +1,8 @@
 #' EPPO table manipulation tools
 #'
 #' \code{eppo_tabletools_names} creates table with names.
+#' \code{eppo_tabletools_hosts} creates table with hosts.
+#' \code{eppo_tabletools_cat} creates table with categorization.
 #'
 #' @param names_tables A list of tables created via {\link{eppo_names_tables}}.
 #' @param token An object containing EPPO API token created via
@@ -95,8 +97,8 @@ eppo_tabletools_hosts <- function(names_tables, token) {
 
   hostIndex <- setNames(vector("list", length(eppocodes)), eppocodes)
 
-  #names(hostIndex) <- eppocodes
-  #
+  #loop over long table to colapse all the host names into one string,
+  #separeted with names of host categories (major, minor, incidental etc.)
   for (i in 1:length(nested_hosts$data)) {
     nested_hosts$data[[i]] %>%
       group_by(.data$labelclass) %>%
@@ -128,9 +130,63 @@ eppo_tabletools_cat <- function(names_tables, token) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
   } else {
-    cat_table <- data.frame()
-    compact_table <- data.frame()
-    return(list(long_table = cat_table,
+    #create reusable variables to access EPPO API
+    eppocodes <- names_tables[[3]]$eppocode
+    hosts_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
+                        eppocodes, '/categorization', token)
+    #download data on categorization from EPPO and strore them as list of tables
+    cat_list_table <- lapply(hosts_urls,
+                             function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+    cat_tables <- setNames(vector("list", length(eppocodes)), eppocodes)
+    #exchange empty lists with NA tables -> NEEDS REFACTORING!!!
+    for (i in 1:length(cat_list_table)) {
+      if (rlang::is_empty(cat_list_table[[i]]) == TRUE) {
+        cat_tables[[i]] <- data.frame(nomcontinent = NA,
+                                      isocode = NA,
+                                      country = NA,
+                                      qlist = NA,
+                                      qlistlabel = NA,
+                                      yr_add = NA,
+                                      yr_del = NA,
+                                      yr_trans = NA)
+      } else {
+        cat_tables[[i]] <- cat_list_table[[i]]
+      }
+    }
+
+    #collapse values in list tables into whole categorization in one cell
+    #for each of the pests
+
+    compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
+
+    for (i in 1: length(cat_tables)) {
+      compact_list[[i]] <- cat_tables[[i]] %>%
+        tidyr::nest(.data$nomcontinent) %>%
+        mutate(categorization = paste0(.data$country, ': ',
+                                       .data$qlistlabel, ': ',
+                                       'add/del/trans: ',
+                                       .data$yr_add, '/',
+                                       .data$yr_del, '/',
+                                       .data$yr_trans)) %>%
+        tidyr::unnest() %>%
+        select('nomcontinent', 'categorization') %>%
+        group_by(.data$nomcontinent) %>%
+        mutate(categorization = paste(.data$categorization,
+                                      collapse = '; ')) %>%
+        distinct(.data$categorization) %>%
+        mutate(categorization = paste(.data$nomcontinent,
+                                      .data$categorization,
+                                      sep = ': ')) %>%
+        ungroup() %>%
+        transmute(categorization = paste(.data$categorization,
+                                         collapse = ' | ')) %>%
+        distinct()
+    }
+
+    compact_table <- compact_list %>%
+      bind_rows(.id = 'eppocode')
+
+    return(list(list_table = cat_tables,
               compact_table))
 }
 }

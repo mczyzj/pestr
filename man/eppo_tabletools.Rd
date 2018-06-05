@@ -27,4 +27,6 @@ List containing two data frames. First is in a long format, and each
 }
 \description{
 \code{eppo_tabletools_names} creates table with names.
+\code{eppo_tabletools_hosts} creates table with hosts.
+\code{eppo_tabletools_cat} creates table with categorization.
 }

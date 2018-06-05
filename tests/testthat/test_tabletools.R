@@ -125,6 +125,71 @@ test_that("Test that categorization f returns correct structure
   result_cat <- eppo_tabletools_cat(testing_names, eppo_token)
 
   expect_is(result_cat, 'list')
-  expect_is(result_cat[[1]], 'data.frame')
+  expect_is(result_cat[[1]], 'list')
   expect_is(result_cat[[2]], 'data.frame')
+})
+
+test_that("Test that cat f works correctly", {
+  skip_on_travis()
+  skip_on_cran()
+  skip('Only for use locally with proper token.') #comment out to test
+  testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
+                                       'Abies alba'))
+  create_eppo_token('') #provide token before using test
+  eppocodes <- testing_names[[3]]$eppocode
+  api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
+  testing_urls <- paste0(api_url,
+                         eppocodes,
+                         '/categorization',
+                         eppo_token)
+  #test long table values
+  testing_cat <- lapply(testing_urls,
+                          function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  names(testing_cat) <- eppocodes
+  transformed_cat <- setNames(vector("list", length(eppocodes)), eppocodes)
+  #exchange empty lists with NA tables
+  for (i in 1:length(testing_cat)) {
+    if (rlang::is_empty(testing_cat[[i]]) == TRUE) {
+      transformed_cat[[i]] <- data.frame(nomcontinent = NA,
+                                         isocode = NA,
+                                         country = NA,
+                                         qlist = NA,
+                                         qlistlabel = NA,
+                                         yr_add = NA,
+                                         yr_del = NA,
+                                         yr_trans = NA)
+    } else {
+      transformed_cat[[i]] <- testing_cat[[i]]
+    }
+  }
+
+  expect_equal(eppo_tabletools_cat(testing_names, eppo_token)[[1]], testing_cat)
+
+
+
+  #test compact table values
+
+  compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
+
+  for (i in 1: length(transformed_cat)) {
+    compact_list[[i]] <- transformed_cat[[i]] %>%
+      tidyr::nest(nomcontinent) %>%
+      dplyr::mutate(categorization = paste0(country, ': ', qlistlabel, ': ',
+                                            'add/del/trans: ',
+                                            yr_add, '/', yr_del, '/', yr_trans)) %>%
+      tidyr::unnest() %>%
+      dplyr::select('nomcontinent', 'categorization') %>%
+      dplyr::group_by(nomcontinent) %>%
+      dplyr::mutate(categorization = paste(categorization, collapse = '; ')) %>%
+      dplyr::distinct(categorization) %>%
+      dplyr::mutate(categorization = paste(nomcontinent, categorization, sep = ': ')) %>%
+      dplyr::ungroup() %>%
+      dplyr::transmute(categorization = paste(categorization, collapse = ' | ')) %>%
+      dplyr::distinct()
+  }
+
+  compact_table <- bind_rows(compact_list, .id = 'eppocode')
+
+  expect_equal(eppo_tabletools_cat(testing_names, eppo_token)[[2]],
+               compact_table)
 })
