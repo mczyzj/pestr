@@ -1,3 +1,10 @@
+# pestr 0.2.0
+
+## New functions
+
+* `eppo_tabletools_hosts()` -- takes result of `eppo_names_tables()` and creates
+table with hosts of each pest
+
 # pestr 0.1.0
 
 ## New functions
@@ -17,3 +24,4 @@ table with proper formating (names etc.) on long or condensed format
 * Documentation
 * Code comments
 * Additional tests (?)
+* Encrypt EPPO API token so test could run also on TravisCI
