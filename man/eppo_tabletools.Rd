@@ -9,12 +9,15 @@
 \usage{
 eppo_tabletools_names(names_tables)
 
-eppo_tabletools_hosts(names_tables, token = eppo_token)
+eppo_tabletools_hosts(names_tables, token)
 
-eppo_tabletools_cat(names_tables, token = eppo_token)
+eppo_tabletools_cat(names_tables, token)
 }
 \arguments{
 \item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}
+
+\item{token}{An object containing EPPO API token created via
+{\link{create_eppo_token}}.}
 }
 \value{
 List containing two data frames. First is in a long format, and each

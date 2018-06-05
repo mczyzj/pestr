@@ -3,6 +3,8 @@
 #' \code{eppo_tabletools_names} creates table with names.
 #'
 #' @param names_tables A list of tables created via {\link{eppo_names_tables}}.
+#' @param token An object containing EPPO API token created via
+#'   {\link{create_eppo_token}}.
 #' @return List containing two data frames. First is in a long format, and each
 #'   row contains synonyms and names in other languages in respect to preferred
 #'   names. The second data frame contains coerced synonyms and other names to
