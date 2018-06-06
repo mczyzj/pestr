@@ -22,13 +22,15 @@ eppo_table_full <- function(names_vector, sqlConnection, token) {
   } else {
 
   names_tables <- eppo_names_tables(names_vector, sqlConnnection)
-
+  #create intermediate table for names, hosts, categorization, taxonomy
+  #and distribution
   compact_names  <- eppo_tabletools_names(names_tables)
   compact_hosts  <- eppo_tabletools_hosts(names_tables, token)
   compact_cat    <- eppo_tabletools_cat(names_tables, token)
   compact_taxo   <- eppo_tabletools_taxo(names_tables, token)
   compact_distri <- eppo_tabletools_distri(names_tables)
-
+  #full join all the intermediate compact tables into one table
+  #each row is one pest
   full_table  <-  compact_names[[2]] %>%
     dplyr::full_join(compact_hosts[[2]], by = 'eppocode') %>%
     dplyr::full_join(compact_cat[[2]], by = 'eppocode') %>%
