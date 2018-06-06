@@ -61,3 +61,6 @@ table with proper formating (names etc.) on long or condensed format
 * Test for `eppo_tabletools_taxo` breaks -- function does not return correct
 values (namely tabel has only one row with NA) for compact table, however when
 run manually everything is O.K.
+* Probably updating sample SQLite db for test will solve above issue
+* Hosts and categorization paste some values double into string, small fix is
+needed for both test and function
