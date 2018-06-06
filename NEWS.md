@@ -1,3 +1,10 @@
+# pestr 0.6.0
+
+## New functions
+
+* `eppo_table_full` -- joins comapct results of `eppo_names_tables()` and 
+`eppo_tabletools` into one compact table
+
 # pestr 0.5.0
 
 ## New functions
