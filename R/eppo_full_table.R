@@ -21,7 +21,7 @@ eppo_table_full <- function(names_vector, sqlConnection, token) {
             Please provide token created with create_eppo_token function')
   } else {
 
-  names_tables <- eppo_names_tables(names_vector, sqlConnnection)
+  names_tables <- eppo_names_tables(names_vector, sqlConnection)
   #create intermediate table for names, hosts, categorization, taxonomy
   #and distribution
   compact_names  <- eppo_tabletools_names(names_tables)
