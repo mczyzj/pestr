@@ -4,3 +4,5 @@
 devHelpers\
 eppocodesDEV.sqlite
 eppocodes.zip
+/*.csv
+.~lock.test_the_table.csv#
