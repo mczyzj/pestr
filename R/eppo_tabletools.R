@@ -98,12 +98,15 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #take long table and colapse all the host names into one string,
   #separeted with names of host categories (major, minor, incidental etc.)
   compact_table <- hosts_table %>%
-    group_by(.data$eppocode) %>%
+    group_by(.data$eppocode, .data$labelclass) %>%
     select('labelclass', 'full_name') %>%
     mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
-    mutate(hosts = paste(.data$labelclass, ': ', .data$hosts, collapse = '; ')) %>%
+    mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
     ungroup() %>%
     select('eppocode', 'hosts') %>%
+    distinct() %>%
+    group_by(.data$eppocode) %>%
+    mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
     distinct()
 
   return(list(long_table = hosts_table,

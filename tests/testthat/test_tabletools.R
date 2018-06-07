@@ -87,12 +87,15 @@ test_that("Test that hosts f works correctly", {
                test_host_table)
   #test compact table values
   compact_names_test <- test_host_table %>%
-    dplyr::group_by(eppocode) %>%
+    dplyr::group_by(.data$eppocode, .data$labelclass) %>%
     dplyr::select('labelclass', 'full_name') %>%
-    dplyr::mutate(hosts = paste(full_name, collapse = ', ')) %>%
-    dplyr::mutate(hosts = paste(labelclass, ': ', hosts, collapse = '; ')) %>%
+    dplyr::mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
+    dplyr::mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
     dplyr::ungroup() %>%
     dplyr::select('eppocode', 'hosts') %>%
+    dplyr::distinct() %>%
+    dplyr::group_by(.data$eppocode) %>%
+    dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
     dplyr::distinct()
 
     test_host_fun <- eppo_tabletools_hosts(testing_names, eppo_token)[[2]]

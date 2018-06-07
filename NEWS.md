@@ -1,9 +1,15 @@
+# pestr 0.6.2
+
+## Fixed issues
+
+`eppo_tabletools_hosts` correctly joins hosts names with their classes
+
 # pestr 0.6.1
 
 ## Fixed issues
 
-`eppo_tabletools_distri` correctly joins countries with names, without repeating
-names of some countries (e.g. USA, China)
+`eppo_tabletools_distri` correctly joins countries with continents, without
+repeating names of some countries (e.g. USA, China)
 
 
 # pestr 0.6.0

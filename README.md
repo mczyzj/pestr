@@ -31,5 +31,4 @@ TODO:
 * Code comments
 * Encrypt token to make more test using TravisCI
 * Update sample SQLite db
-* Fix nown issues (up to date list in NEWS.rd)
 * Add Vignettes
