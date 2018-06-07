@@ -243,6 +243,7 @@ eppo_tabletools_distri <- function(names_tables) {
     filter(!grepl("Absent", .data$Status)) %>%
     select('eppocode', 'continent', 'country') %>%
     group_by(.data$eppocode, .data$continent) %>%
+    distinct() %>%
     mutate(distribution = paste(.data$country,
                                 collapse = ', ')) %>%
     mutate(distribution = paste(.data$continent,

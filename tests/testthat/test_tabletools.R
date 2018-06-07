@@ -279,6 +279,7 @@ test_that("Test that distribution f returns correct values
     dplyr::filter(!grepl("Absent", Status)) %>%
     dplyr::select('eppocode', 'continent', 'country') %>%
     dplyr::group_by(eppocode, continent) %>%
+    dplyr::distinct() %>%
     dplyr::mutate(distribution = paste(country, collapse = ', ')) %>%
     dplyr::mutate(distribution = paste(continent, distribution, sep = ': ')) %>%
     dplyr::ungroup() %>%
