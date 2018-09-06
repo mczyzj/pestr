@@ -19,9 +19,10 @@ NULL
 #' @export
 eppo_database_check <- function(filepath = getwd(),
                                 filename = 'eppocodes.sqlite') {
-  dbfile <- paste0(filepath, '/', filename)
-#  dbfile <- cat(filepath, filename,
-#                sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
+#  dbfile <- paste0(filepath, '/', filename)
+  dbfile <- capture.output(cat(filepath, filename,
+                               sep = ifelse(.Platform$OS.type == 'windows',
+                                            "\\", "/")))
   if (file.exists(dbfile)) {
          message(cat('EPPO database was downloaded on ',
                      as.character(file.info(dbfile)$mtime)))
@@ -34,9 +35,10 @@ eppo_database_check <- function(filepath = getwd(),
 #' @rdname eppo_database
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
-  zipfile <- paste0(filepath, '/', 'eppocodes.zip')
-#  zipfile <- cat(filepath, 'eppocodes.zip',
-#                 sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
+#  zipfile <- paste0(filepath, '/', 'eppocodes.zip')
+  zipfile <- capture.output(cat(filepath, 'eppocodes.zip',
+                                sep = ifelse(.Platform$OS.type == 'windows',
+                                             "\\", "/")))
   utils::download.file('https://data.eppo.int/files/sqlite.zip',
                        destfile = zipfile)
   utils::unzip(zipfile, overwrite = T)
@@ -46,9 +48,10 @@ eppo_database_download <- function(filepath = getwd()) {
 #' @export
 eppo_database_connect <- function(filepath = getwd(),
                                   filename = 'eppocodes.sqlite') {
-  dbfile <- paste0(filepath, '/', filename)
-  #  dbfile <- cat(filepath, filename,
-  #                sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
+#  dbfile <- paste0(filepath, '/', filename)
+  dbfile <- capture.output(cat(filepath, filename,
+                               sep = ifelse(.Platform$OS.type == 'windows',
+                                            "\\", "/")))
   if (file.exists(dbfile)) {
     message('Your connection to EPPO SQLite database is etablished')
     return(RSQLite::dbConnect(RSQLite::SQLite(), dbname = dbfile))
