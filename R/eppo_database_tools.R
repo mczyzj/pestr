@@ -3,6 +3,9 @@
 #' \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 #' and informs user if it is outdated and should be downloaded.
 #' \code{eppo_database_download} downloads database in SQLite format directly.
+#' This might not work under Windows, since it automatically unzips the file,
+#' which is currently unavilable in Windows. When using Windows, please
+#' download the file directly from EPPO Data Services.
 #' \code{eppo_databse_connect} allows user to conect to SQLite database
 #' downloaded from EPPO Data Services.
 #'
@@ -41,7 +44,11 @@ eppo_database_download <- function(filepath = getwd()) {
                                              "\\", "/")))
   utils::download.file('https://data.eppo.int/files/sqlite.zip',
                        destfile = zipfile)
-  utils::unzip(zipfile, overwrite = T)
+  if(.Platform$OS.type == 'windows') {
+    message('Please unzip sqllite.zip file manually to your working directory')
+  } else {
+    utils::unzip(zipfile, overwrite = T)
+  }
 }
 
 #' @rdname eppo_database
