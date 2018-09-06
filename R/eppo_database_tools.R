@@ -3,6 +3,9 @@
 #' \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 #' and informs user if it is outdated and should be downloaded.
 #' \code{eppo_database_download} downloads database in SQLite format directly.
+#' This might not work under Windows, since it automatically unzips the file,
+#' which is currently unavilable in Windows. When using Windows, please
+#' download the file directly from EPPO Data Services.
 #' \code{eppo_databse_connect} allows user to conect to SQLite database
 #' downloaded from EPPO Data Services.
 #'
@@ -20,8 +23,8 @@ NULL
 eppo_database_check <- function(filepath = getwd(),
                                 filename = 'eppocodes.sqlite') {
 #  dbfile <- paste0(filepath, '/', filename)
-  dbfile <- capture.output(cat(filepath, filename,
-                               sep = ifelse(.Platform$OS.type == 'windows',
+  dbfile <- utils::capture.output(cat(filepath, filename,
+                                  sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
   if (file.exists(dbfile)) {
          message(cat('EPPO database was downloaded on ',
@@ -36,12 +39,16 @@ eppo_database_check <- function(filepath = getwd(),
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
 #  zipfile <- paste0(filepath, '/', 'eppocodes.zip')
-  zipfile <- capture.output(cat(filepath, 'eppocodes.zip',
-                                sep = ifelse(.Platform$OS.type == 'windows',
+  zipfile <- utils::capture.output(cat(filepath, 'eppocodes.zip',
+                                   sep = ifelse(.Platform$OS.type == 'windows',
                                              "\\", "/")))
   utils::download.file('https://data.eppo.int/files/sqlite.zip',
                        destfile = zipfile)
-  utils::unzip(zipfile, overwrite = T)
+  if(.Platform$OS.type == 'windows') {
+    message('Please unzip sqllite.zip file manually to your working directory')
+  } else {
+    utils::unzip(zipfile, overwrite = T)
+  }
 }
 
 #' @rdname eppo_database
@@ -49,8 +56,8 @@ eppo_database_download <- function(filepath = getwd()) {
 eppo_database_connect <- function(filepath = getwd(),
                                   filename = 'eppocodes.sqlite') {
 #  dbfile <- paste0(filepath, '/', filename)
-  dbfile <- capture.output(cat(filepath, filename,
-                               sep = ifelse(.Platform$OS.type == 'windows',
+  dbfile <- utils::capture.output(cat(filepath, filename,
+                                  sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
   if (file.exists(dbfile)) {
     message('Your connection to EPPO SQLite database is etablished')

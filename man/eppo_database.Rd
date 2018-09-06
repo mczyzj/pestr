@@ -11,7 +11,8 @@ eppo_database_check(filepath = getwd(), filename = "eppocodes.sqlite")
 
 eppo_database_download(filepath = getwd())
 
-eppo_database_connect(filepath = getwd(), filename = "eppocodes.sqlite")
+eppo_database_connect(filepath = getwd(),
+  filename = "eppocodes.sqlite")
 }
 \arguments{
 \item{filepath}{A string with path where eppocodes.sqlite file is stored. By
@@ -28,6 +29,9 @@ Checks if database file exist in directory, if it is outdated, and
 \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 and informs user if it is outdated and should be downloaded.
 \code{eppo_database_download} downloads database in SQLite format directly.
+This might not work under Windows, since it automatically unzips the file,
+which is currently unavilable in Windows. When using Windows, please
+download the file directly from EPPO Data Services.
 \code{eppo_databse_connect} allows user to conect to SQLite database
 downloaded from EPPO Data Services.
 }
