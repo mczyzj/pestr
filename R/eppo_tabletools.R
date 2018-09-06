@@ -90,11 +90,20 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #element with eppocode and bind sub-tables by rows to store them as long table
   hosts_download <- lapply(hosts_urls,
                            function(x) jsonlite::fromJSON(RCurl::getURL(x)))
-  names(hosts_download) <- eppocodes
-  hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x)) %>%
-    bind_rows(.id = 'pest_code') %>%
-    rename(host_eppocode = .data$eppocode, eppocode = .data$pest_code)
-
+  #exchange empty lists with NA table to avoid empty host table
+    if(is.null(unlist(hosts_download))) {
+       host_table <- data.frame(eppocode = eppocodes,
+                     codeid              = names_tables[[3]]$codeid,
+                     host_eppocode       = NA,
+                     idclass             = NA,
+                     labelclass          = NA,
+                     full_name           = NA)
+    } else {
+      names(hosts_download) <- eppocodes
+      hosts_table <- lapply(hosts_download, function(x) dplyr::bind_rows(x)) %>%
+        bind_rows(.id = 'pest_code') %>%
+        rename(host_eppocode = .data$eppocode, eppocode = .data$pest_code)
+    }
   #take long table and colapse all the host names into one string,
   #separeted with names of host categories (major, minor, incidental etc.)
   compact_table <- hosts_table %>%
@@ -133,13 +142,13 @@ eppo_tabletools_cat <- function(names_tables, token) {
     for (i in 1:length(cat_list_table)) {
       if (rlang::is_empty(cat_list_table[[i]]) == TRUE) {
         cat_tables[[i]] <- data.frame(nomcontinent = NA,
-                                      isocode = NA,
-                                      country = NA,
-                                      qlist = NA,
-                                      qlistlabel = NA,
-                                      yr_add = NA,
-                                      yr_del = NA,
-                                      yr_trans = NA)
+                                      isocode      = NA,
+                                      country      = NA,
+                                      qlist        = NA,
+                                      qlistlabel   = NA,
+                                      yr_add       = NA,
+                                      yr_del       = NA,
+                                      yr_trans     = NA)
       } else {
         cat_tables[[i]] <- cat_list_table[[i]]
       }
