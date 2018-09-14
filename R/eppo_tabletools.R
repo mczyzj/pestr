@@ -92,7 +92,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
                            function(x) jsonlite::fromJSON(RCurl::getURL(x)))
   #exchange empty lists with NA table to avoid empty host table
     if(is.null(unlist(hosts_download))) {
-       host_table <- data.frame(eppocode = eppocodes,
+       hosts_table <- data.frame(eppocode = eppocodes,
                      codeid              = names_tables[[3]]$codeid,
                      host_eppocode       = NA,
                      idclass             = NA,
