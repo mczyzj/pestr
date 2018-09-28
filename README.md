@@ -4,6 +4,16 @@ extract data from EPPO Data Services. Before you start using it you should
 register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token
 to access REST API.
 
+## Installation
+
+You can install and use **pestr** development version from GitHub as follows:
+
+```r
+devtools::install_github("mczyzj/pestr")
+```
+
+## Overview and Usage
+
 Package include function that allow you to download SQLite database
 (around 12 MB) that is needed for extracting eppocodes that are used in other
 functions from this package. Function included in `eppo_tabletools` group return
@@ -32,3 +42,5 @@ TODO:
 * Encrypt token to make more test using TravisCI
 * Update sample SQLite db
 * Add Vignettes
+* Internationalization
+* Connection to pestrPRA
