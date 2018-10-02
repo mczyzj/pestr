@@ -1,0 +1,142 @@
+---
+title: "pestr Workflow"
+author: "Michal Jan Czyz"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pestr Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library('kableExtra')
+library('dplyr')
+```
+
+# Overview
+
+**pestr** Package is a set of functions and wrappers that allow painless and quick data retrival on pests and their hosts from [EPPO Data Services](https://data.eppo.int/). First of all it allow extraction of *scientific names* of organisms (and viruses), as well as *synonyms* and *common names* from SQLite database. Second, there are three functions in the package that use REST API to extract data on *hosts*, *categorization* and *taxonomy*. Lastly there is a function that downloads \*.csv files containing information on organisms (and viruses) distribution. Besides functions that deal with extracting data and putting them into tables in *human friendly* format, we support users with functions that allow to download (**this function works correctly only under LINUX**) and connect to file with SQLite database.
+
+# Example workflow
+
+## Setting up `token` and connecting to **SQLite db**
+In order to start working with **pestr** package, you should register yourself (*free of charge*) for EPPO Data Services. Than you should run `create_eppo_token()` which will store your credentials in variable used by functions that connect to REST API.
+
+```{r eval = F}
+create_eppo_token('<<your_EPPO_token')
+```
+
+Next if you are on **Linux** operating system you can run `eppo_database_download()` function that will automaticaly download archive with the **SQLite** file and extract it into your working directory (you can overide default behaviour).
+
+```{r eval = F}
+eppo_database_download()
+```
+
+When working on **Windows** you can manually [download](https://data.eppo.int/files/sqlite.zip) and extract the archive.
+
+Last step of setup is to connect to database file, which can be easily done with `eppo_database_connect` function.
+
+```{r eval = F}
+eppo_SQLite <- eppo_database_connect()
+```
+
+After this three short steps you are ready to go.
+
+## Extracting tables with scientific, common and synonym names
+
+
+
+```{r eval = F}
+
+
+# Create vector of names that you are looking for
+pest <- 'Helicoverpa zea'
+# Connect to SQLite db
+
+
+# Get pest names, in result you will have list containing 4 tables:
+# df with names that are present in EPPO, df with names that are not present
+# df with preferred names and eppo codes, df with all associated names to 
+# eppocode from third df. It is necessary to run it before other 'tabletools'
+# functions since it extracts eppocodes that are used later by other functions
+pest_names <- eppo_names_tables(pest, eppo_SQLite)
+
+# Get pest categorization - as result you will get list with two elements:
+# first is a list of tables for each eppocode one categorisation table, second
+# element is single df with categorization for each eppocode condensed to single
+# cell.
+pests_cat <- eppo_tabletools_cat(pest_names, eppo_token)
+cat_table <-  pests_cat[[1]][[1]] %>% select(c('nomcontinent','country','qlistlabel','yr_add'))
+
+# Get pest hosts as a result you get two tables: firs is long table with all data 
+# for all pests combined. In second hosts are combined into single cell for each
+# eppocode
+pests_hosts <- eppo_tabletools_hosts(pest_names, eppo_token)
+
+hosts_tab <- pests_hosts[[1]] %>% rename(Comments = labelclass) %>% mutate(Presence_PRA_area = 'Yes/no',Reference = '@eppo2018') %>% select(full_name, Presence_PRA_area, Comments, Reference)
+
+# Get taxonomy. Also list with two elements. Fist is a list of taxonomy tables
+# for each pest; second is table with 'main category' of each eppocode 
+pests_taxo <- eppo_tabletools_taxo(pest_names, eppo_token)
+
+# Get distributions of hosts. As a result a two element list. First one contains
+# df of distribution for each eppocode, second contains single cell of distribution
+# for each eppocode.
+pest_distri <- eppo_tabletools_distri(pest_names)
+
+# Whole condensed table in one shot:
+eppo_fulltable <- eppo_table_full(pests, eppo_SQLite, eppo_token)
+eppo_fulltable2 <- eppo_table_full(pests2, eppo_SQLite, eppo_token)
+
+kable(pests_cat[[1]] %>%
+        bind_rows(.id = 'eppocode')) %>%
+  kable_styling(full_width = T, bootstrap_options = c('striped', 'condensed', 'bordered')) %>%
+  row_spec(row = 0, bold = T, background = '#F5F6FA') %>%
+  collapse_rows(columns = 1:2, valign = "middle")
+kable(pests_hosts[[2]]) %>%
+  kable_styling(full_width = T, bootstrap_options = c('striped', 'bordered')) %>%
+  row_spec(row = 0, bold = T, background = '#F5F6FA')
+eppo_fulltable2 %>%
+  slice(-1L) %>%
+  select(-'codeid', - 'eppocode') %>%
+  kable() %>%
+  kable_styling(full_width = T, bootstrap_options = c('striped', 'bordered')) %>%
+  row_spec(row = 0, bold = T, background = '#F5F6FA')
+
+
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))

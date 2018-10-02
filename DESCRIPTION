@@ -26,4 +26,7 @@ RoxygenNote: 6.1.0
 Suggests:
     DT,
     roxygen2,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
