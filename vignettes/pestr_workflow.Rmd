@@ -39,7 +39,7 @@ eppo_database_download()
 
 When working on **Windows** you can manually [download](https://data.eppo.int/files/sqlite.zip) and extract the archive.
 
-Last step of setup is to connect to database file, which can be easily done with `eppo_database_connect` function.
+Last step of setup is to connect to database file, which can be easily done with `eppo_database_connect()` function.
 
 ```{r eval = F}
 eppo_SQLite <- eppo_database_connect()
@@ -49,45 +49,60 @@ After this three short steps you are ready to go.
 
 ## Extracting tables with scientific, common and synonym names
 
-
+Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with
+partial names -- e.g. when you query for *Cydia packardi* you get infomation related to this species, while when you query for *Cydia* you get information on whole genus. Likewise when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can parse whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
 
 ```{r eval = F}
-
-
 # Create vector of names that you are looking for
-pest <- 'Helicoverpa zea'
-# Connect to SQLite db
+pests_query <- c('Helicoverpa zea', 'Cydia')
+```
 
+Than you should start with quering for names and assigning your results to a variable. This variable will contain `eppocodes` that are used by other functions to extract data from EPPO REST API. `eppo_names_tables()` takes two arguments: first is a vector of names to query the database, second is variable with connection to **SQLite** database.
 
-# Get pest names, in result you will have list containing 4 tables:
-# df with names that are present in EPPO, df with names that are not present
-# df with preferred names and eppo codes, df with all associated names to 
-# eppocode from third df. It is necessary to run it before other 'tabletools'
-# functions since it extracts eppocodes that are used later by other functions
-pest_names <- eppo_names_tables(pest, eppo_SQLite)
+```{r eval = F}
+pest_names <- eppo_names_tables(pests_query, eppo_SQLite)
+```
 
-# Get pest categorization - as result you will get list with two elements:
-# first is a list of tables for each eppocode one categorisation table, second
-# element is single df with categorization for each eppocode condensed to single
-# cell.
+As a result you will get  list containing 4 tables:
+* df with names that are present in EPPO,
+* df with names that are not present in database
+* df with preferred names and eppo codes,
+* df with all associated names to eppocode from third df. 
+
+**REMEMBER:** It is necessary to run it before other 'tabletools' functions since it extracts eppocodes that are used later by other functions.
+
+## EPPO *tabletools* functions to extract categorization, hosts, taxonomy and distribution
+
+This functions works separately from each other, thus there is no need to use all of them as well as ther is no need to use them in any particular order. Functions for categorization, hosts and taxonomy takes two arguments: a varibale containing result of `eppo_names_tables()` and variable with EPPO token. 
+
+### categorization
+As result `eppo_tabletools_cat()` you will get list with two elements: first is a list of tables -- for each eppocode one categorisation table, second element is a single df with categorization for each eppocode condensed to single cell.
+
+```{r eval = F}
 pests_cat <- eppo_tabletools_cat(pest_names, eppo_token)
-cat_table <-  pests_cat[[1]][[1]] %>% select(c('nomcontinent','country','qlistlabel','yr_add'))
+```
 
-# Get pest hosts as a result you get two tables: firs is long table with all data 
-# for all pests combined. In second hosts are combined into single cell for each
-# eppocode
+### hosts
+`eppo_tabletools_hosts()` as a result gives two tables: first is long table with all the data, for all pests combined. In second hosts are combined into single cell for each eppocode.
+
+```{r eval = F}
 pests_hosts <- eppo_tabletools_hosts(pest_names, eppo_token)
+```
 
-hosts_tab <- pests_hosts[[1]] %>% rename(Comments = labelclass) %>% mutate(Presence_PRA_area = 'Yes/no',Reference = '@eppo2018') %>% select(full_name, Presence_PRA_area, Comments, Reference)
+### taxonomy
 
-# Get taxonomy. Also list with two elements. Fist is a list of taxonomy tables
-# for each pest; second is table with 'main category' of each eppocode 
+In the case of `eppo_tabletools_taxo()` you will also get a list with two elements. Fist is a list of taxonomy tables for each pest; second is table with 'main category' of each eppocode.
+
+```{r eval = F}
 pests_taxo <- eppo_tabletools_taxo(pest_names, eppo_token)
+```
 
-# Get distributions of hosts. As a result a two element list. First one contains
-# df of distribution for each eppocode, second contains single cell of distribution
-# for each eppocode.
+### distribution
+`eppo_tabletools_distri()` does not connect to REST API, but it downloads \*.csv files from EPPO. Thus it takes only one argument (since it does not need the EPPO token) -- a varibale containing result of `eppo_names_tables`. As a result a two element list. First one contains df of distribution for each eppocode, second contains single cell of distribution for each eppocode. The distribution data is grouped within cell by continent.
+
+```{r eval = F}
 pest_distri <- eppo_tabletools_distri(pest_names)
+```
 
 # Whole condensed table in one shot:
 eppo_fulltable <- eppo_table_full(pests, eppo_SQLite, eppo_token)
