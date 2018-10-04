@@ -104,26 +104,13 @@ pests_taxo <- eppo_tabletools_taxo(pest_names, eppo_token)
 pest_distri <- eppo_tabletools_distri(pest_names)
 ```
 
-# Whole condensed table in one shot:
-eppo_fulltable <- eppo_table_full(pests, eppo_SQLite, eppo_token)
-eppo_fulltable2 <- eppo_table_full(pests2, eppo_SQLite, eppo_token)
+## Whole condensed table in one shot:
 
-kable(pests_cat[[1]] %>%
-        bind_rows(.id = 'eppocode')) %>%
-  kable_styling(full_width = T, bootstrap_options = c('striped', 'condensed', 'bordered')) %>%
-  row_spec(row = 0, bold = T, background = '#F5F6FA') %>%
-  collapse_rows(columns = 1:2, valign = "middle")
-kable(pests_hosts[[2]]) %>%
-  kable_styling(full_width = T, bootstrap_options = c('striped', 'bordered')) %>%
-  row_spec(row = 0, bold = T, background = '#F5F6FA')
-eppo_fulltable2 %>%
-  slice(-1L) %>%
-  select(-'codeid', - 'eppocode') %>%
-  kable() %>%
-  kable_styling(full_width = T, bootstrap_options = c('striped', 'bordered')) %>%
-  row_spec(row = 0, bold = T, background = '#F5F6FA')
+If you want to make one table with all the infromation: names, categorization, hosts, distirbution and taxonomy -- condensed to one cell *per* pest, please use `eppo_table_full()` function that takes arguments: vector of names, **SQLite** connection and EPPO token. 
 
-
+```{r eval = F}
+eppo_fulltable <- eppo_table_full(pest_names, eppo_SQLite, eppo_token)
+```
 
 ## Styles
 
