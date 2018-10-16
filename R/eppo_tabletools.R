@@ -1,7 +1,10 @@
 #' EPPO table manipulation tools
 #'
 #' \code{eppo_tabletools_names} creates table with names -- preferred, common
-#' and synonyms -- of pests.
+#' and synonyms -- of pests. It is particularly useful for creating whole table
+#' with {\link{eppo_table_full}}, otherwise it might be more informative to use
+#' {\link{eppo_names_tables}} which provides additional information for your
+#' query.
 #' \code{eppo_tabletools_hosts} creates table with hosts of pests.
 #' \code{eppo_tabletools_cat} creates table with categorization of pests.
 #' \code{eppo_tabletools_taxo} creates table with taxonomy of pests.
@@ -22,13 +25,15 @@ NULL
 #' @rdname eppo_tabletools
 #' @export
 eppo_tabletools_names <- function(names_tables) {
+  #intermediate table holding non preffered names with corrected headings
   other_table <- names_tables$all_associated_names %>%
     filter(.data$preferred == 0) %>%
     rename(Other_names = .data$fullname) %>%
     select('codeid'       = 1,
            'Other_names'  = 2,
            'codelang'     = 4)
-
+  #long format table containing collumns for preffered names and accompanying
+  #other names, also intermediate table that is a basis for a compact table
   preferred_table <- names_tables$all_associated_names %>%
     filter(.data$preferred == 1) %>%
     rename(Preferred_name = .data$fullname) %>%
@@ -44,6 +49,8 @@ eppo_tabletools_names <- function(names_tables) {
                                  is.na(.data$Name_type), 'Preferred')) %>%
     arrange(.data$Preferred_name, desc(.data$Name_type), .data$Other_names)
 
+  #temporary table nested by name type and other names, in next step
+  #names will be collapsed to one cell per preffered name
   temp_table <- preferred_table %>%
     select('codeid', 'eppocode',
            'Preferred_name', 'Other_names', 'Name_type') %>%
