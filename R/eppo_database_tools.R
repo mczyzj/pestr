@@ -22,13 +22,13 @@ NULL
 #' @export
 eppo_database_check <- function(filepath = getwd(),
                                 filename = 'eppocodes.sqlite') {
-#  dbfile <- paste0(filepath, '/', filename)
   dbfile <- utils::capture.output(cat(filepath, filename,
                                   sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
   if (file.exists(dbfile)) {
          message(cat('EPPO database was downloaded on ',
                      as.character(file.info(dbfile)$mtime)))
+    return(TRUE)
   } else {
          message('This file does not exist,
                  please download or give correct directory')
@@ -38,12 +38,13 @@ eppo_database_check <- function(filepath = getwd(),
 #' @rdname eppo_database
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
-#  zipfile <- paste0(filepath, '/', 'eppocodes.zip')
   zipfile <- utils::capture.output(cat(filepath, 'eppocodes.zip',
                                    sep = ifelse(.Platform$OS.type == 'windows',
                                              "\\", "/")))
+  if (!isTRUE(eppo_database_check())){
   utils::download.file('https://data.eppo.int/files/sqlite.zip',
                        destfile = zipfile)
+  }
   if(.Platform$OS.type == 'windows') {
     message('Please unzip sqllite.zip file manually to your working directory')
   } else {
@@ -55,7 +56,6 @@ eppo_database_download <- function(filepath = getwd()) {
 #' @export
 eppo_database_connect <- function(filepath = getwd(),
                                   filename = 'eppocodes.sqlite') {
-#  dbfile <- paste0(filepath, '/', filename)
   dbfile <- utils::capture.output(cat(filepath, filename,
                                   sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
@@ -107,10 +107,11 @@ eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
                            WHERE fullname LIKE ',
                            paste(paste0("'%", names_vector, "%'"),
                                  collapse = " OR fullname LIKE ")))
-  #intermediet list with that checks if element of names_vector
+  #intermediet list that checks if element of names_vector
   #match element in SQLite db
   test_list <- lapply(names_vector, grep, names_in_DB$fullname)
-  #extracts EPPO codes for unique codeid
+  #extracts EPPO codes for unique codeid, that will be used in next
+  #step to match names from db to unique eppocode
   EPPOcodes <- sqlConnection %>%
     DBI::dbGetQuery(paste0('SELECT codeid, eppocode FROM t_codes
                            WHERE codeid IN (',
@@ -123,7 +124,6 @@ eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
                            paste(unique(names_in_DB$codeid), collapse = ', '),
                            ')')) %>%
     filter(.data$status == 'A')
-
 
   return(list(exist_in_DB     = data.frame(names_in_DB),
               not_in_DB       = names_vector[test_list %>%

@@ -1,3 +1,11 @@
+# pestr 0.7.1
+
+# Fixed issues
+
+* updated comment in `eppo_names_table`
+* deleted unused dependency from vignette
+* added condition to download db file only if one does not exist in `eppo_database_download`
+
 # pestr 0.7.0
 
 ## New vignette
