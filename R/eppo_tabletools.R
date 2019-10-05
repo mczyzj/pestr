@@ -10,7 +10,8 @@
 #' \code{eppo_tabletools_taxo} creates table with taxonomy of pests.
 #' \code{eppo_tabletools_distri} creates table with distribution of pests --
 #' continent and country level only.
-#' All functions return both long tables and compact, human friendly tables
+#' \code{eppo_tabletools_pests} creates table with pests of host.
+#' All functions return both long tables and compact, human friendly tables.
 #'
 #' @param names_tables A list of tables created via {\link{eppo_names_tables}}.
 #' @param token An object containing EPPO API token created via
@@ -115,7 +116,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #separeted with names of host categories (major, minor, incidental etc.)
   compact_table <- hosts_table %>%
     group_by(.data$eppocode, .data$labelclass) %>%
-    select('labelclass', 'full_name') %>%
+    select('eppocode', 'labelclass', 'full_name') %>%
     mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
     mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
     ungroup() %>%
@@ -279,4 +280,59 @@ eppo_tabletools_distri <- function(names_tables) {
 
   return(list(list_table = distri_lists,
          compact_table = compact_table))
+}
+
+
+#' @rdname eppo_tabletools
+#' @export
+eppo_tabletools_pests <- function(names_tables, token) {
+  if (!all(class(token) == c('pestr_token', 'character'))) {
+    message('Your token argument is not of pestr_token class.
+            Please provide token created with create_eppo_token function')
+  } else {
+    #create reusable variables to access EPPO API
+    eppocodes <- names_tables[[3]]$eppocode
+    pests_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
+                        eppocodes, '/pests', token)
+    #download data on pests from EPPO and strore them as list, name each list
+    #element with eppocode and bind sub-tables by rows
+    #to store them as long table
+    pests_download <- lapply(pests_urls,
+                             function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+    #exchange empty lists with NA table to avoid empty host table
+     if(is.null(unlist(pests_download))) {
+       pests_table <- data.frame(eppocode       = eppocodes,
+                                 codeid         = names_tables[[3]]$codeid,
+                                 pests_eppocode = NA,
+                                 idclass        = NA,
+                                 labelclass     = NA,
+                                 fullname      = NA)
+     } else {
+       names(pests_download) <- eppocodes
+       pests_table <- lapply(pests_download,
+                             function(x) dplyr::bind_rows(x)) %>%
+         bind_rows(.id = 'host_code') %>%
+         dplyr::rename(pests_eppocode = .data$eppocode,
+                       eppocode = .data$host_code)
+     }
+    #take long table and colapse all the host names into one string,
+    #separeted with names of host categories (major, minor, incidental etc.)
+     compact_table <- pests_table %>%
+       group_by(.data$eppocode, .data$labelclass) %>%
+       dplyr::select('eppocode', 'labelclass', 'fullname') %>%
+       mutate(pests = paste(.data$fullname,
+                            collapse = ', ')) %>%
+       mutate(pests = paste0(.data$labelclass, ': ', .data$pests)) %>%
+       ungroup() %>%
+       dplyr::select('eppocode', 'pests') %>%
+       distinct() %>%
+       group_by(.data$eppocode) %>%
+       mutate(pests = paste(.data$pests, collapse = '; ')) %>%
+       distinct()
+
+     return(list(long_table = pests_table,
+                 compact_table))
+
+
+  }
 }

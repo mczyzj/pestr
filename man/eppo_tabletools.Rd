@@ -7,6 +7,7 @@
 \alias{eppo_tabletools_cat}
 \alias{eppo_tabletools_taxo}
 \alias{eppo_tabletools_distri}
+\alias{eppo_tabletools_pests}
 \title{EPPO table manipulation tools}
 \usage{
 eppo_tabletools_names(names_tables)
@@ -18,6 +19,8 @@ eppo_tabletools_cat(names_tables, token)
 eppo_tabletools_taxo(names_tables, token)
 
 eppo_tabletools_distri(names_tables)
+
+eppo_tabletools_pests(names_tables, token)
 }
 \arguments{
 \item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}
@@ -42,5 +45,6 @@ query.
 \code{eppo_tabletools_taxo} creates table with taxonomy of pests.
 \code{eppo_tabletools_distri} creates table with distribution of pests --
 continent and country level only.
-All functions return both long tables and compact, human friendly tables
+\code{eppo_tabletools_pests} creates table with pests of host.
+All functions return both long tables and compact, human friendly tables.
 }

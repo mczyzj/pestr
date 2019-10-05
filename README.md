@@ -76,13 +76,19 @@ Get pest categorization - as result you will get list with two elements:  first 
 pests_cat <- eppo_tabletools_cat(pests_names, eppo_token)
 ```
 
-Get pest hosts as a result you get two tables: firs is long table with all data  for all pests combined. In second hosts are combined into single cell for each eppocode
+Get pest hosts as a result you get two tables: first is long table with all data  for all pests combined. In second hosts are combined into single cell for each eppocode
 
 ```r
 pests_hosts <- eppo_tabletools_hosts(pests_names, eppo_token)
 ```
 
-Get taxonomy. Also list with two elements. Fist is a list of taxonomy tables for each pest; second is table with 'main category' of each eppocode 
+Get host's pests as a result you get two tables: first is long table with all data for all hosts combined. In second pests are combined into single cell for each eppocode
+
+```r
+pests_hosts <- eppo_tabletools_pests(hosts_names, eppo_token)
+```
+
+Get taxonomy. Also list with two elements. First is a list of taxonomy tables for each pest; second is table with 'main category' of each eppocode 
 
 ```r
 pests_taxo <- eppo_tabletools_taxo(pests_names, eppo_token)

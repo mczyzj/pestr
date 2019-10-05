@@ -1,6 +1,16 @@
+# pestr 0.7.2
+
+## New functions
+
+* new function `eppo_tabletools_pests` returning pests of hosts.
+
+## Known issues
+
+* `eppo_tabletools_pests` needs testing.
+
 # pestr 0.7.1
 
-# Fixed issues
+## Fixed issues
 
 * updated comment in `eppo_names_table`
 * deleted unused dependency from vignette
