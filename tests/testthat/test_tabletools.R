@@ -39,7 +39,7 @@ test_that("Test that names f creates correct condensed data frame", {
     dplyr::distinct(Other_names) %>%
     dplyr::mutate(Other_names = paste(Other_names, collapse = '; ')) %>%
     dplyr::distinct()
-  expect_equal(result_names[[2]][1,4], cydia_test[[1]])
+  expect_equal(result_names[[2]]$Other_names[1], cydia_test$Other_names)
 })
 
 test_that("Test that hosts f checks if parsed arguments are of proper class", {
