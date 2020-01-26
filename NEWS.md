@@ -122,3 +122,8 @@ in EPPO template (#7)
 * Internationalization of package (#5) and (#6)
 * Hosts and categorization paste some values double into string, small fix is
 needed for both test and function
+
+## TODOs
+
+* Add vignettes.
+* `taxize` package can be helpful with correction of organism names.
