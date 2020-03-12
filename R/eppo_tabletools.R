@@ -94,12 +94,9 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   } else {
   #create reusable variables to access EPPO API
   eppocodes <- names_tables[[3]]$eppocode
-  hosts_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
-                    eppocodes, '/hosts', token)
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
-  hosts_download <- lapply(hosts_urls,
-                           function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
   #exchange empty lists with NA table to avoid empty host table
     if(is.null(unlist(hosts_download))) {
        hosts_table <- data.frame(eppocode      = eppocodes,
@@ -143,11 +140,8 @@ eppo_tabletools_cat <- function(names_tables, token) {
   } else {
     #create reusable variables to access EPPO API
     eppocodes <- names_tables[[3]]$eppocode
-    cat_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
-                        eppocodes, '/categorization', token)
     #download data on categorization from EPPO and strore them as list of tables
-    cat_list_table <- lapply(cat_urls,
-                             function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+    cat_list_table <- eppo_rest_download(eppocodes, "categorization", token)
     cat_tables <- setNames(vector("list", length(eppocodes)), eppocodes)
     #exchange empty lists with NA tables -> NEEDS REFACTORING!!!
     for (i in 1:length(cat_list_table)) {
@@ -209,10 +203,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
             Please provide token created with create_eppo_token function')
   } else {
     eppocodes <- names_tables[[3]]$eppocode
-    taxo_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
-                        eppocodes, '/taxonomy', token)
-    taxo_list_table <- lapply(taxo_urls,
-                              function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+    taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
     #Create empty table and NA table
     empty_taxo_df <- data.frame(codeid = NA,
                                 eppocode = NA,
@@ -302,6 +293,7 @@ eppo_tabletools_pests <- function(names_tables, token) {
     #to store them as long table
     pests_download <- lapply(pests_urls,
                              function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+ ##   pests_download <- eppo_rest_download(eppocodes, "pests", token)
     #exchange empty lists with NA table to avoid empty host table
      if(is.null(unlist(pests_download))) {
        pests_table <- data.frame(eppocode       = eppocodes,
