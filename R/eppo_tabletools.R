@@ -88,7 +88,7 @@ eppo_tabletools_names <- function(names_tables) {
 #' @rdname eppo_tabletools
 #' @export
 eppo_tabletools_hosts <- function(names_tables, token) {
-  if (!all(class(token) == c('pestr_token', 'character'))) {
+  if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
   } else {
@@ -137,7 +137,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
 #' @rdname eppo_tabletools
 #' @export
 eppo_tabletools_cat <- function(names_tables, token) {
-  if (!all(class(token) == c('pestr_token', 'character'))) {
+  if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
   } else {
@@ -204,7 +204,7 @@ eppo_tabletools_cat <- function(names_tables, token) {
 #' @rdname eppo_tabletools
 #' @export
 eppo_tabletools_taxo <- function(names_tables, token) {
-  if (!all(class(token) == c('pestr_token', 'character'))) {
+  if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
   } else {
@@ -289,7 +289,7 @@ eppo_tabletools_distri <- function(names_tables) {
 #' @rdname eppo_tabletools
 #' @export
 eppo_tabletools_pests <- function(names_tables, token) {
-  if (!all(class(token) == c('pestr_token', 'character'))) {
+  if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
   } else {
