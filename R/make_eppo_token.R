@@ -8,6 +8,10 @@
 #' @return Global variable with the token to access EPPO Data Services API.
 #' @seealso To obtain your free EPPO token please register
 #' \url{https://data.eppo.int/}
+#' @examples
+#' \dontrun{
+#' create_eppo_token("12345678abcdef")
+#' }
 #' @export
 create_eppo_token <- function(x) {
   eppo_token <- NULL

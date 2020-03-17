@@ -17,6 +17,11 @@ Global variable with the token to access EPPO Data Services API.
 of class string, that is needed to communicate with EPPO Data Services API.
 Global variable is shared between package functions.
 }
+\examples{
+\dontrun{
+create_eppo_token("12345678abcdef")
+}
+}
 \seealso{
 To obtain your free EPPO token please register
 \url{https://data.eppo.int/}
