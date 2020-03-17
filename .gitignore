@@ -6,5 +6,9 @@ eppocodesDEV.sqlite
 eppocodes.zip
 eppocodes.sqlite
 inst/doc
+<<<<<<< HEAD
 GarbageCollector/
+=======
+GarbageCollector\
+>>>>>>> 6f85945a721c94967036783e161006f083922d5b
 test_table.csv
