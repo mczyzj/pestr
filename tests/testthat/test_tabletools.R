@@ -49,7 +49,9 @@ test_that("Test that hosts f checks if parsed arguments are of proper class", {
                  'Please provide token created with create_eppo_token function')
 })
 
-test_that("Test that hosts f returns correct structure from database", {
+
+
+ test_that("Test that hosts f returns correct structure from database", {
   skip_on_travis()
   skip_on_cran()
   skip('Only for use locally with proper token.') #comment out to test
@@ -303,15 +305,16 @@ test_that("Test that pests f returns correct structure
           from database", {
   skip_on_travis()
   skip_on_cran()
-#  skip('Only for use locally with proper token.') #comment out to test
+  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables('Triticum aestivum')
 
-  create_eppo_token('e3ecef2dea564abec28e9781eb3b9b94') #provide token before using test
+  create_eppo_token('') #provide token before using test
 
   result_pest <- eppo_tabletools_pests(testing_names, eppo_token)
-#print(result_pest)
 
   expect_is(result_pest, 'list')
   expect_is(result_pest[[1]], 'list')
   expect_is(result_pest[[2]], 'data.frame')
 })
+
+#rm(eppo_token, envir = globalenv())
