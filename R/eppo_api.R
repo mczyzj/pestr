@@ -7,10 +7,7 @@
 #' @param type string, one of: hosts, categorization, taxonomy, pests
 #' @param token An object containing EPPO API token created via
 #'   {\link{create_eppo_token}}.
-#' @return List containing two data frames. First is in a long format, and each
-#'   row contains synonyms and names in other languages in respect to preferred
-#'   names. The second data frame contains coerced synonyms and other names to
-#'   single cell for each preferred name.
+#' @return List of REST download results.
 #' @noRd
 
 eppo_rest_download <- function(eppocodes, type, token) {
