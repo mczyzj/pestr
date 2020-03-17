@@ -1,7 +1,10 @@
 .Rproj.user
 .Rhistory
 .RData
-devHelpers\
+devHelpers/
 eppocodesDEV.sqlite
 eppocodes.zip
+eppocodes.sqlite
 inst/doc
+GarbageCollector/
+test_table.csv

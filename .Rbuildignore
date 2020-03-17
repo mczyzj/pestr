@@ -3,3 +3,6 @@
 ^devHelpers$
 ^\.travis\.yml$
 ^codecov\.yml$
+^GarbageCollector$
+^eppocodes\.sqlite$
+^eppocodes\.zip$
