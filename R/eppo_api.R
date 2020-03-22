@@ -13,7 +13,18 @@
 eppo_rest_download <- function(eppocodes, type, token) {
   urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
                       eppocodes, paste0("/", type), token)
-  #download data on (...) from EPPO and strore them as list
-  hosts_download <- lapply(urls,
-                           function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  lapply(urls, eppo_json_wrapper)
+}
+
+#' JSON wrapper
+#'
+#' Set of small wrappers and functions to help connecting with API and reuse
+#' among other package functions
+#'
+#' @param urls character vector of eppocodes to be downloaded.
+#' @return List of REST download results.
+#' @noRd
+
+eppo_json_wrapper <- function(urls) {
+  jsonlite::fromJSON(httr::content(httr::GET(urls), "text"))
 }
