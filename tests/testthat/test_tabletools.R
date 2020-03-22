@@ -70,7 +70,7 @@ test_that("Test that hosts f works correctly", {
   skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
                                        'Abies alba'))
-  create_eppo_token('') #provide token before using test
+  create_eppo_token("") #provide token before using test
   eppocodes <- testing_names[[3]]$eppocode
   api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
   testing_urls <- paste0(api_url,
@@ -306,7 +306,7 @@ test_that("Test that pests f returns correct structure
   skip_on_travis()
   skip_on_cran()
   skip('Only for use locally with proper token.') #comment out to test
-  testing_names <- eppo_names_tables('Triticum aestivum')
+  testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
 
   create_eppo_token('') #provide token before using test
 

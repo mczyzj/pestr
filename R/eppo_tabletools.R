@@ -286,14 +286,12 @@ eppo_tabletools_pests <- function(names_tables, token) {
   } else {
     #create reusable variables to access EPPO API
     eppocodes <- names_tables[[3]]$eppocode
-    pests_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
-                        eppocodes, '/pests', token)
+#    pests_urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
+#                        eppocodes, '/pests', token)
     #download data on pests from EPPO and strore them as list, name each list
     #element with eppocode and bind sub-tables by rows
     #to store them as long table
-    pests_download <- lapply(pests_urls,
-                             function(x) jsonlite::fromJSON(RCurl::getURL(x)))
- ##   pests_download <- eppo_rest_download(eppocodes, "pests", token)
+    pests_download <- eppo_rest_download(eppocodes, "pests", token)
     #exchange empty lists with NA table to avoid empty host table
      if(is.null(unlist(pests_download))) {
        pests_table <- data.frame(eppocode       = eppocodes,
