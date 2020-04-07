@@ -28,7 +28,9 @@ Suggests:
     DT,
     httptest,
     knitr,
+    mockr,
     rmarkdown,
     roxygen2,
+    stringr,
     testthat
 VignetteBuilder: knitr

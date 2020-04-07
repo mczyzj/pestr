@@ -313,8 +313,36 @@ test_that("Test that pests f returns correct structure
   result_pest <- eppo_tabletools_pests(testing_names, eppo_token)
 
   expect_is(result_pest, 'list')
-  expect_is(result_pest[[1]], 'list')
+  expect_is(result_pest[[1]], 'data.frame')
   expect_is(result_pest[[2]], 'data.frame')
 })
 
 #rm(eppo_token, envir = globalenv())
+
+test_that("Test that pest f works correctly", {
+  #use artificial token overriden with mock function
+  create_eppo_token('123cef1dea123abec12e1234aa1b2ca1')
+
+  testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
+
+  tester_pest_func <- function() {
+    # Here, we override the function that raises the error
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, pests, token) readRDS("mocked_pests.RDS"),
+      eppo_tabletools_pests(testing_names, eppo_token)
+    )
+  }
+
+  test_pests <- tester_pest_func()
+
+  expect_equal(test_pests[[2]]$eppocode[1], "TRZAC")
+  expect_true(stringr::str_detect(test_pests[[2]]$pests[3],
+                                  "Listronotus bonariensis"))
+  expect_false(stringr::str_detect(test_pests[[2]]$pests[3],
+                                  "Listronotusbonariensis"))
+  expect_true(all(test_pests[[1]]$labelclass %in% c("Incidental",
+                                                    "Major",
+                                                    "Minor",
+                                                    "Unclassified",
+                                                    "Artificial")))
+})

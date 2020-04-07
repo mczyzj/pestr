@@ -324,8 +324,6 @@ eppo_tabletools_pests <- function(names_tables, token) {
        dplyr::distinct()
 
      return(list(long_table = pests_table,
-                 compact_table))
-
-
+                 compact_table = compact_table))
   }
 }

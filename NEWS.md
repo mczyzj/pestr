@@ -1,3 +1,11 @@
+# pestr 0.7.3
+
+## New tests
+
+* new tests include mocking to support testing on CI and CRAN without using token or connect to EPPO API.
+* EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
+
+
 # pestr 0.7.2
 
 ## New functions
