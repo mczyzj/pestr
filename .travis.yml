@@ -11,10 +11,9 @@ cache: packages
 r_packages:
   - covr
 
-before_install:
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    - tlmgr install inconsolata
-fi
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo tlmgr update --self; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo tlmgr install inconsolata; fi
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
