@@ -5,6 +5,15 @@
 * new tests include mocking to support testing on CI and CRAN without using token or connect to EPPO API.
 * EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
 
+* Fixed issues
+
+* Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. #12
+* Updated sample db.
+* Updated tidyr::nest amd dplyr functions arguments.
+
+## Known issues
+
+* `eppo_tabletools_distri` needs mockups for testing.
 
 # pestr 0.7.2
 

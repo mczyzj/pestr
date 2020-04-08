@@ -9,7 +9,8 @@ test_that("Test that f returns correct names from database", {
                                       'Cherry little cherry virus',
                                       'Cherry virus A',
                                       'Little cherry virus 1',
-                                      'Little cherry virus 2'),
+                                      'Little cherry virus 2',
+                                      'Little cherry virus 3'),
                       not_in_DB = c('noPest', 'noPest2'))
   preferredNames <- c('Grapholita packardi',
                       'Epirus cherry virus',

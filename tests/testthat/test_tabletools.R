@@ -1,6 +1,7 @@
 context("EPPO tabletools functions")
 library(pestr)
 
+##### EPPO TABLETOOLS NAMES #####
 test_that("Test that names f returns correct structure from database", {
   testing_names <- eppo_names_tables('Xylella')
   result_names <- eppo_tabletools_names(testing_names)
@@ -42,6 +43,7 @@ test_that("Test that names f creates correct condensed data frame", {
   expect_equal(result_names[[2]]$Other_names[1], cydia_test$Other_names)
 })
 
+##### EPPO TABLETOOLS HOSTS ####
 test_that("Test that hosts f checks if parsed arguments are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
   create_eppo_token('abc123')
@@ -49,45 +51,53 @@ test_that("Test that hosts f checks if parsed arguments are of proper class", {
                  'Please provide token created with create_eppo_token function')
 })
 
-
-
  test_that("Test that hosts f returns correct structure from database", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('') #provide token before using test
-  result_hosts <- eppo_tabletools_hosts(testing_names, eppo_token)
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
-  expect_is(result_hosts, 'list')
-  expect_is(result_hosts[[1]], 'data.frame')
-  expect_is(result_hosts[[2]], 'data.frame')
+  tester_host_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, hosts, token) readRDS("mocked_hosts_xylella.RDS"),
+      eppo_tabletools_hosts(testing_names, eppo_token)
+    )
+  }
+
+  test_hosts <- tester_host_func()
+
+  expect_is(test_hosts, 'list')
+  expect_is(test_hosts[[1]], 'data.frame')
+  expect_is(test_hosts[[2]], 'data.frame')
 })
 
 test_that("Test that hosts f works correctly", {
   skip_on_travis()
   skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
+ # skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
                                        'Abies alba'))
-  create_eppo_token("") #provide token before using test
-  eppocodes <- testing_names[[3]]$eppocode
-  api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
-  testing_urls <- paste0(api_url,
-                         eppocodes,
-                         '/hosts',
-                         eppo_token)
-  #test long table values
-  testing_hosts <- lapply(testing_urls,
-                          function(x) jsonlite::fromJSON(RCurl::getURL(x)))
-  names(testing_hosts) <- eppocodes
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  testing_hosts <- readRDS("mocked_hosts.RDS")
+  eppocode <- testing_names[[3]]$eppocode
+  names(testing_hosts) <- eppocode
   test_host_table <- lapply(testing_hosts, dplyr::bind_rows) %>%
     dplyr::bind_rows(.id = 'pest_code') %>%
     dplyr::rename(host_eppocode = eppocode, eppocode = pest_code)
 
-  expect_equal(eppo_tabletools_hosts(testing_names, eppo_token)[[1]],
+  tester_host_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, hosts, token) readRDS("mocked_hosts.RDS"),
+      eppo_tabletools_hosts(testing_names, eppo_token)
+    )
+  }
+
+  test_hosts <- tester_host_func()
+
+
+  expect_equal(test_hosts[[1]],
                test_host_table)
-  #test compact table values
+
+  ###test compact table values
+
   compact_names_test <- test_host_table %>%
     dplyr::group_by(.data$eppocode, .data$labelclass) %>%
     dplyr::select('labelclass', 'full_name') %>%
@@ -100,8 +110,7 @@ test_that("Test that hosts f works correctly", {
     dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
     dplyr::distinct()
 
-    test_host_fun <- eppo_tabletools_hosts(testing_names, eppo_token)[[2]]
-  expect_equal(test_host_fun, compact_names_test)
+  expect_equal(test_hosts[[2]], compact_names_test)
 
 })
 
@@ -115,34 +124,29 @@ test_that("Test that categorization f checks if parsed arguments
 
 test_that("Test that categorization f returns correct structure
           from database", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('') #provide token before using test
-  result_cat <- eppo_tabletools_cat(testing_names, eppo_token)
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
-  expect_is(result_cat, 'list')
-  expect_is(result_cat[[1]], 'list')
-  expect_is(result_cat[[2]], 'data.frame')
+  tester_cat_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_cat_xylella.RDS"),
+      eppo_tabletools_cat(testing_names, eppo_token)
+    )
+  }
+
+  test_cat <- tester_cat_func()
+
+  expect_is(test_cat, 'list')
+  expect_is(test_cat[[1]], 'list')
+  expect_is(test_cat[[2]], 'data.frame')
 })
 
 test_that("Test that cat f works correctly", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
                                        'Abies alba'))
-  create_eppo_token('') #provide token before using test
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
   eppocodes <- testing_names[[3]]$eppocode
-  api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
-  testing_urls <- paste0(api_url,
-                         eppocodes,
-                         '/categorization',
-                         eppo_token)
-  #test long table values
-  testing_cat <- lapply(testing_urls,
-                          function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  testing_cat <- readRDS("mocked_cat.RDS")
   names(testing_cat) <- eppocodes
   transformed_cat <- setNames(vector("list", length(eppocodes)), eppocodes)
   #exchange empty lists with NA tables
@@ -161,23 +165,33 @@ test_that("Test that cat f works correctly", {
     }
   }
 
-  expect_equal(eppo_tabletools_cat(testing_names, eppo_token)[[1]], testing_cat)
+  tester_cat_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_cat.RDS"),
+      eppo_tabletools_cat(testing_names, eppo_token)
+    )
+  }
+
+  test_cat <- tester_cat_func()
+
+  expect_equal(test_cat[[1]]$LASPPA, testing_cat$LASPPA)
 
   #test compact table values
+
   compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
 
   for (i in 1: length(transformed_cat)) {
     compact_list[[i]] <- transformed_cat[[i]] %>%
-      tidyr::nest(nomcontinent) %>%
+      tidyr::nest(data = .data$nomcontinent) %>%
       dplyr::mutate(categorization = paste0(country, ': ', qlistlabel, ': ',
                                             'add/del/trans: ',
                                             yr_add, '/', yr_del, '/', yr_trans)) %>%
-      tidyr::unnest() %>%
-      dplyr::select('nomcontinent', 'categorization') %>%
-      dplyr::group_by(nomcontinent) %>%
+      tidyr::unnest(cols = .data$data) %>%
+      dplyr::select(.data$nomcontinent, .data$categorization) %>%
+      dplyr::group_by(.data$nomcontinent) %>%
       dplyr::mutate(categorization = paste(categorization, collapse = '; ')) %>%
       dplyr::distinct(categorization) %>%
-      dplyr::mutate(categorization = paste(nomcontinent, categorization, sep = ': ')) %>%
+      dplyr::mutate(categorization = paste(.data$nomcontinent, .data$categorization, sep = ': ')) %>%
       dplyr::ungroup() %>%
       dplyr::transmute(categorization = paste(categorization, collapse = ' | ')) %>%
       dplyr::distinct()
@@ -185,7 +199,7 @@ test_that("Test that cat f works correctly", {
 
   compact_table <- bind_rows(compact_list, .id = 'eppocode')
 
-  expect_equal(eppo_tabletools_cat(testing_names, eppo_token)[[2]],
+  expect_equal(test_cat[[2]],
                compact_table)
 })
 
@@ -199,19 +213,24 @@ test_that("Test that taxonomy f checks if parsed arguments
 
 test_that("Test that taxonomy f returns correct structure
           from database", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
                                      'Plasmodiophora brassicae', 'Abies alba',
                                      'Pantoea stewartii', 'Globodera pallida',
                                      'Phialophora cinerescens'))
-  create_eppo_token('') #provide token before using test
-  result_taxo <- eppo_tabletools_taxo(testing_names, eppo_token)
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
-  expect_is(result_taxo, 'list')
-  expect_is(result_taxo[[1]], 'list')
-  expect_is(result_taxo[[2]], 'data.frame')
+  tester_taxo_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_taxo.RDS"),
+      eppo_tabletools_taxo(testing_names, eppo_token)
+    )
+  }
+
+  test_taxo <- tester_taxo_func()
+
+  expect_is(test_taxo, 'list')
+  expect_is(test_taxo[[1]], 'list')
+  expect_is(test_taxo[[2]], 'data.frame')
 })
 
 test_that("Test that categorization f works correctly", {
@@ -222,16 +241,9 @@ test_that("Test that categorization f works correctly", {
                                        'Plasmodiophora brassicae', 'Abies alba',
                                        'Pantoea stewartii', 'Globodera pallida',
                                        'Phialophora cinerescens'))
-  create_eppo_token('') #provide token before using test
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
   eppocodes <- testing_names[[3]]$eppocode
-  api_url <- 'https://data.eppo.int/api/rest/1.0/taxon/'
-  testing_urls <- paste0(api_url,
-                         eppocodes,
-                         '/taxonomy',
-                         eppo_token)
-  #test long table values
-  testing_taxo <- lapply(testing_urls,
-                          function(x) jsonlite::fromJSON(RCurl::getURL(x)))
+  testing_taxo <- readRDS("mocked_taxo.RDS")
   names(testing_taxo) <- eppocodes
   test_taxon_names <- data.frame(eppocode = c('HETDPA', 'LASPPA', 'ERWIST', 'PHIACI',
                                  'PLADBR', 'ABIAL', 'CCCVD0'),
@@ -240,13 +252,17 @@ test_that("Test that categorization f works correctly", {
                                               "Protista", "Plantae", "Viroids"),
                                  stringsAsFactors = FALSE)
 
-  taxo_tables <- eppo_tabletools_taxo(testing_names, eppo_token)
-  expect_equal(taxo_tables[[1]], testing_taxo)
-  #for unknown reasons automatic test does not work, however manualy checking
-  #outcome of function using same arguments as automatic test gives
-  #expected results
-  skip('not working see coment above')
-  expect_equal(taxo_tables[[2]], test_taxon_names)
+  tester_taxo_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_taxo.RDS"),
+      eppo_tabletools_taxo(testing_names, eppo_token)
+    )
+  }
+
+  test_taxo <- tester_taxo_func()
+
+  expect_equal(test_taxo[[1]], testing_taxo)
+  expect_equal(test_taxo[[2]], test_taxon_names)
 
 })
 
@@ -303,30 +319,32 @@ test_that("Test that distribution f returns correct values
 
 test_that("Test that pests f returns correct structure
           from database", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
 
-  create_eppo_token('') #provide token before using test
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
-  result_pest <- eppo_tabletools_pests(testing_names, eppo_token)
+  tester_pest_func <- function() {
+    mockr::with_mock(
+      eppo_rest_download = function(eppocodes, pests, token) readRDS("mocked_pests.RDS"),
+      eppo_tabletools_pests(testing_names, eppo_token)
+    )
+  }
 
-  expect_is(result_pest, 'list')
-  expect_is(result_pest[[1]], 'data.frame')
-  expect_is(result_pest[[2]], 'data.frame')
+  test_pests <- tester_pest_func()
+
+  expect_is(test_pests, 'list')
+  expect_is(test_pests[[1]], 'data.frame')
+  expect_is(test_pests[[2]], 'data.frame')
 })
 
 #rm(eppo_token, envir = globalenv())
 
 test_that("Test that pest f works correctly", {
-  #use artificial token overriden with mock function
-  create_eppo_token('123cef1dea123abec12e1234aa1b2ca1')
+  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
 
   tester_pest_func <- function() {
-    # Here, we override the function that raises the error
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, pests, token) readRDS("mocked_pests.RDS"),
       eppo_tabletools_pests(testing_names, eppo_token)
