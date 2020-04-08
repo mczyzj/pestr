@@ -54,10 +54,10 @@ eppo_tabletools_names <- function(names_tables) {
 
   #temporary table nested by name type and other names, in next step
   #names will be collapsed to one cell per preffered name
-  temp_table <- preferred_table %>%
-    dplyr::select('codeid', 'eppocode',
-                  'Preferred_name', 'Other_names', 'Name_type') %>%
-    tidyr::nest(.data$Name_type, .data$Other_names)
+   temp_table <- preferred_table %>%
+     dplyr::select('codeid', 'eppocode',
+                   'Preferred_name', 'Other_names', 'Name_type') %>%
+     tidyr::nest(data = c(.data$Name_type, .data$Other_names))
 
   temp_Index <- seq(length(temp_table$data))
 
@@ -77,12 +77,12 @@ eppo_tabletools_names <- function(names_tables) {
       gsub('; NA', '', .) -> temp_Index[i]
   }
 
-  compact_table <- temp_table %>%
-    dplyr::mutate(data = temp_Index) %>%
-    dplyr::rename(Other_names = .data$data)
+ compact_table <- temp_table %>%
+   dplyr::mutate(data = temp_Index) %>%
+   dplyr::rename(Other_names = .data$data)
 
-  return(list(long_table = preferred_table,
-              compact_table))
+ return(list(long_table = preferred_table,
+             compact_table = compact_table))
 }
 
 #' @rdname eppo_tabletools
@@ -164,32 +164,33 @@ eppo_tabletools_cat <- function(names_tables, token) {
 
     compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
 
-    for (i in 1: length(cat_tables)) {
-      compact_list[[i]] <- cat_tables[[i]] %>%
-        tidyr::nest(.data$nomcontinent) %>%
+     for (i in 1: length(cat_tables)) {
+       compact_list[[i]] <- cat_tables[[i]] %>%
+        tidyr::nest(data = .data$nomcontinent) %>%
         dplyr::mutate(categorization = paste0(.data$country, ': ',
                                               .data$qlistlabel, ': ',
                                               'add/del/trans: ',
                                               .data$yr_add, '/',
                                               .data$yr_del, '/',
                                               .data$yr_trans)) %>%
-        tidyr::unnest() %>%
-        dplyr::select('nomcontinent', 'categorization') %>%
-        dplyr::group_by(.data$nomcontinent) %>%
-        dplyr::mutate(categorization = paste(.data$categorization,
-                                             collapse = '; ')) %>%
-        dplyr::distinct(.data$categorization) %>%
-        dplyr::mutate(categorization = paste(.data$nomcontinent,
-                                             .data$categorization,
-                                             sep = ': ')) %>%
-        dplyr::ungroup() %>%
-        dplyr::transmute(categorization = paste(.data$categorization,
-                                                collapse = ' | ')) %>%
-        dplyr::distinct()
+         tidyr::unnest(cols = .data$data) %>%
+         dplyr::select(.data$nomcontinent, .data$categorization) %>%
+         dplyr::group_by(.data$nomcontinent) %>%
+         dplyr::mutate(categorization = paste(.data$categorization,
+                                              collapse = '; ')) %>%
+         dplyr::distinct(.data$categorization) %>%
+         dplyr::mutate(categorization = paste(.data$nomcontinent,
+                                              .data$categorization,
+                                              sep = ': ')) %>%
+         dplyr::ungroup() %>%
+         dplyr::transmute(categorization = paste(.data$categorization,
+                                                 collapse = ' | ')) %>%
+         dplyr::distinct()
     }
 
     compact_table <- compact_list %>%
       dplyr::bind_rows(.id = 'eppocode')
+
 
     return(list(list_table = cat_tables,
               compact_table))
