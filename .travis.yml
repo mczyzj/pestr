@@ -5,15 +5,12 @@ r:
 os:
   - linux
   - osx
+osx_image: xcode9.2
 dist:
   - bionic
 cache: packages
 r_packages:
   - covr
-
-before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo tlmgr update --self; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo tlmgr install inconsolata; fi
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
