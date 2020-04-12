@@ -1,19 +1,20 @@
 # pestr 0.7.3
 
-## New tests
+## New and updated tests
 
-* new tests include mocking to support testing on CI and CRAN without using token or connect to EPPO API.
+* Updated tests include mocking to support testing on CI and CRAN without using token, or connect to EPPO API, or download *csv* files.
 * EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
+* Now test are only checking if it `inherits` from `pestr_token` class.
 
-* Fixed issues
+## Fixed issues
 
 * Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. #12
 * Updated sample db.
-* Updated tidyr::nest amd dplyr functions arguments.
-
-## Known issues
-
-* `eppo_tabletools_distri` needs mockups for testing.
+* Updated tidyr::nest and dplyr functions arguments.
+* Deleted `dplyr` package from imports. Package now only uses `::` to acces dplyr functions.
+* Deleted `pryr` for dependencies at it was only used to check if `eppo_token` is `S3` class. 
+* Deleted `RCurl` from dependecies since now package relies on `httr` to connect with **REST API**.
+* All test now use correct syntac to load packages (e.g. library('dplyr') instead of `library(dplyr)`).
 
 # pestr 0.7.2
 

@@ -1,5 +1,5 @@
 context("EPPO API helpers")
-library(pestr)
+library("pestr")
 
 #test if eppo_rest_download is downloading resuts into list
 test_that('Test that eppo_rest_download is downloading correctly', {

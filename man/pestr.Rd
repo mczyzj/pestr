@@ -3,7 +3,6 @@
 \docType{package}
 \name{pestr}
 \alias{pestr}
-\alias{pestr-package}
 \title{pestr: A package for retriving data from
 EPPO Data Services \url{https://data.eppo.int/}}
 \description{

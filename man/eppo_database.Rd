@@ -11,8 +11,7 @@ eppo_database_check(filepath = getwd(), filename = "eppocodes.sqlite")
 
 eppo_database_download(filepath = getwd())
 
-eppo_database_connect(filepath = getwd(),
-  filename = "eppocodes.sqlite")
+eppo_database_connect(filepath = getwd(), filename = "eppocodes.sqlite")
 }
 \arguments{
 \item{filepath}{A string with path where eppocodes.sqlite file is stored. By

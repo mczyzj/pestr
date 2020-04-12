@@ -1,29 +1,27 @@
 Package: pestr
 Title: Extracting Data on Pests from EPPO Database
-Version: 0.7.2.9000
+Version: 0.7.3.9000
 Authors@R: person("Michal Jan", "Czyz", email = "m.czyz.j@gmail.com",
   role = c("aut", "cre"))
 Description: Set of tools to extract data on pests from EPPO Data Services and
-    to put them into tables with human readable format. Those function use EPPO 
-    databes API, thus you first need to register on https://data.eppo.int (free
-    of charge).
-Depends: R (>= 3.3.0)
+    to put them into tables with human readable format. Those function use EPPO
+    databes API, thus you first need to register on <https://data.eppo.int>
+    (free of charge).
+Depends: R (>= 3.5.0)
 Imports: 
     DBI,
     dplyr,
     httr,
     jsonlite,
     magrittr,
-    pryr,
     rlang,
-    RCurl,
     RSQLite,
     tidyr,
     utils
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Suggests: 
     DT,
     httptest,
