@@ -49,7 +49,7 @@ eppo_tabletools_names <- function(names_tables) {
                   Name_type   = replace(.data$Name_type,
                                         is.na(.data$Name_type),
                                         'Preferred')) %>%
-    dplyr::arrange(.data$Preferred_name, desc(.data$Name_type),
+    dplyr::arrange(.data$Preferred_name, dplyr::desc(.data$Name_type),
                    .data$Other_names)
 
   #temporary table nested by name type and other names, in next step
@@ -63,7 +63,7 @@ eppo_tabletools_names <- function(names_tables) {
 
   for (i in 1:length(temp_table$data)) {
     temp_table$data[[i]] %>%
-      dplyr::arrange(desc(.data$Name_type), .data$Other_names) %>%
+      dplyr::arrange(dplyr::desc(.data$Name_type), .data$Other_names) %>%
       dplyr::group_by(.data$Name_type) %>%
       dplyr::mutate(temp_names = paste(.data$Other_names, collapse = ', ')) %>%
       dplyr::distinct(.data$temp_names) %>%

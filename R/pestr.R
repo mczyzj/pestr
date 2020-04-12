@@ -8,7 +8,6 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @importFrom stats setNames
-#' @import dplyr
 #' @docType package
 #' @name pestr
 NULL

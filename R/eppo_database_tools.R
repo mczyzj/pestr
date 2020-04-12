@@ -123,17 +123,17 @@ eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
                            FROM t_names WHERE codeid IN (',
                            paste(unique(names_in_DB$codeid), collapse = ', '),
                            ')')) %>%
-    filter(.data$status == 'A')
+    dplyr::filter(.data$status == 'A')
 
   return(list(exist_in_DB     = data.frame(names_in_DB),
               not_in_DB       = names_vector[test_list %>%
                                                sapply(length) == 0],
               pref_names = data.frame(all_names %>%
-                                        filter(.data$preferred == 1) %>%
-                                        select(.data$codeid, .data$fullname) %>%
-                                        left_join(EPPOcodes, by = 'codeid')),
+                                        dplyr::filter(.data$preferred == 1) %>%
+                                        dplyr::select(.data$codeid, .data$fullname) %>%
+                                        dplyr::left_join(EPPOcodes, by = 'codeid')),
               all_associated_names  = data.frame(all_names %>%
-                                                   select(-.data$status) %>%
-                                                   left_join(EPPOcodes,
+                                                   dplyr::select(-.data$status) %>%
+                                                   dplyr::left_join(EPPOcodes,
                                                              by = 'codeid'))))
 }
