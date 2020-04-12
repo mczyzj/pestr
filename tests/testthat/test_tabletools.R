@@ -1,5 +1,5 @@
 context("EPPO tabletools functions")
-library(pestr)
+library("pestr")
 
 ##### EPPO TABLETOOLS NAMES #####
 test_that("Test that names f returns correct structure from database", {
@@ -92,7 +92,6 @@ test_that("Test that hosts f works correctly", {
 
   test_hosts <- tester_host_func()
 
-
   expect_equal(test_hosts[[1]],
                test_host_table)
 
@@ -175,6 +174,7 @@ test_that("Test that cat f works correctly", {
   test_cat <- tester_cat_func()
 
   expect_equal(test_cat[[1]]$LASPPA, testing_cat$LASPPA)
+  expect_equal(test_cat[[1]]$ABIAL, testing_cat$ABIAL)
 
   #test compact table values
 
@@ -233,23 +233,23 @@ test_that("Test that taxonomy f returns correct structure
   expect_is(test_taxo[[2]], 'data.frame')
 })
 
-test_that("Test that categorization f works correctly", {
-  skip_on_travis()
-  skip_on_cran()
-  skip('Only for use locally with proper token.') #comment out to test
+test_that("Test that taxonomy f works correctly", {
   testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
                                        'Plasmodiophora brassicae', 'Abies alba',
                                        'Pantoea stewartii', 'Globodera pallida',
                                        'Phialophora cinerescens'))
+
   create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+
   eppocodes <- testing_names[[3]]$eppocode
   testing_taxo <- readRDS("mocked_taxo.RDS")
   names(testing_taxo) <- eppocodes
+
   test_taxon_names <- data.frame(eppocode = c('HETDPA', 'LASPPA', 'ERWIST', 'PHIACI',
                                  'PLADBR', 'ABIAL', 'CCCVD0'),
                                  taxonomy = c("Nematoda", "Arthropoda",
                                               "Bacteria", "Fungi",
-                                              "Protista", "Plantae", "Viroids"),
+                                              "Protista", "Plantae", "Riboviria"),
                                  stringsAsFactors = FALSE)
 
   tester_taxo_func <- function() {
@@ -261,39 +261,56 @@ test_that("Test that categorization f works correctly", {
 
   test_taxo <- tester_taxo_func()
 
-  expect_equal(test_taxo[[1]], testing_taxo)
+  expect_equal(test_taxo[[1]][[1]], testing_taxo[[1]])
+  expect_equal(test_taxo[[1]][[3]], testing_taxo[[3]])
+  expect_equal(test_taxo[[1]][[6]], testing_taxo[[6]])
+
   expect_equal(test_taxo[[2]], test_taxon_names)
 
 })
 
 test_that("Test that distribution f returns correct structure
           from database", {
+
   testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
                                        'Plasmodiophora brassicae', 'Abies alba',
                                        'Pantoea stewartii', 'Globodera pallida',
                                        'Phialophora cinerescens'))
-  result_distri <- eppo_tabletools_distri(testing_names)
 
-  expect_is(result_distri, 'list')
-  expect_is(result_distri[[1]], 'list')
-  expect_is(result_distri[[2]], 'data.frame')
+  tester_distri_func <- function() {
+    mockr::with_mock(
+      eppo_csv_download = function(eppocodes) readRDS("mocked_distri.RDS"),
+      eppo_tabletools_distri(testing_names)
+    )
+  }
+
+  test_distri <- tester_distri_func()
+
+
+  expect_is(test_distri, 'list')
+  expect_is(test_distri[[1]], 'list')
+  expect_is(test_distri[[2]], 'data.frame')
 })
 
 test_that("Test that distribution f returns correct values
           from database", {
+
   testing_names <- eppo_names_tables(c('Cydia packardi', 'cadang',
                                        'Plasmodiophora brassicae', 'Abies alba',
                                        'Pantoea stewartii', 'Globodera pallida',
                                        'Phialophora cinerescens'))
   eppocodes <- testing_names[[3]]$eppocode
-  distri_urls <- paste0('https://gd.eppo.int/taxon/',
-                         eppocodes,'/download/distribution_csv')
 
-  distri_lists <- setNames(vector("list", length(eppocodes)), eppocodes)
-  for (i in 1:length(distri_lists)) {
-       distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
-                                               header = T, stringsAsFactors = F)
+  distri_lists <- readRDS("mocked_distri.RDS")
+
+  tester_distri_func <- function() {
+    mockr::with_mock(
+      eppo_csv_download = function(eppocodes) readRDS("mocked_distri.RDS"),
+      eppo_tabletools_distri(testing_names)
+    )
   }
+
+  test_distri <- tester_distri_func()
 
   testing_distri_df <- distri_lists %>%
     dplyr::bind_rows(.id = 'eppocode') %>%
@@ -311,10 +328,8 @@ test_that("Test that distribution f returns correct values
     dplyr::distinct() %>%
     dplyr::ungroup()
 
-  testing_distri <- eppo_tabletools_distri(testing_names)
-
-  expect_equal(testing_distri[[1]], distri_lists)
-  expect_equal(testing_distri[[2]], testing_distri_df)
+  expect_equal(test_distri[[1]], distri_lists)
+  expect_equal(test_distri[[2]], testing_distri_df)
 })
 
 test_that("Test that pests f returns correct structure
@@ -353,7 +368,9 @@ test_that("Test that pest f works correctly", {
 
   test_pests <- tester_pest_func()
 
-  expect_equal(test_pests[[2]]$eppocode[1], "TRZAC")
+#  print(test_pests[[2]]$eppocode)
+
+  expect_equal(test_pests[[2]]$eppocode, c("ABIAL", "TRZAC", "TRZAX"))
   expect_true(stringr::str_detect(test_pests[[2]]$pests[3],
                                   "Listronotus bonariensis"))
   expect_false(stringr::str_detect(test_pests[[2]]$pests[3],
