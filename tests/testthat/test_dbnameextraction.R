@@ -1,5 +1,6 @@
 context("EPPO database functions")
-library(pestr)
+library("pestr")
+library("dplyr")
 
 test_that("Test that f returns correct names from database", {
   testNames <- c('Cydia packardi', 'noPest', 'cherry virus', 'noPest2')

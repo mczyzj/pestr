@@ -1,5 +1,6 @@
 context("EPPO tabletools functions")
 library("pestr")
+library("dplyr")
 
 ##### EPPO TABLETOOLS NAMES #####
 test_that("Test that names f returns correct structure from database", {
