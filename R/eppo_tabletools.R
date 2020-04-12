@@ -210,6 +210,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
                                 eppocode = NA,
                                 prefname = NA,
                                 level = NA)
+
     taxo_tables <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
 
     #If table from list is empty exchange it with NA table
@@ -220,6 +221,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
         taxo_tables[i] <- taxo_list_table[i]
       }
     }
+
     #Create compact table
     compact_table <- data.frame(eppocode = eppocodes,
                                 taxonomy = rep(NA, length(eppocodes)),
@@ -247,11 +249,14 @@ eppo_tabletools_distri <- function(names_tables) {
   distri_urls <- paste0('https://gd.eppo.int/taxon/',
                        eppocodes,'/download/distribution_csv')
 
-  distri_lists <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
-  for (i in 1:length(distri_lists)) {
-    distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
-                                            header = T, stringsAsFactors = F)
-  }
+  # distri_lists <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
+  #
+  # for (i in 1:length(distri_lists)) {
+  #   distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
+  #                                           header = T, stringsAsFactors = F)
+  # }
+
+  distri_lists <- eppo_csv_download(eppocodes)
 
   compact_table <- distri_lists %>%
     dplyr::bind_rows(.id = 'eppocode') %>%
