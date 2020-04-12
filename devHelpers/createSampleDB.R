@@ -1,7 +1,10 @@
 testDB <- RSQLite::dbConnect(RSQLite::SQLite(), dbname = 'eppo_sample.sqlite')
 
 names_vector <- c('Cydia packardi', 'noPest', 'cherry virus', 'noPest2',
-                  'Xylella', 'Drosophila', "Triticum aestivum")
+                  'Xylella', 'Drosophila', "Triticum aestivum", 'cadang',
+                  'Plasmodiophora brassicae', 'Abies alba',
+                  'Pantoea stewartii', 'Globodera pallida',
+                  'Phialophora cinerescens')
 
 eppoDB <- RSQLite::dbConnect(RSQLite::SQLite(), dbname = 'eppocodes.sqlite')
 
