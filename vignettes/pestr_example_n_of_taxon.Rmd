@@ -85,12 +85,12 @@ abies_alba_pests$long_table %>%
 ### Than we can create very simple barplot to visualise number of
 ### species in particular type of pest
 abies_alba_pests$long_table %>%
-   dplyr::select(labelclass) %>%
-   dplyr::group_by(labelclass) %>% 
-   dplyr::summarise(n = dplyr::n()) %>%
-   barplot(formula = n~labelclass, data = .,
-           xlab = "Type of pest", ylab = "Number of species",
+  dplyr::select(labelclass) %>%
+  table %>%
+  barplot(xlab = "Type of pest", ylab = "Number of species",
            col = "#AF0011", ylim = c(0, 30))
+
+
 ```
 
 ## Step 4 -- Number of taxons
@@ -139,10 +139,9 @@ pests_taxonomy$compact_table %>%
 
 pests_taxonomy$compact_table %>%
   dplyr::filter(eppocode %in% pests_eppocodes) %>%
-  dplyr::group_by(taxonomy) %>% 
-   dplyr::summarise(n = dplyr::n()) %>%
-   barplot(formula = n~taxonomy, data = .,
-           xlab = "Classification of pest", ylab = "Number of species",
+  dplyr::select(taxonomy) %>%
+  table() %>%
+   barplot(xlab = "Classification of pest", ylab = "Number of species",
            col = "#AF0011", ylim = c(0, 30))
 ```
 
