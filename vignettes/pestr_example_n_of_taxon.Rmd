@@ -88,7 +88,7 @@ abies_alba_pests$long_table %>%
    dplyr::select(labelclass) %>%
    dplyr::group_by(labelclass) %>% 
    dplyr::summarise(n = dplyr::n()) %>%
-   barplot(n~labelclass, data = .,
+   barplot(formula = n~labelclass, data = .,
            xlab = "Type of pest", ylab = "Number of species",
            col = "#AF0011", ylim = c(0, 30))
 ```
@@ -141,7 +141,7 @@ pests_taxonomy$compact_table %>%
   dplyr::filter(eppocode %in% pests_eppocodes) %>%
   dplyr::group_by(taxonomy) %>% 
    dplyr::summarise(n = dplyr::n()) %>%
-   barplot(n~taxonomy, data = .,
+   barplot(formula = n~taxonomy, data = .,
            xlab = "Classification of pest", ylab = "Number of species",
            col = "#AF0011", ylim = c(0, 30))
 ```
