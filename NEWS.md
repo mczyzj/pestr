@@ -6,6 +6,10 @@
 * EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
 * Now test are only checking if it `inherits` from `pestr_token` class.
 
+## New vignettes
+
+* Vignette showing how to use output of `eppo_tabletools_pests()` to check taxonomy of pest infecting Abies alba.
+
 ## Fixed issues
 
 * Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. #12
