@@ -1,3 +1,4 @@
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" style="display: block; margin: auto auto auto 0;" />
 # pestr
 Functions included in this package allows users to painlessly connect to and
 extract data from EPPO Data Services. Before you start using it you should
