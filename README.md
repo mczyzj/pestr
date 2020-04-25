@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
 [![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
+
 Functions included in this package allows users to painlessly connect to and
 extract data from EPPO Data Services. Before you start using it you should
 register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token
