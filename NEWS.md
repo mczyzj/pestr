@@ -19,6 +19,7 @@
 * Deleted `pryr` for dependencies at it was only used to check if `eppo_token` is `S3` class. 
 * Deleted `RCurl` from dependecies since now package relies on `httr` to connect with **REST API**.
 * All test now use correct syntac to load packages (e.g. library('dplyr') instead of `library(dplyr)`).
+* Added hex sticker.
 
 # pestr 0.7.2
 
