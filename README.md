@@ -1,4 +1,9 @@
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" style="display: block; margin: auto auto auto 0;" />
+
 # pestr
+
+[![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
+[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
 Functions included in this package allows users to painlessly connect to and
 extract data from EPPO Data Services. Before you start using it you should
 register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token
@@ -32,8 +37,7 @@ one row per one pest.
 
 Feel free to contribute to this package and report issues via GitHub or email.
 
-[![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
-[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
+
 
 ## Example workflow
 
