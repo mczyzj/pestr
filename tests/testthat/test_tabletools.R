@@ -1,6 +1,7 @@
 context("EPPO tabletools functions")
 library("pestr")
 library("dplyr")
+library("rlang")
 
 ##### EPPO TABLETOOLS NAMES #####
 test_that("Test that names f returns correct structure from database", {
@@ -108,7 +109,8 @@ test_that("Test that hosts f works correctly", {
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
     dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::ungroup()
 
   expect_equal(test_hosts[[2]], compact_names_test)
 
@@ -285,12 +287,12 @@ test_that("Test that distribution f returns correct structure
     )
   }
 
-  test_distri <- tester_distri_func()
+ test_distri <- tester_distri_func()
 
 
-  expect_is(test_distri, 'list')
-  expect_is(test_distri[[1]], 'list')
-  expect_is(test_distri[[2]], 'data.frame')
+ expect_is(test_distri, 'list')
+expect_is(test_distri[[1]], 'list')
+ expect_is(test_distri[[2]], 'data.frame')
 })
 
 test_that("Test that distribution f returns correct values
@@ -312,6 +314,19 @@ test_that("Test that distribution f returns correct values
   }
 
   test_distri <- tester_distri_func()
+
+  distri_lists <- readRDS("mocked_distri.RDS")
+
+  for (i in 1:length(distri_lists)) {
+    if (dim(distri_lists[[i]])[1] == 0) {
+      distri_lists[[i]] <- data.frame(continent    = NA,
+                                      country      = NA,
+                                      state        = NA,
+                                      country.code = NA,
+                                      state.code   = NA,
+                                      Status       = NA)
+    }
+  }
 
   testing_distri_df <- distri_lists %>%
     dplyr::bind_rows(.id = 'eppocode') %>%

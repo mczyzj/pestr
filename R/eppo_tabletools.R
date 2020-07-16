@@ -124,7 +124,8 @@ eppo_tabletools_hosts <- function(names_tables, token) {
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
     dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::ungroup()
 
   return(list(long_table = hosts_table,
                 compact_table))
@@ -257,6 +258,17 @@ eppo_tabletools_distri <- function(names_tables) {
   # }
 
   distri_lists <- eppo_csv_download(eppocodes)
+
+   for (i in 1:length(distri_lists)) {
+     if (dim(distri_lists[[i]])[1] == 0) {
+       distri_lists[[i]] <- data.frame(continent    = NA,
+                                       country      = NA,
+                                       state        = NA,
+                                       country.code = NA,
+                                       state.code   = NA,
+                                       Status       = NA)
+     }
+   }
 
   compact_table <- distri_lists %>%
     dplyr::bind_rows(.id = 'eppocode') %>%
