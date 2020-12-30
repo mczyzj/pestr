@@ -24,3 +24,46 @@ create_eppo_token <- function(x) {
                              class = c('pestr_token', 'character'))
   }
 }
+
+#' EPPO Data Services token variable
+#'
+#' \code{check_eppo_token} should be used after \code{create_eppo_token}
+#' to check if the token is correctly recognized by EPPO Data Sevices API.
+#' As a reference it uses link to Xylella fastidiosa hosts database -
+#' XYLEFA eppocode.
+#' If token is recognized there will be no message. In other cases function will
+#' show following messages: No internet connection or Forbidden (HTTP 403).
+#'
+#' @param token object of class pestr_token.
+#' @return Silent NULL when there is no error, otherwise message.
+#' @seealso To obtain your free EPPO token please register
+#' \url{https://data.eppo.int/}
+#' @examples
+#' \dontrun{
+#' check_eppo_token(eppo_token)
+#' }
+#' @export
+check_eppo_token <- function(token) {
+  if (!all(inherits(token, c('pestr_token')))) {
+    message('Your token argument is not of pestr_token class.
+            Please provide token created with create_eppo_token function')
+  } else {
+    # First check internet connection
+    if (!curl::has_internet()) {
+      message("No internet connection.")
+      return(invisible(NULL))
+      }
+    # Then try for timeout problems
+    resp <- try_GET(paste0(
+      "https://data.eppo.int/api/rest/1.0/taxon/XYLEFA/hosts", token))
+    if (!inherits(resp, "response")) {
+      message(resp)
+      return(invisible(NULL))
+      }
+    # Then stop if status > 400
+    if (httr::http_error(resp)) {
+      httr::message_for_status(resp)
+      return(invisible(NULL))
+    }
+  }
+}

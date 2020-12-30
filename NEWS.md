@@ -1,4 +1,7 @@
 # pestr 0.7.3
+## New functions
+
+* `check_eppo_token` allows checking if eppo_token is correctly recognized by EPPO Data Services API.
 
 ## New and updated tests
 
