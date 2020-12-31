@@ -79,7 +79,18 @@ eppo_rest_download <- function(eppocodes, type, token) {
 #' @noRd
 
 eppo_json_wrapper <- function(urls) {
-  jsonlite::fromJSON(httr::content(httr::GET(urls), "text"))
+  querry_content <- jsonlite::fromJSON(httr::content(eppo_try_urls(urls), "text"))
+
+  if (is.null(querry_content)) {
+    querry_content <- list()
+  } else if (length(querry_content) == 1 &
+             "message" %in% names(querry_content)) {
+    querry_content <- list()
+  }
+
+  return(querry_content)
+
+#  jsonlite::fromJSON(httr::content(httr::GET(urls), "text"))
 }
 
 #' EPPO distribution helper tools
