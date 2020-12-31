@@ -9,12 +9,11 @@
 
 try_GET <- function(x, ...) {
   tryCatch(
-    httr::GET(url = x, httr::timeout(15), ...),
+    httr::GET(url = x, httr::timeout(20), ...),
     error = function(e) conditionMessage(e),
     warning = function(w) conditionMessage(w)
   )
 }
-
 
 #' Fail Gracefuly API helper tools
 #'
@@ -46,6 +45,7 @@ eppo_try_urls <- function(urls) {
   # Then stop if status > 400
   if (httr::http_error(resp)) {
     httr::message_for_status(resp)
+    message("\nMost likely one of the provided EPPO codes or token is invalid.")
   }
 
   return(resp)
@@ -108,9 +108,29 @@ eppo_csv_download <- function(eppocodes) {
 
   distri_lists <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
 
+  # download csv files directly into list
   for (i in 1:length(distri_lists)) {
-    distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
-                                            header = T, stringsAsFactors = F)
+    distri_lists[[i]] <- eppo_try_urls(distri_urls[i]) %>%
+      httr::content(type = "text/csv",
+                    encoding = "UTF-8",
+                    col_types = readr::cols()) %>%
+      as.data.frame()
   }
+  #If the eppo code was not recognized the file will be empty, with no correct
+  #column names. Delete by substituting those wrong elements of the list
+  #with NULL and print the wrong codes.
+  for (i in names(distri_lists)) {
+    if (!all(names(distri_lists[[i]]) %in% c("continent", "country", "state",
+                                       "country code", "state code", "Status"))) {
+      message("The distribution file for EPPO code ", i, " was not found.")
+      distri_lists[[i]] <- NULL
+    } else {
+      colnames(distri_lists[[i]]) <- c("continent", "country", "state",
+                                       "country.code", "state.code", "Status")
+    }
+  }
+#    distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
+#                                            header = T, stringsAsFactors = F)
+#}
   return(distri_lists)
 }

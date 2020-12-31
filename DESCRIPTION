@@ -9,16 +9,17 @@ Description: Set of tools to extract data on pests from EPPO Data Services and
     (free of charge).
 Depends: R (>= 3.6.0)
 Imports: 
+    curl,
     DBI,
     dplyr,
     httr,
     jsonlite,
     magrittr,
+    readr,
     rlang,
     RSQLite,
     tidyr,
-    utils,
-    curl
+    utils
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true

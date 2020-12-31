@@ -2,7 +2,8 @@
 ## New functions
 
 * `check_eppo_token` allows checking if eppo_token is correctly recognized by EPPO Data Services API.
-* `try_GET` and `eppo_try_urls` helper wrappers to fail gracefuly.
+* `try_GET` and `eppo_try_urls` helper wrappers to fail gracefully.
+* updated `eppo_json_wrapper` and `eppo_csv_download` helpers to fail gracefully.
 
 ## New and updated tests
 
