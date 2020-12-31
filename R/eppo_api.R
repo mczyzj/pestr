@@ -1,3 +1,56 @@
+#' Fail Gracefuly API helper tools
+#'
+#' Try-catch wrapper.
+#'
+#' @param x character vector of urls including token, to be downloaded.
+#'
+#' @return List of REST download results.
+#' @noRd
+
+try_GET <- function(x, ...) {
+  tryCatch(
+    httr::GET(url = x, httr::timeout(15), ...),
+    error = function(e) conditionMessage(e),
+    warning = function(w) conditionMessage(w)
+  )
+}
+
+
+#' Fail Gracefuly API helper tools
+#'
+#' Small wrapper for graceful fail if there is an error with internet
+#' connection, wrong token or wrong link.
+#' The solution is based on
+#' https://bit.ly/2WYD1cC as suggested by kvasilopoulos
+#'
+#' @param urls character vector of urls including token, to be downloaded.
+#'
+#' @return List of REST download results.
+#' @noRd
+
+eppo_try_urls <- function(urls) {
+
+  # First check internet connection
+  if (!curl::has_internet()) {
+    message("No internet connection.")
+    return(invisible(NULL))
+  }
+
+    # Then try for timeout problems
+  resp <- try_GET(urls)
+  if (!inherits(resp, "response")) {
+    message(resp)
+    return(invisible(NULL))
+  }
+
+  # Then stop if status > 400
+  if (httr::http_error(resp)) {
+    httr::message_for_status(resp)
+  }
+
+  return(resp)
+}
+
 #' EPPO API helper tools
 #'
 #' Set of small wrappers and functions to help connecting with API and reuse
