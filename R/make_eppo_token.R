@@ -17,7 +17,9 @@ create_eppo_token <- function(x) {
   eppo_token <- NULL
   character_token <- as.character(x)
   if (grepl('[^a-f0-9]', character_token)) {
-    warning('Token contains forbiden characters')
+    #not sure if this should result in error - to consider
+    message('Token contains forbiden characters')
+    return(invisible(NULL))
   } else {
     character_token <- as.character(paste0('?authtoken=', character_token))
     eppo_token <<- structure(character_token,

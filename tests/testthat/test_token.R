@@ -11,9 +11,9 @@ test_that("Test that token is a string", {
 })
 
 test_that("Test that token has proper format", {
-  expect_warning(create_eppo_token('aa@-'), 'forbiden characters')
-  expect_warning(create_eppo_token('AAZ'), 'forbiden characters')
-  expect_warning(create_eppo_token('ghij'), 'forbiden characters')
+  expect_message(create_eppo_token('aa@-'), 'forbiden characters')
+  expect_message(create_eppo_token('AAZ'), 'forbiden characters')
+  expect_message(create_eppo_token('ghij'), 'forbiden characters')
 })
 
 test_that("Test that function creates global variable eppo_token", {
@@ -21,7 +21,10 @@ test_that("Test that function creates global variable eppo_token", {
               exists('eppo_token'))
   expect_false(create_eppo_token('abc123') == '?authtoken=123abc',
                exists('eppo_token'))
-  expect_equal(create_eppo_token('Z@a1') == '123abc', !exists('eppo_token'))
+  #for time being the below test is useless
+  #should the function throw error when there is wrong character,
+  #this should be adjusted.
+  expect_null(create_eppo_token('Z@a1'))
 })
 
 rm(eppo_token, envir = globalenv())
