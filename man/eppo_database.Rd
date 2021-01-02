@@ -34,3 +34,23 @@ download the file directly from EPPO Data Services.
 \code{eppo_databse_connect} allows user to conect to SQLite database
 downloaded from EPPO Data Services.
 }
+\examples{
+\dontrun{
+#to check if the db file exist in the directory (default working directory)
+
+eppo_database_check(filepath = getwd())
+
+#to download EPPO SQLite database into directory (default working directory).
+#If you are Windows user, after download finishes you will need to unzip file
+#manualy.
+
+eppo_database_download(filepath = getwd())
+
+#prior to use functions that check pest names in SQLite database,
+#you need to set up connection to SQLite database. Doing so is
+#straightforward with function below (once per sesion):
+
+eppo_connection <- eppo_database_connect(filepath = getwd(),
+                                         filename = "eppocodes.sqlite")
+}
+}
