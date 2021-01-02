@@ -194,7 +194,7 @@ eppo_tabletools_cat <- function(names_tables, token) {
 
 
     return(list(list_table = cat_tables,
-              compact_table))
+              compact_table = compact_table))
 }
 }
 #' @rdname eppo_tabletools
