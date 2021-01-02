@@ -56,7 +56,7 @@ eppo_database_check <- function(filepath = getwd(),
 
 #' @rdname eppo_database
 #' @export
-eppo_database_download <- function(filepath = getwd(), quiet = FALSE) {
+eppo_database_download <- function(filepath = getwd()) {
   zipfile <- utils::capture.output(cat(filepath, 'eppocodes.zip',
                                    sep = ifelse(.Platform$OS.type == 'windows',
                                              "\\", "/")))
@@ -66,14 +66,10 @@ eppo_database_download <- function(filepath = getwd(), quiet = FALSE) {
     print(link)
     try_GET <- function(x, ...) {
       tryCatch(
-        curl::curl_download(url = link, destfile = zipfile, mode = "wb", quiet = quiet, ...),
+        curl::curl_download(url = link, destfile = zipfile, mode = "wb", ...),
         error = function(e) conditionMessage(e),
         warning = function(w) conditionMessage(w)
       )
-    }
-
-    is_response <- function(x) {
-      class(x) == "response"
     }
 
     # First check internet connection
@@ -83,13 +79,13 @@ eppo_database_download <- function(filepath = getwd(), quiet = FALSE) {
     }
     # Then try for timeout problems
     resp <- try_GET(link)
-    if (!is_response(resp)) {
+    if (!inherits(resp, "response")) {
       message(resp)
       return(invisible(NULL))
     }
     # Then stop if status > 400
     if (httr::http_error(resp)) {
-      message_for_status(resp)
+      httr::message_for_status(resp)
       return(invisible(NULL))
     }
 
