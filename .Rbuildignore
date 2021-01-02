@@ -6,3 +6,4 @@
 ^GarbageCollector$
 ^eppocodes\.sqlite$
 ^eppocodes\.zip$
+^\.github$
