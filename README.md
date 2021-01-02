@@ -120,8 +120,6 @@ write.csv(eppo_fulltable, 'eppo_fulltable.csv')
 TODO:
 
 * Code comments
-* Encrypt token to make more test using TravisCI
-* Update sample SQLite db
 * Add Vignettes
 * Internationalization
 * Connection to pestrPRA

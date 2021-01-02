@@ -116,6 +116,8 @@ test_that("Test that hosts f works correctly", {
 
 })
 
+##### EPPO TABLETOOLS CAEGORIZATION ####
+
 test_that("Test that categorization f checks if parsed arguments
           are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
@@ -206,6 +208,8 @@ test_that("Test that cat f works correctly", {
                compact_table)
 })
 
+##### EPPO TABLETOOLS TAXONOMY ####
+
 test_that("Test that taxonomy f checks if parsed arguments
           are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
@@ -248,11 +252,12 @@ test_that("Test that taxonomy f works correctly", {
   testing_taxo <- readRDS("mocked_taxo.RDS")
   names(testing_taxo) <- eppocodes
 
-  test_taxon_names <- data.frame(eppocode = c('HETDPA', 'LASPPA', 'ERWIST', 'PHIACI',
-                                 'PLADBR', 'ABIAL', 'CCCVD0'),
-                                 taxonomy = c("Nematoda", "Arthropoda",
-                                              "Bacteria", "Fungi",
-                                              "Protista", "Plantae", "Riboviria"),
+  test_taxon_names <- data.frame(eppocode = c("HETDPA", "LASPPA", "PHIACI",
+                                              "PLADBR", "ABIAL", "CCCVD0",
+                                              "ERWIST", "PNTOIN"),
+                                 taxonomy = c("Nematoda", "Arthropoda", "Fungi",
+                                              "Protista", "Plantae", "Riboviria",
+                                              "Bacteria", "Bacteria"),
                                  stringsAsFactors = FALSE)
 
   tester_taxo_func <- function() {
@@ -271,6 +276,8 @@ test_that("Test that taxonomy f works correctly", {
   expect_equal(test_taxo[[2]], test_taxon_names)
 
 })
+
+##### EPPO TABLETOOLS DISTRIBUTION ####
 
 test_that("Test that distribution f returns correct structure
           from database", {
@@ -348,6 +355,8 @@ test_that("Test that distribution f returns correct values
   expect_equal(test_distri[[2]], testing_distri_df)
 })
 
+##### EPPO TABLETOOLS PESTS ####
+
 test_that("Test that pests f returns correct structure
           from database", {
   testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
@@ -386,14 +395,16 @@ test_that("Test that pest f works correctly", {
 
 #  print(test_pests[[2]]$eppocode)
 
-  expect_equal(test_pests[[2]]$eppocode, c("ABIAL", "TRZAC", "TRZAX"))
+  expect_equal(test_pests[[2]]$eppocode, c("ABIAL", "TRZAC", "TRZAX", "TTLRI"))
   expect_true(stringr::str_detect(test_pests[[2]]$pests[3],
                                   "Listronotus bonariensis"))
   expect_false(stringr::str_detect(test_pests[[2]]$pests[3],
                                   "Listronotusbonariensis"))
   expect_true(all(test_pests[[1]]$labelclass %in% c("Incidental",
-                                                    "Major",
-                                                    "Minor",
+                                                    "Host",
+                                                    "Major host",
+                                                    "Minor host",
                                                     "Unclassified",
-                                                    "Artificial")))
+                                                    "Artificial",
+                                                    "Experimental")))
 })

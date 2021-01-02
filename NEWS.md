@@ -10,6 +10,7 @@
 * Updated tests include mocking to support testing on CI and CRAN without using token, or connect to EPPO API, or download *csv* files.
 * EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
 * Now test are only checking if it `inherits` from `pestr_token` class.
+* mocked files and SQLite db is up to date on *02-Jan-2020*.
 
 ## New vignettes
 
