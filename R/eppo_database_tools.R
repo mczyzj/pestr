@@ -15,6 +15,25 @@
 #'    eppocodes.sqlite.
 #' @return Checks if database file exist in directory, if it is outdated, and
 #'    establishes SQLite database connection
+#' @examples
+#' \dontrun{
+#' #to check if the db file exist in the directory (default working directory)
+#'
+#' eppo_database_check(filepath = getwd())
+#'
+#' #to download EPPO SQLite database into directory (default working directory).
+#' #If you are Windows user, after download finishes you will need to unzip file
+#' #manualy.
+#'
+#' eppo_database_download(filepath = getwd())
+#'
+#' #prior to use functions that check pest names in SQLite database,
+#' #you need to set up connection to SQLite database. Doing so is
+#' #straightforward with function below (once per sesion):
+#'
+#' eppo_connection <- eppo_database_connect(filepath = getwd(),
+#'                                          filename = "eppocodes.sqlite")
+#' }
 #' @name eppo_database
 NULL
 
@@ -37,14 +56,47 @@ eppo_database_check <- function(filepath = getwd(),
 
 #' @rdname eppo_database
 #' @export
-eppo_database_download <- function(filepath = getwd()) {
+eppo_database_download <- function(filepath = getwd(), quiet = FALSE) {
   zipfile <- utils::capture.output(cat(filepath, 'eppocodes.zip',
                                    sep = ifelse(.Platform$OS.type == 'windows',
                                              "\\", "/")))
+  link <- 'https://data.eppo.int/files/sqlite.zip'
+  ### Try to download zipfile, if somethings wrong fail gracefully
   if (!isTRUE(eppo_database_check())){
-  utils::download.file('https://data.eppo.int/files/sqlite.zip',
-                       destfile = zipfile)
+    print(link)
+    try_GET <- function(x, ...) {
+      tryCatch(
+        curl::curl_download(url = link, destfile = zipfile, mode = "wb", quiet = quiet, ...),
+        error = function(e) conditionMessage(e),
+        warning = function(w) conditionMessage(w)
+      )
+    }
+
+    is_response <- function(x) {
+      class(x) == "response"
+    }
+
+    # First check internet connection
+    if (!curl::has_internet()) {
+      message("No internet connection! \n")
+      return(invisible(NULL))
+    }
+    # Then try for timeout problems
+    resp <- try_GET(link)
+    if (!is_response(resp)) {
+      message(resp)
+      return(invisible(NULL))
+    }
+    # Then stop if status > 400
+    if (httr::http_error(resp)) {
+      message_for_status(resp)
+      return(invisible(NULL))
+    }
+
+  #utils::download.file('https://data.eppo.int/files/sqlite.zip',
+  #                     destfile = zipfile)
   }
+
   if(.Platform$OS.type == 'windows') {
     message('Please unzip sqllite.zip file manually to your working directory')
   } else {
