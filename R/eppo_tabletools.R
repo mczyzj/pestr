@@ -29,35 +29,29 @@ eppo_tabletools_names <- function(names_tables) {
   #intermediate table holding non preffered names with corrected headings
   other_table <- names_tables$all_associated_names %>%
     dplyr::filter(.data$preferred == 0) %>%
-    dplyr::rename(Other_names = .data$fullname) %>%
-    dplyr::select('codeid'       = 1,
-                  'Other_names'  = 2,
-                  'codelang'     = 4)
+    dplyr::select(.data$codeid, Other_names = .data$fullname, .data$codelang)
   #long format table containing collumns for preffered names and accompanying
   #other names, also intermediate table that is a basis for a compact table
   preferred_table <- names_tables$all_associated_names %>%
     dplyr::filter(.data$preferred == 1) %>%
-    dplyr::rename(Preferred_name = .data$fullname) %>%
-    dplyr::select('codeid', 'eppocode', 'Preferred_name') %>%
+    dplyr::select(.data$codeid, .data$eppocode,
+                  Preferred_name = .data$fullname) %>%
     dplyr::left_join(other_table, by = 'codeid') %>%
     dplyr::mutate(Name_type = ifelse(.data$codelang == 'la',
                                      'Synonym', 'Other languages')) %>%
-    dplyr::mutate(Other_names = replace(.data$Other_names,
-                                        is.na(.data$Other_names), 'none'),
-                  codelang    = replace(.data$codelang,
-                                        is.na(.data$codelang), 'none'),
-                  Name_type   = replace(.data$Name_type,
-                                        is.na(.data$Name_type),
-                                        'Preferred')) %>%
+    dplyr::mutate(dplyr::across(c(.data$Other_names, .data$codelang),
+                                ~ ifelse(is.na(.x), "none", (.x)))) %>%
+    dplyr::mutate(Name_type = ifelse(is.na(.data$Name_type),
+                                     "Preferred", .data$Name_type)) %>%
     dplyr::arrange(.data$Preferred_name,
                    dplyr::desc(.data$Name_type),
                    .data$Other_names)
-
   #temporary table nested by name type and other names, in next step
   #names will be collapsed to one cell per preffered name
   temp_table <- preferred_table %>%
     dplyr::select(
-      'codeid', 'eppocode', 'Preferred_name', 'Other_names', 'Name_type'
+      .data$codeid, .data$eppocode,
+      .data$Preferred_name, .data$Other_names, .data$Name_type
       ) %>%
     tidyr::nest(data = c(.data$Name_type, .data$Other_names))
 
@@ -77,8 +71,6 @@ eppo_tabletools_names <- function(names_tables) {
         .data$temp_names[1], .data$temp_names[2], sep = '; '),
         .keep = "none"
         ) %>%
-#      dplyr::transmute(alt_names = paste(.data$temp_names[1],
-#                                         .data$temp_names[2], sep = '; ')) %>%
       dplyr::distinct() %>%
       gsub('; NA', '', .)
   }

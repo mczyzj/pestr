@@ -11,14 +11,14 @@ Depends: R (>= 3.6.0)
 Imports: 
     curl,
     DBI,
-    dplyr,
+    dplyr (>= 1.0.0),
     httr,
     jsonlite,
     magrittr,
     readr,
     rlang,
     RSQLite,
-    tidyr,
+    tidyr (>= 1.0.0),
     utils
 License: CC BY 4.0
 Encoding: UTF-8
