@@ -331,12 +331,12 @@ eppo_tabletools_pests <- function(names_tables, token) {
   #separeted with names of host categories (major, minor, incidental etc.)
     compact_table <- pests_table %>%
       dplyr::group_by(.data$eppocode, .data$labelclass) %>%
-      dplyr::select('eppocode', 'labelclass', 'fullname') %>%
+      dplyr::select(.data$eppocode, .data$labelclass, .data$fullname) %>%
       dplyr::mutate(pests = paste(.data$fullname,
                                   collapse = ', ')) %>%
       dplyr::mutate(pests = paste0(.data$labelclass, ': ', .data$pests)) %>%
       dplyr::ungroup() %>%
-      dplyr::select('eppocode', 'pests') %>%
+      dplyr::select(.data$eppocode, .data$pests) %>%
       dplyr::distinct() %>%
       dplyr::group_by(.data$eppocode) %>%
       dplyr::mutate(pests = paste(.data$pests, collapse = '; ')) %>%
