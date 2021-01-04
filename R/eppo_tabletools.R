@@ -213,7 +213,8 @@ eppo_tabletools_taxo <- function(names_tables, token) {
     empty_taxo_df <- data.frame(codeid = NA,
                                 eppocode = NA,
                                 prefname = NA,
-                                level = NA)
+                                level = NA,
+                                stringsAsFactors = FALSE)
 
     taxo_tables <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
 
@@ -225,6 +226,9 @@ eppo_tabletools_taxo <- function(names_tables, token) {
         taxo_tables[i] <- taxo_list_table[i]
       }
     }
+
+    long_table <- taxo_tables %>%
+      dplyr::bind_rows(.id = "eppocode")
 
   #Create compact table
     compact_table <- data.frame(eppocode = eppocodes,
@@ -243,7 +247,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
       }
     }
 
-    return(list(list_table = taxo_tables,
+    return(list(long_table = long_table,
                 compact_table = compact_table))
   }
 }

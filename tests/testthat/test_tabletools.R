@@ -241,7 +241,7 @@ test_that("Test that taxonomy f returns correct structure
   test_taxo <- tester_taxo_func()
 
   expect_is(test_taxo, 'list')
-  expect_is(test_taxo[[1]], 'list')
+  expect_is(test_taxo[[1]], 'data.frame')
   expect_is(test_taxo[[2]], 'data.frame')
 })
 
@@ -274,9 +274,10 @@ test_that("Test that taxonomy f works correctly", {
 
   test_taxo <- tester_taxo_func()
 
-  expect_equal(test_taxo[[1]][[1]], testing_taxo[[1]])
-  expect_equal(test_taxo[[1]][[3]], testing_taxo[[3]])
-  expect_equal(test_taxo[[1]][[6]], testing_taxo[[6]])
+  expect_equal(test_taxo[[1]][1, 3], "Animalia")
+  expect_equal(test_taxo[[1]][15, 3], "Grapholita packardi")
+  expect_equal(test_taxo[[1]][25, 1], 60625)
+  expect_equal(test_taxo[[1]][39, 2], "CCCVD0")
 
   expect_equal(test_taxo[[2]], test_taxon_names)
 
