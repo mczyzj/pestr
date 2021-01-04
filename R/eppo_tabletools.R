@@ -160,6 +160,9 @@ eppo_tabletools_cat <- function(names_tables, token) {
       }
     }
 
+    long_table <- cat_tables %>%
+      dplyr::bind_rows(.id = 'eppocode')
+
   #collapse values in list tables into whole categorization in one cell
   #for each of the pests
     compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
@@ -186,15 +189,13 @@ eppo_tabletools_cat <- function(names_tables, token) {
         dplyr::mutate(categorization = paste(.data$categorization,
                                              collapse = ' | '),
                       .keep = "none") %>%
-        # dplyr::transmute(categorization = paste(.data$categorization,
-        #                                        collapse = ' | ')) %>%
          dplyr::distinct()
     }
 
     compact_table <- compact_list %>%
       dplyr::bind_rows(.id = 'eppocode')
 
-    return(list(list_table = cat_tables,
+    return(list(long_table = long_table,
                 compact_table = compact_table))
   }
 }

@@ -100,7 +100,7 @@ test_that("Test that hosts f works correctly", {
   ###test compact table values
 
   compact_names_test <- test_host_table %>%
-    dplyr::select(.data$labelclass, .data$full_name) %>%
+    dplyr::select(.data$eppocode, .data$labelclass, .data$full_name) %>%
     dplyr::group_by(.data$eppocode, .data$labelclass) %>%
     dplyr::mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
     dplyr::mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
@@ -141,7 +141,7 @@ test_that("Test that categorization f returns correct structure
   test_cat <- tester_cat_func()
 
   expect_is(test_cat, 'list')
-  expect_is(test_cat[[1]], 'list')
+  expect_is(test_cat[[1]], 'data.frame')
   expect_is(test_cat[[2]], 'data.frame')
 })
 
@@ -169,6 +169,9 @@ test_that("Test that cat f works correctly", {
     }
   }
 
+  transformed_cat_lt <- transformed_cat %>%
+    dplyr::bind_rows(.id = "eppocode")
+
   tester_cat_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_cat.RDS"),
@@ -178,8 +181,10 @@ test_that("Test that cat f works correctly", {
 
   test_cat <- tester_cat_func()
 
-  expect_equal(test_cat[[1]]$LASPPA, testing_cat$LASPPA)
-  expect_equal(test_cat[[1]]$ABIAL, testing_cat$ABIAL)
+  expect_equal(test_cat[[1]] %>% dplyr::filter(.data$eppocode == "LASPPA"),
+               transformed_cat_lt %>% dplyr::filter(.data$eppocode == "LASPPA"))
+  expect_equal(test_cat$long_table %>% dplyr::filter(.data$eppocode == "ABIAL"),
+               transformed_cat_lt %>% dplyr::filter(.data$eppocode == "ABIAL"))
 
   #test compact table values
 
