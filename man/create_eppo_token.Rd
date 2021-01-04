@@ -13,6 +13,7 @@ create_eppo_token(x)
 Global variable with the token to access EPPO Data Services API.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
 \code{create_eppo_token} makes global variable eppo_token. It contains token
 of class string, that is needed to communicate with EPPO Data Services API.
 Global variable is shared between package functions.

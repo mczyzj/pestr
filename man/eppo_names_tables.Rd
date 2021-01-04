@@ -12,14 +12,15 @@ function will automatically connect to database with default credentials.}
 }
 \value{
 Check if provided names are present in EPPO SQLite Database, creates
-   list which contains: data frame with matching names in database and their
-   codeids, character vector of names from \code{names_vector} which do not
-   match any entry in database, data frame with preferred names and their
-   codeids, and data frame containing all names matching codeids of preffered
-   names. Last data frame contains also column with preferred (binary),
-   codeland (two letter character with language code), and EPPOcode.
+list which contains: data frame with matching names in database and their
+codeids, character vector of names from \code{names_vector} which do not
+match any entry in database, data frame with preferred names and their
+codeids, and data frame containing all names matching codeids of preffered
+names. Last data frame contains also column with preferred (binary),
+codeland (two letter character with language code), and EPPOcode.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{eppo_names_table} checks if string (names or parts of the names)
 provided by user match any name in the EPPO database. If strings match any
 name in database, data frame with all names matching codeid, as well as

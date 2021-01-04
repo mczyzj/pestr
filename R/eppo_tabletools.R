@@ -1,5 +1,6 @@
 #' EPPO table manipulation tools
 #'
+#' `r lifecycle::badge("maturing")`
 #' \code{eppo_tabletools_names} creates table with names -- preferred, common
 #' and synonyms -- of pests. It is particularly useful for creating whole table
 #' with {\link{eppo_table_full}}, otherwise it might be more informative to use

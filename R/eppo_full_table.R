@@ -1,5 +1,6 @@
 #' EPPO Data Services information table
 #'
+#' `r lifecycle::badge("maturing")`
 #' \code{eppo_table_full} creates table in human friendly format with data on
 #' pest preferred name, synonyms and common names, hosts, categorization,
 #' taxonomy and its distribution.

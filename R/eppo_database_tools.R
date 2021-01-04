@@ -1,5 +1,6 @@
 #' EPPO Data Services Database connection tools
 #'
+#' `r lifecycle::badge("stable")`
 #' \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 #' and informs user if it is outdated and should be downloaded.
 #' \code{eppo_database_download} downloads database in SQLite format directly.
@@ -121,6 +122,7 @@ eppo_database_connect <- function(filepath = getwd(),
 
 #' EPPO Data Services SQLite Database search tools
 #'
+#' `r lifecycle::badge("maturing")`
 #' \code{eppo_names_table} checks if string (names or parts of the names)
 #' provided by user match any name in the EPPO database. If strings match any
 #' name in database, data frame with all names matching codeid, as well as

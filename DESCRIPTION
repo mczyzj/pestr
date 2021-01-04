@@ -34,3 +34,4 @@ Suggests:
     stringr,
     testthat
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)

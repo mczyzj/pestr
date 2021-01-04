@@ -1,5 +1,6 @@
 #' EPPO Data Services token variable
 #'
+#' `r lifecycle::badge("stable")`
 #' \code{create_eppo_token} makes global variable eppo_token. It contains token
 #' of class string, that is needed to communicate with EPPO Data Services API.
 #' Global variable is shared between package functions.
@@ -29,6 +30,7 @@ create_eppo_token <- function(x) {
 
 #' EPPO Data Services token variable
 #'
+#' `r lifecycle::badge("stable")`
 #' \code{check_eppo_token} should be used after \code{create_eppo_token}
 #' to check if the token is correctly recognized by EPPO Data Sevices API.
 #' As a reference it uses link to Xylella fastidiosa hosts database -

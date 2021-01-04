@@ -18,11 +18,12 @@ function will automatically connect to database with default credentials.}
 }
 \value{
 Wraps results of function from \code{eppo_tabletools}, namely:
-   {\link{eppo_tabletools_names}}, {\link{eppo_tabletools_hosts}},
-   {\link{eppo_tabletools_cat}}, {\link{eppo_tabletools_taxo}}, and
-   {\link{eppo_tabletools_distri}} into one compact, human readable table.
+{\link{eppo_tabletools_names}}, {\link{eppo_tabletools_hosts}},
+{\link{eppo_tabletools_cat}}, {\link{eppo_tabletools_taxo}}, and
+{\link{eppo_tabletools_distri}} into one compact, human readable table.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{eppo_table_full} creates table in human friendly format with data on
 pest preferred name, synonyms and common names, hosts, categorization,
 taxonomy and its distribution.

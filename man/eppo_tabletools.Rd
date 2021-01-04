@@ -30,11 +30,12 @@ eppo_tabletools_pests(names_tables, token)
 }
 \value{
 List containing two data frames. First is in a long format, and each
-  row contains synonyms and names in other languages in respect to preferred
-  names. The second data frame contains coerced synonyms and other names to
-  single cell for each preferred name.
+row contains synonyms and names in other languages in respect to preferred
+names. The second data frame contains coerced synonyms and other names to
+single cell for each preferred name.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{eppo_tabletools_names} creates table with names -- preferred, common
 and synonyms -- of pests. It is particularly useful for creating whole table
 with {\link{eppo_table_full}}, otherwise it might be more informative to use
