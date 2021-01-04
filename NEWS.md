@@ -3,29 +3,31 @@
 
 * `check_eppo_token` allows checking if eppo_token is correctly recognized by EPPO Data Services API.
 * `try_GET` and `eppo_try_urls` helper wrappers to fail gracefully.
-* updated `eppo_json_wrapper` and `eppo_csv_download` helpers to fail gracefully.
+* Updated `eppo_json_wrapper` and `eppo_csv_download` helpers to fail gracefully.
 
 ## New and updated tests
 
-* Updated tests include mocking to support testing on CI and CRAN without using token, or connect to EPPO API, or download *csv* files.
-* EPPO REST responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
+* Updated tests include mocking to support testing on CI and CRAN without using token, or connect to **EPPO API**, or download *csv* files.
+* **EPPO REST** responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
 * Now test are only checking if it `inherits` from `pestr_token` class.
-* mocked files and SQLite db is up to date on *02-Jan-2020*.
+* mocked files and *SQLite* db is up to date on *04-Jan-2020*.
+* Added tests for `eppo_tabletools_pests`.
 
 ## New vignettes
 
-* Vignette showing how to use output of `eppo_tabletools_pests()` to check taxonomy of pest infecting Abies alba.
+* Vignette showing how to use output of `eppo_tabletools_pests()` to check taxonomy of pest infecting *Abies alba*.
 
-## Fixed issues
+## Fixed issues and smaller functionalities
 
 * Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. #12
-* Updated sample db.
-* Updated tidyr::nest and dplyr functions arguments.
-* Deleted `dplyr` package from imports. Package now only uses `::` to acces dplyr functions.
+* Updated sample database.
+* Updated `tidyr::nest` and dplyr functions arguments.
+* Deleted `dplyr` package from imports. Package now only uses `::` to access dplyr functions.
 * Deleted `pryr` for dependencies at it was only used to check if `eppo_token` is `S3` class. 
-* Deleted `RCurl` from dependecies since now package relies on `httr` to connect with **REST API**.
-* All test now use correct syntac to load packages (e.g. library('dplyr') instead of `library(dplyr)`).
+* Deleted `RCurl` from dependencies since now package relies on `httr` and `curl` to connect with **REST API**, download *csv* files or download *SQLite* database.
+* All test now use correct syntax to load packages (e.g. `library('dplyr')` instead of `library(dplyr)`).
 * Added hex sticker.
+* Added `lifcycle badges`
 
 # pestr 0.7.2
 
@@ -138,21 +140,23 @@ table with proper formating (names etc.) on long or condensed format;
 
 ## Issues to solve
 
-* Encrypt EPPO API token so test could run also on TravisCI (#12)
+* Unify table outputs (#17)
+* Encrypt EPPO API token so test could run also on TravisCI (#12) *FIXED*
 * Code comments (#11)
 * Documentation (#10)
 * Additional tests (?) (#9)
 * Test for `eppo_tabletools_taxo` breaks -- function does not return correct
 values (namely tabel has only one row with NA) for compact table, however when
 run manually everything is O.K. (#9) -- Probably updating sample SQLite db for
-test will solve above issue
+test will solve above issue *FIXED*
 * Add new list item - tables formatted in the same way as they are formatted
 in EPPO template (#7)
 * Internationalization of package (#5) and (#6)
 * Hosts and categorization paste some values double into string, small fix is
-needed for both test and function
+needed for both test and function *FIXED*
 
 ## TODOs
 
 * Add vignettes.
 * `taxize` package can be helpful with correction of organism names.
+* Prepare package for *CRAN* submission.
