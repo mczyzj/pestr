@@ -271,10 +271,12 @@ eppo_tabletools_distri <- function(names_tables) {
     }
   }
 
-  compact_table <- distri_lists %>%
-    dplyr::bind_rows(.id = 'eppocode') %>%
+  long_table <- distri_lists %>%
+    bind_rows(.id = "eppocode")
+
+  compact_table <- long_table %>%
     dplyr::filter(!grepl("Absent", .data$Status)) %>%
-    dplyr::select('eppocode', 'continent', 'country') %>%
+    dplyr::select(.data$eppocode, .data$continent, .data$country) %>%
     dplyr::group_by(.data$eppocode, .data$continent) %>%
     dplyr::distinct() %>%
     dplyr::mutate(distribution = paste(.data$country,
@@ -283,7 +285,7 @@ eppo_tabletools_distri <- function(names_tables) {
                                       .data$distribution,
                                       sep = ': ')) %>%
     dplyr::ungroup() %>%
-    dplyr::select('eppocode', 'distribution') %>%
+    dplyr::select(.data$eppocode, .data$distribution) %>%
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
     dplyr::mutate(distribution = paste(.data$distribution,
@@ -291,8 +293,8 @@ eppo_tabletools_distri <- function(names_tables) {
     dplyr::distinct() %>%
     dplyr::ungroup()
 
-  return(list(list_table = distri_lists,
-         compact_table = compact_table))
+  return(list(long_table = long_table,
+              compact_table = compact_table))
 }
 
 

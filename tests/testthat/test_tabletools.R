@@ -304,7 +304,7 @@ test_that("Test that distribution f returns correct structure
 
 
  expect_is(test_distri, 'list')
-expect_is(test_distri[[1]], 'list')
+expect_is(test_distri[[1]], 'data.frame')
  expect_is(test_distri[[2]], 'data.frame')
 })
 
@@ -341,6 +341,9 @@ test_that("Test that distribution f returns correct values
     }
   }
 
+  distri_df <- distri_lists %>%
+    dplyr::bind_rows(.id = 'eppocode')
+
   testing_distri_df <- distri_lists %>%
     dplyr::bind_rows(.id = 'eppocode') %>%
     dplyr::filter(!grepl("Absent", Status)) %>%
@@ -357,7 +360,7 @@ test_that("Test that distribution f returns correct values
     dplyr::distinct() %>%
     dplyr::ungroup()
 
-  expect_equal(test_distri[[1]], distri_lists)
+  expect_equal(test_distri[[1]], distri_df)
   expect_equal(test_distri[[2]], testing_distri_df)
 })
 
