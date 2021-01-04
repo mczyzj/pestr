@@ -1,3 +1,5 @@
+# pestr 0.7.4
+
 # pestr 0.7.3
 ## New functions
 
