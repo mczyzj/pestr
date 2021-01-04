@@ -100,12 +100,12 @@ test_that("Test that hosts f works correctly", {
   ###test compact table values
 
   compact_names_test <- test_host_table %>%
+    dplyr::select(.data$labelclass, .data$full_name) %>%
     dplyr::group_by(.data$eppocode, .data$labelclass) %>%
-    dplyr::select('labelclass', 'full_name') %>%
     dplyr::mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
     dplyr::mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
     dplyr::ungroup() %>%
-    dplyr::select('eppocode', 'hosts') %>%
+    dplyr::select(.data$eppocode, .data$hosts) %>%
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
     dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%

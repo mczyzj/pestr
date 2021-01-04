@@ -115,12 +115,12 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #take long table and colapse all the host names into one string,
   #separeted with names of host categories (major, minor, incidental etc.)
     compact_table <- hosts_table %>%
+      dplyr::select(.data$eppocode, .data$labelclass, .data$full_name) %>%
       dplyr::group_by(.data$eppocode, .data$labelclass) %>%
-      dplyr::select('eppocode', 'labelclass', 'full_name') %>%
-      dplyr::mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
-      dplyr::mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
+      dplyr::mutate(hosts = paste0(.data$labelclass, ': ',
+                                   paste(.data$full_name, collapse = ', '))) %>%
       dplyr::ungroup() %>%
-      dplyr::select('eppocode', 'hosts') %>%
+      dplyr::select(.data$eppocode, .data$hosts) %>%
       dplyr::distinct() %>%
       dplyr::group_by(.data$eppocode) %>%
       dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
@@ -128,7 +128,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
       dplyr::ungroup()
 
     return(list(long_table = hosts_table,
-                compact_table))
+                compact_table = compact_table))
   }
 }
 
