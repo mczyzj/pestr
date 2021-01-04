@@ -7,3 +7,4 @@
 ^eppocodes\.sqlite$
 ^eppocodes\.zip$
 ^\.github$
+^LICENSE\.md$

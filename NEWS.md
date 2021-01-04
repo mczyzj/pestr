@@ -1,5 +1,10 @@
 # pestr 0.7.4
 
+## Fixed issues and smaller functionalities
+
+* Updated description of usage in *README*
+* Changed licence to MIT
+
 # pestr 0.7.3
 ## New functions
 

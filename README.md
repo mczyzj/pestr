@@ -2,14 +2,16 @@
 
 <img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align= "right" />
 
+<!-- badges: start -->
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
 [![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
+  <!-- badges: end -->
 
-Functions included in this package allows users to painlessly connect to and
-extract data from EPPO Data Services. Before you start using it you should
-register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token
-to access REST API.
+
+Functions included in this package allows users to painlessly connect to and extract data from EPPO Data Services. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access REST API.
 
 ## Installation
 
@@ -21,25 +23,16 @@ devtools::install_github("mczyzj/pestr")
 
 ## Overview and Usage
 
-Package include function that allow you to download SQLite database
-(around 12 MB) that is needed for extracting eppocodes that are used in other
-functions from this package. Function included in `eppo_tabletools` group return
-both list of machine friendly list of tables and processed, compact table, that
-contain all infromation in one row per one pest.
+Package include function that allow you to download SQLite database `eppo_database_download` (archive around 12 MB, after extraction around 45 MB). The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools` group return both:
 
-Before using functions that connect to REST API (hosts, categorization, taxonomy)
-you should execute `create_eppo_token()` function with string argument equal to
-your personal EPPO Data Services token. This function creates global variable
-`eppo_token` which should be parsed as an argument to functions that require
-`token` argument.
+* table of raw results in so called *long format* (machine friendly) 
+* processed, compact table, that contain all infromation in one row per one pest.
 
-`eppo_table_full()` allow to execute all the functions and return compact table
-with information on names, hosts, categorization, distribution and taxonomy --
-one row per one pest.
+Before using functions that connect to REST API (hosts, categorization, taxonomy and pests) you should execute `create_eppo_token()` function with string argument equal to your personal EPPO Data Services token. This function creates global variable `eppo_token` which should be parsed as an argument to functions that require `token` argument.
+
+`eppo_table_full()` allow to execute all the functions and return compact table with information on names, hosts, categorization, distribution and taxonomy -- one row per one pest.
 
 Feel free to contribute to this package and report issues via GitHub or email.
-
-
 
 ## Example workflow
 
@@ -55,57 +48,92 @@ Than:
 eppo_database_download()
 ```
 
-* on Windows: download SQLite db using this link https://data.eppo.int/files/sqlite.zip
-and extract it to working directory
+* on Windows: download SQLite db using 
+```r
+eppo_database_download()
+```
+and extract the file manually to project working directory.
 
-Put all the names that you are looking for into a vector:
+Put all the names that you are looking for into a vector, e.g.:
 
 ```r
 pests<- c(''Xylella', Cydia packardi', 'Drosophila suzuki')
 ```
 
-and connect to database.
+and make connection to database.
 
 ```r
 eppo_SQLite <- eppo_database_connect()
 ```
 
-Get pest names, in result you will have list containing 4 tables: df with names that are present in EPPO, df with names that are not present  df with preferred names and eppo codes, df with all associated names to eppocode from third df. It is necessary to run it before other 'tabletools' functions since it extracts eppocodes that are used later by other functions.
+### pests names
+
+Get pest names using:
 
 ```r
-pests_names <- eppo_names_tables(pests, eppo_SQLite)
+pests_names_tables <- eppo_names_tables(pests, eppo_SQLite)
 ```
 
-Get pest categorization - as result you will get list with two elements:  first is a list of tables for each eppocode one categorisation table, second element is single df with categorization for each eppocode condensed to single cell.
+in result you will have list containing 4 tables: 
+
+* `data frame` with names that are present in **EPPO Data Services**;
+* `data frame` with names that are not present **EPPO Data Services**;
+* `data frame` with preferred names and eppo codes **EPPO Data Services**;
+* `data frame` with all associated names to eppocode from third `data frame`. 
+
+It is necessary to run it before other 'tabletools' functions since it extracts eppocodes that are used later by other functions.
+
+### pests categorization
+
+Using:
 
 ```r
-pests_cat <- eppo_tabletools_cat(pests_names, eppo_token)
+pests_cat <- eppo_tabletools_cat(pests_names_tables, eppo_token)
 ```
 
-Get pest hosts as a result you get two tables: first is long table with all data  for all pests combined. In second hosts are combined into single cell for each eppocode
+you will get as result you will get list with two elements:  
+
+* `data frame` with categorization tables for each eppocode in long format;
+* a single `data frame` with categorization for each eppocode condensed into a single cell.
+
+### pest hosts
 
 ```r
-pests_hosts <- eppo_tabletools_hosts(pests_names, eppo_token)
+pests_hosts <- eppo_tabletools_hosts(pests_names_tables, eppo_token)
 ```
 
-Get host's pests as a result you get two tables: first is long table with all data for all hosts combined. In second pests are combined into single cell for each eppocode
+result with two tables: 
+
+* first is a `data frame` in long format with all data for all pests; 
+* second is a `data frame` where hosts are combined into single cell for each eppocode.
+
+### pests taxonomy
+
+To get taxonomy use: 
 
 ```r
-pests_hosts <- eppo_tabletools_pests(hosts_names, eppo_token)
+pests_taxo <- eppo_tabletools_taxo(pests_names_tables, eppo_token)
 ```
 
-Get taxonomy. Also list with two elements. First is a list of taxonomy tables for each pest; second is table with 'main category' of each eppocode 
+This function results are a list of two `data frames`:
+
+* first is a long format table; 
+* second is table with 'main category' of each eppocode.
+
+### pest distribution
+
+The function extracting distribution from **EPPO Global Database** does not need `eppo_token`. It can be called like:
 
 ```r
-pests_taxo <- eppo_tabletools_taxo(pests_names, eppo_token)
+pest_distri <- eppo_tabletools_distri(pests_names_tables)
 ```
 
-Get distributions of hosts. As a result a two element list. First one contains df of distribution for each eppocode, second contains single cell of distribution for each eppocode.
+The result is a two element list:
 
-```r
-pest_distri <- eppo_tabletools_distri(pests_names)
-```
+* first one contains `data frame` of distribution in long format;
+* second contains single cell of distribution for each eppocode.
 
+### pest names, categorization, distribution, taxonomy and hosts in one shot
 Whole condensed table in one shot:
 
 ```r
@@ -116,6 +144,17 @@ which you can easily save as csv and use in a spreadsheet:
 
 ```r
 write.csv(eppo_fulltable, 'eppo_fulltable.csv')
+```
+
+### hosts pests
+
+Since the **EPPO Data Services** provides infomration on pest of particular host, you can easily access information with:
+
+```r
+hosts <- c("Abies alba", "Triticum")
+
+hosts_names_tables <- eppo_names_tables(pests, eppo_SQLite)
+hosts_pests <- eppo_tabletools_taxo(hosts_names_tables, eppo_token)
 ```
 
 TODO:
