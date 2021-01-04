@@ -272,7 +272,7 @@ eppo_tabletools_distri <- function(names_tables) {
   }
 
   long_table <- distri_lists %>%
-    bind_rows(.id = "eppocode")
+    dplyr::bind_rows(.id = "eppocode")
 
   compact_table <- long_table %>%
     dplyr::filter(!grepl("Absent", .data$Status)) %>%
