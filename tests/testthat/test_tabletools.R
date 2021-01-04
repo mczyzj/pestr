@@ -402,8 +402,6 @@ test_that("Test that pest f works correctly", {
 
   test_pests <- tester_pest_func()
 
-#  print(test_pests[[2]]$eppocode)
-
   expect_equal(test_pests[[2]]$eppocode, c("ABIAL", "TRZAC", "TRZAX", "TTLRI"))
   expect_true(stringr::str_detect(test_pests[[2]]$pests[3],
                                   "Listronotus bonariensis"))
