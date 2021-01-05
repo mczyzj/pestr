@@ -96,7 +96,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
     hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
-
+  #empty table to substitute
     empty_host_df <- data.frame(
       codeid = NA,
       eppocode = NA,
@@ -104,7 +104,6 @@ eppo_tabletools_hosts <- function(names_tables, token) {
       labelclass = "Host",
       full_name = NA
     )
-
   #exchange empty lists with NA table to avoid empty host table
     if (is.null(unlist(hosts_download))) {
       hosts_table <- data.frame(eppocode      = eppocodes,
@@ -114,7 +113,9 @@ eppo_tabletools_hosts <- function(names_tables, token) {
                                 labelclass    = NA,
                                 full_name     = NA)
     } else {
-      for(i in 1:length(hosts_download)) {
+  #subsitute empty list elements with empty table so the eppocodes
+  #for which there are no results are included in function output
+            for(i in 1:length(hosts_download)) {
         if(rlang::is_empty(hosts_download[[i]])) {
           hosts_download[[i]] <- list(Host = empty_host_df)
         }
@@ -126,8 +127,8 @@ eppo_tabletools_hosts <- function(names_tables, token) {
         dplyr::rename(host_eppocode = .data$eppocode,
                       eppocode      = .data$pest_code)
     }
-  #take long table and colapse all the host names into one string,
-  #separeted with names of host categories (major, minor, incidental etc.)
+  #take long table and collapse all the host names into one string,
+  #separated with names of host categories (major, minor, incidental etc.)
     compact_table <- hosts_table %>%
       dplyr::select(.data$eppocode, .data$labelclass, .data$full_name) %>%
       dplyr::group_by(.data$eppocode, .data$labelclass) %>%
@@ -158,7 +159,9 @@ eppo_tabletools_cat <- function(names_tables, token) {
   #download data on categorization from EPPO and strore them as list of tables
     cat_list_table <- eppo_rest_download(eppocodes, "categorization", token)
     cat_tables <- setNames(vector("list", length(eppocodes)), eppocodes)
-  #exchange empty lists with NA tables -> NEEDS REFACTORING!!!
+  #subsitute empty list elements with empty table so the eppocodes
+  #for which there are no results are included in function output
+  #-> NEEDS REFACTORING!!!
     for (i in 1:length(cat_list_table)) {
       if (rlang::is_empty(cat_list_table[[i]]) == TRUE) {
         cat_tables[[i]] <- data.frame(nomcontinent = NA,
@@ -176,7 +179,6 @@ eppo_tabletools_cat <- function(names_tables, token) {
 
     long_table <- cat_tables %>%
       dplyr::bind_rows(.id = 'eppocode')
-
   #collapse values in list tables into whole categorization in one cell
   #for each of the pests
     compact_list <- setNames(vector("list", length(eppocodes)), eppocodes)
@@ -223,7 +225,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
   } else {
     eppocodes <- names_tables[[3]]$eppocode
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
-  #Create empty table and NA table
+  #empty table to substitute
     empty_taxo_df <- data.frame(codeid = NA,
                                 eppocode = NA,
                                 prefname = NA,
@@ -231,8 +233,8 @@ eppo_tabletools_taxo <- function(names_tables, token) {
                                 stringsAsFactors = FALSE)
 
     taxo_tables <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
-
-  #If table from list is empty exchange it with NA table
+  #subsitute empty list elements with empty table so the eppocodes
+  #for which there are no results are included in function output
     for (i in 1:length(taxo_list_table)) {
       if (rlang::is_empty(taxo_list_table[[i]]) == TRUE) {
         taxo_tables[[i]] <- empty_taxo_df
@@ -273,7 +275,8 @@ eppo_tabletools_distri <- function(names_tables) {
   distri_urls <- paste0('https://gd.eppo.int/taxon/',
                        eppocodes,'/download/distribution_csv')
   distri_lists <- eppo_csv_download(eppocodes)
-
+  #subsitute empty list elements with empty table so the eppocodes
+  #for which there are no results are included in function output
   for (i in 1:length(distri_lists)) {
     if (dim(distri_lists[[i]])[1] == 0) {
       distri_lists[[i]] <- data.frame(continent    = NA,
@@ -287,7 +290,8 @@ eppo_tabletools_distri <- function(names_tables) {
 
   long_table <- distri_lists %>%
     dplyr::bind_rows(.id = "eppocode")
-
+  #take long table and colapse all the distributions into
+  #one string per eppocode
   compact_table <- long_table %>%
     dplyr::filter(!grepl("Absent", .data$Status)) %>%
     dplyr::select(.data$eppocode, .data$continent, .data$country) %>%
@@ -325,14 +329,13 @@ eppo_tabletools_pests <- function(names_tables, token) {
   #element with eppocode and bind sub-tables by rows
   #to store them as long table
     pests_download <- eppo_rest_download(eppocodes, "pests", token)
-
+  #empty table to substitute
     empty_pests_df <- data.frame(
       eppocode = NA,
       idclass = 9,
       labelclass = "Host",
       fullname = NA
     )
-
   #exchange empty lists with NA table to avoid empty host table
     if(is.null(unlist(pests_download))) {
       pests_table <- data.frame(eppocode       = eppocodes,
@@ -343,7 +346,8 @@ eppo_tabletools_pests <- function(names_tables, token) {
                                 fullname       = NA)
     } else {
       names(pests_download) <- eppocodes
-
+  #subsitute empty list elements with empty table so the eppocodes
+  #for which there are no results are included in function output
       for(i in 1:length(pests_download)) {
         if(rlang::is_empty(pests_download[[i]])) {
           pests_download[[i]] <- list(Host = empty_pests_df)
