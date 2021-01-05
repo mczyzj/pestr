@@ -89,8 +89,6 @@ eppo_json_wrapper <- function(urls) {
   }
 
   return(querry_content)
-
-#  jsonlite::fromJSON(httr::content(httr::GET(urls), "text"))
 }
 
 #' EPPO distribution helper tools
@@ -120,8 +118,9 @@ eppo_csv_download <- function(eppocodes) {
   #column names. Delete by substituting those wrong elements of the list
   #with NULL and print the wrong codes.
   for (i in names(distri_lists)) {
-    if (!all(names(distri_lists[[i]]) %in% c("continent", "country", "state",
-                                       "country code", "state code", "Status"))) {
+    if (!all(names(distri_lists[[i]]) %in%
+             c("continent", "country", "state",
+               "country code", "state code", "Status"))) {
       message("The distribution file for EPPO code ", i, " was not found.")
       distri_lists[[i]] <- NULL
     } else {
@@ -129,8 +128,5 @@ eppo_csv_download <- function(eppocodes) {
                                        "country.code", "state.code", "Status")
     }
   }
-#    distri_lists[i][[1]] <- utils::read.csv(file = distri_urls[i],
-#                                            header = T, stringsAsFactors = F)
-#}
   return(distri_lists)
 }
