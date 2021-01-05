@@ -1,9 +1,14 @@
 # pestr 0.7.4
 
+## New and updated test.
+
+* updated `eppo_tabletools_hosts` test including changes in function behaviour.
+
 ## Fixed issues and smaller functionalities
 
-* Updated description of usage in *README*
-* Changed licence to MIT
+* Updated description of usage in *README*.
+* Changed licence to MIT.
+* `eppo_tabletools_hosts` and `eppo_tabletools_pests` now include row with eppocode for which there is no data.
 
 # pestr 0.7.3
 ## New functions
