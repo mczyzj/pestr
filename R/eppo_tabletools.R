@@ -90,6 +90,7 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
+    return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
     eppocodes <- names_tables[[3]]$eppocode
@@ -153,6 +154,7 @@ eppo_tabletools_cat <- function(names_tables, token) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
+    return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
     eppocodes <- names_tables[[3]]$eppocode
@@ -222,6 +224,7 @@ eppo_tabletools_taxo <- function(names_tables, token) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
+    return(invisible(NULL))
   } else {
     eppocodes <- names_tables[[3]]$eppocode
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
@@ -322,6 +325,7 @@ eppo_tabletools_pests <- function(names_tables, token) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
+    return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
     eppocodes <- names_tables[[3]]$eppocode
