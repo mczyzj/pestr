@@ -96,6 +96,15 @@ eppo_tabletools_hosts <- function(names_tables, token) {
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
     hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
+
+    empty_host_df <- data.frame(
+      codeid = NA,
+      eppocode = NA,
+      idclass = 9,
+      labelclass = "Host",
+      full_name = NA
+    )
+
   #exchange empty lists with NA table to avoid empty host table
     if (is.null(unlist(hosts_download))) {
       hosts_table <- data.frame(eppocode      = eppocodes,
@@ -105,6 +114,11 @@ eppo_tabletools_hosts <- function(names_tables, token) {
                                 labelclass    = NA,
                                 full_name     = NA)
     } else {
+      for(i in 1:length(hosts_download)) {
+        if(rlang::is_empty(hosts_download[[i]])) {
+          hosts_download[[i]] <- list(Host = empty_host_df)
+        }
+      }
       names(hosts_download) <- eppocodes
       hosts_table <- lapply(hosts_download,
                             function(x) dplyr::bind_rows(x)) %>%
@@ -311,6 +325,14 @@ eppo_tabletools_pests <- function(names_tables, token) {
   #element with eppocode and bind sub-tables by rows
   #to store them as long table
     pests_download <- eppo_rest_download(eppocodes, "pests", token)
+
+    empty_pests_df <- data.frame(
+      eppocode = NA,
+      idclass = 9,
+      labelclass = "Host",
+      fullname = NA
+    )
+
   #exchange empty lists with NA table to avoid empty host table
     if(is.null(unlist(pests_download))) {
       pests_table <- data.frame(eppocode       = eppocodes,
@@ -321,6 +343,13 @@ eppo_tabletools_pests <- function(names_tables, token) {
                                 fullname       = NA)
     } else {
       names(pests_download) <- eppocodes
+
+      for(i in 1:length(pests_download)) {
+        if(rlang::is_empty(pests_download[[i]])) {
+          pests_download[[i]] <- list(Host = empty_pests_df)
+        }
+      }
+
       pests_table <- lapply(pests_download,
                             function(x) dplyr::bind_rows(x)) %>%
         dplyr::bind_rows(.id = 'host_code') %>%

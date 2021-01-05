@@ -81,6 +81,18 @@ test_that("Test that hosts f works correctly", {
   testing_hosts <- readRDS("mocked_hosts.RDS")
   eppocode <- testing_names[[3]]$eppocode
   names(testing_hosts) <- eppocode
+
+  for(i in 1:length(testing_hosts))   {
+    if(rlang::is_empty(testing_hosts[[i]])) {
+      testing_hosts[[i]] <- list(Host = data.frame(
+        codeid = NA,
+        eppocode = NA,
+        idclass = 9,
+        labelclass = "Host",
+        full_name = NA
+      ))
+    }
+  }
   test_host_table <- lapply(testing_hosts, dplyr::bind_rows) %>%
     dplyr::bind_rows(.id = 'pest_code') %>%
     dplyr::rename(host_eppocode = eppocode, eppocode = pest_code)
