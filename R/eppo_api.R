@@ -130,3 +130,33 @@ eppo_csv_download <- function(eppocodes) {
   }
   return(distri_lists)
 }
+
+#' EPPO check eppocodes helper tools
+#'
+#' Set of small wrappers and functions to help connecting with API and reuse
+#' among other package functions
+#'
+#' @param eppocodes character vector of eppocodes to be downloaded.
+#' @return List of CSV download results.
+#' @noRd
+check_eppocodes <- function(eppocodes) {
+
+
+  grep("[A-Z]{1,}", grep("^[A-Z0-9]{5,6}$", eppocodes, value = TRUE), value = TRUE)
+
+  correct_str <- grep("[A-Z]{1,}",
+                      grep("^[A-Z0-9]{5,6}$", eppocodes, value = TRUE),
+                      value = TRUE)
+  incorrect_str <- eppocodes[!(eppocodes %in% correct_str)]
+
+  if (length(incorrect_str) != 0) {
+    message("Following codes have wrong structure and will not be used.
+Please check and correct if needed.\n", paste(incorrect_str, collapse = " | "))
+  }
+
+  if (length(correct_str) == 0) {
+    return(NULL)
+  }
+
+  return(correct_str)
+}
