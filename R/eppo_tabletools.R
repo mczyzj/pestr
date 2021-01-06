@@ -142,13 +142,10 @@ eppo_tabletools_hosts <- function(names_tables = NULL,
                                   token, raw_eppocodes = NULL,
                                   use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
-    message('Your token argument is not of pestr_token class.
-            Please provide token created with create_eppo_token function')
+    message(msg_helper("wrong_token"))
     return(invisible(NULL))
   } else if (use_raw_codes & is.null(raw_eppocodes)) {
-    message('Please provide character vector of eppocodes or set use_raw_codes
-            parameter to FALSE and parse result of eppo_names_table function to
-            names_tables parameter.')
+    message(msg_helper("wrong_arguments"))
     return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
@@ -161,8 +158,7 @@ eppo_tabletools_hosts <- function(names_tables = NULL,
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
     if (is.null(eppocodes)) {
-      message("All provided eppocodes have incorrect stucture. Please provide
-              at least one valid eppocode.")
+      message(msg_helper("empty_querry"))
       return(invisible(NULL))
     }
     hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
@@ -214,13 +210,10 @@ eppo_tabletools_cat <- function(names_tables = NULL,
                                 token, raw_eppocodes = NULL,
                                 use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
-    message('Your token argument is not of pestr_token class.
-            Please provide token created with create_eppo_token function')
+    message(msg_helper("wrong_token"))
     return(invisible(NULL))
   } else if (use_raw_codes & is.null(raw_eppocodes)) {
-    message('Please provide character vector of eppocodes or set use_raw_codes
-            parameter to FALSE and parse result of eppo_names_table function to
-            names_tables parameter.')
+    message(msg_helper("wrong_arguments"))
     return(invisible(NULL))
   } else {
     #create reusable variables to access EPPO API
@@ -231,8 +224,7 @@ eppo_tabletools_cat <- function(names_tables = NULL,
     }
   #download data on categorization from EPPO and strore them as list of tables
     if (is.null(eppocodes)) {
-      message("All provided eppocodes have incorrect stucture. Please provide
-              at least one valid eppocode.")
+      message(msg_helper("empty_querry"))
       return(invisible(NULL))
     }
     cat_list_table <- eppo_rest_download(eppocodes, "categorization", token)
@@ -305,13 +297,10 @@ eppo_tabletools_taxo <- function(names_tables = NULL,
                                  token, raw_eppocodes = NULL,
                                  use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
-    message('Your token argument is not of pestr_token class.
-            Please provide token created with create_eppo_token function')
+    message(msg_helper("wrong_token"))
     return(invisible(NULL))
   } else if (use_raw_codes & is.null(raw_eppocodes)) {
-    message('Please provide character vector of eppocodes or set use_raw_codes
-            parameter to FALSE and parse result of eppo_names_table function to
-            names_tables parameter.')
+    message(msg_helper("wrong_arguments"))
     return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
@@ -322,8 +311,7 @@ eppo_tabletools_taxo <- function(names_tables = NULL,
     }
   #download data on taxonomy from EPPO and strore them as list of tables
     if (is.null(eppocodes)) {
-      message("All provided eppocodes have incorrect stucture. Please provide
-              at least one valid eppocode.")
+      message("empty_querry")
       return(invisible(NULL))
     }
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
@@ -376,9 +364,7 @@ eppo_tabletools_distri <- function(names_tables = NULL,
                                    raw_eppocodes = NULL,
                                    use_raw_codes = FALSE) {
   if (use_raw_codes & is.null(raw_eppocodes)) {
-    message('Please provide character vector of eppocodes or set use_raw_codes
-            parameter to FALSE and parse result of eppo_names_table function to
-            names_tables parameter.')
+    message(msg_helper("wrong_arguments"))
     return(invisible(NULL))
   } else {
     #create reusable variables to access EPPO API
@@ -390,8 +376,7 @@ eppo_tabletools_distri <- function(names_tables = NULL,
   }
   #Download data on distribution and store them in list of tables
   if (is.null(eppocodes)) {
-    message("All provided eppocodes have incorrect stucture. Please provide
-              at least one valid eppocode.")
+    message(msg_helper("empty_querry"))
     return(invisible(NULL))
   }
   distri_urls <- paste0('https://gd.eppo.int/taxon/',
@@ -449,13 +434,10 @@ eppo_tabletools_pests <- function(names_tables = NULL,
                                   token, raw_eppocodes = NULL,
                                   use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
-    message('Your token argument is not of pestr_token class.
-            Please provide token created with create_eppo_token function')
+    message(msg_helper("wrong_token"))
     return(invisible(NULL))
   } else if (use_raw_codes & is.null(raw_eppocodes)) {
-    message('Please provide character vector of eppocodes or set use_raw_codes
-            parameter to FALSE and parse result of eppo_names_table function to
-            names_tables parameter.')
+    message(msg_helper("wrong_arguments"))
     return(invisible(NULL))
   } else {
     #create reusable variables to access EPPO API
@@ -468,8 +450,7 @@ eppo_tabletools_pests <- function(names_tables = NULL,
   #element with eppocode and bind sub-tables by rows
   #to store them as long table
     if (is.null(eppocodes)) {
-      message("All provided eppocodes have incorrect stucture. Please provide
-              at least one valid eppocode.")
+      message(msg_helper("empty_querry"))
       return(invisible(NULL))
     }
     pests_download <- eppo_rest_download(eppocodes, "pests", token)

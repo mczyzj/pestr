@@ -19,7 +19,7 @@ create_eppo_token <- function(x) {
   character_token <- as.character(x)
   if (grepl('[^a-f0-9]', character_token)) {
     #not sure if this should result in error - to consider
-    message('Token contains forbiden characters')
+    message(msg_helper("forbidden_chars"))
     return(invisible(NULL))
   } else {
     character_token <- as.character(paste0('?authtoken=', character_token))
@@ -49,8 +49,7 @@ create_eppo_token <- function(x) {
 #' @export
 check_eppo_token <- function(token) {
   if (!all(inherits(token, c('pestr_token')))) {
-    message('Your token argument is not of pestr_token class.
-            Please provide token created with create_eppo_token function')
+    message(msg_helper("wrong_token"))
   } else {
     # First check internet connection
     if (!curl::has_internet()) {

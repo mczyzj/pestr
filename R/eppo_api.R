@@ -121,7 +121,7 @@ eppo_csv_download <- function(eppocodes) {
     if (!all(names(distri_lists[[i]]) %in%
              c("continent", "country", "state",
                "country code", "state code", "Status"))) {
-      message("The distribution file for EPPO code ", i, " was not found.")
+      message(msg_helper("no_distri", i))
       distri_lists[[i]] <- NULL
     } else {
       colnames(distri_lists[[i]]) <- c("continent", "country", "state",
@@ -150,8 +150,7 @@ check_eppocodes <- function(eppocodes) {
   incorrect_str <- eppocodes[!(eppocodes %in% correct_str)]
 
   if (length(incorrect_str) != 0) {
-    message("Following codes have wrong structure and will not be used.
-Please check and correct if needed.\n", paste(incorrect_str, collapse = " | "))
+    message(msg_helper("wrong_eppocodes", incorrect_str))
   }
 
   if (length(correct_str) == 0) {

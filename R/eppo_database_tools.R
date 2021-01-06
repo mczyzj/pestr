@@ -49,12 +49,10 @@ eppo_database_check <- function(filepath = getwd(),
                                   sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
   if (file.exists(dbfile)) {
-         message(cat('EPPO database was downloaded on ',
-                     as.character(file.info(dbfile)$mtime)))
+         message(msg_helper("db_time", dbfile))
     return(TRUE)
   } else {
-         message('This file does not exist,
-                 please download or give correct directory')
+         message(msg_helper("no_file"))
   }
 }
 
@@ -98,7 +96,7 @@ eppo_database_download <- function(filepath = getwd()) {
   }
 
   if(.Platform$OS.type == 'windows') {
-    message('Please unzip sqllite.zip file manually to your working directory')
+    message(msg_helper("db_win_unzip"))
   } else {
     utils::unzip(zipfile, overwrite = T)
   }
@@ -112,13 +110,10 @@ eppo_database_connect <- function(filepath = getwd(),
                                   sep = ifelse(.Platform$OS.type == 'windows',
                                             "\\", "/")))
   if (file.exists(dbfile)) {
-    message('Your connection to EPPO SQLite database is etablished')
+    message(msg_helper("db_connection"))
     return(RSQLite::dbConnect(RSQLite::SQLite(), dbname = dbfile))
   } else {
-    message('There is no such database in location you provided.\n',
-            'Please provide correct name for database and/or location\n',
-            'or use eppo_database_download to download .zip files from\n',
-            'EPPO Data Services.')
+    message(msg_helper("no_db"))
     #result <- FALSE #this value is only needed for automatic testing
   }
 }
