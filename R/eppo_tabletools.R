@@ -17,6 +17,10 @@
 #' @param names_tables A list of tables created via {\link{eppo_names_tables}}.
 #' @param token An object containing EPPO API token created via
 #'   {\link{create_eppo_token}}.
+#' @param raw_eppocodes A character vector of eppocodes. Use with caution, and ONLY
+#' when sure that provided eppocodes are correct.
+#' @param use_raw_codes logical. Default FALSE. Set TRUE if you want to provide
+#' eppocodes directly.
 #' @return List containing two data frames. First is in a long format, and each
 #'   row contains synonyms and names in other languages in respect to preferred
 #'   names. The second data frame contains coerced synonyms and other names to
@@ -86,16 +90,33 @@ eppo_tabletools_names <- function(names_tables) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_hosts <- function(names_tables, token) {
+eppo_tabletools_hosts <- function(names_tables = NULL,
+                                  token, raw_eppocodes = NULL,
+                                  use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
     return(invisible(NULL))
+  } else if (use_raw_codes & is.null(raw_eppocodes)) {
+    message('Please provide character vector of eppocodes or set use_raw_codes
+            parameter to FALSE and parse result of eppo_names_table function to
+            names_tables parameter.')
+    return(invisible(NULL))
   } else {
   #create reusable variables to access EPPO API
-    eppocodes <- names_tables[[3]]$eppocode
+    if (!use_raw_codes) {
+      eppocodes <- names_tables[[3]]$eppocode
+    } else {
+      eppocodes <- check_eppocodes(raw_eppocodes)
+    }
+
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
+    if (is.null(eppocodes)) {
+      message("All provided eppocodes have incorrect stucture. Please provide
+              at least one valid eppocode.")
+      return(invisible(NULL))
+    }
     hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
   #empty table to substitute
     empty_host_df <- data.frame(
@@ -150,15 +171,31 @@ eppo_tabletools_hosts <- function(names_tables, token) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_cat <- function(names_tables, token) {
+eppo_tabletools_cat <- function(names_tables = NULL,
+                                token, raw_eppocodes = NULL,
+                                use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
     return(invisible(NULL))
+  } else if (use_raw_codes & is.null(raw_eppocodes)) {
+    message('Please provide character vector of eppocodes or set use_raw_codes
+            parameter to FALSE and parse result of eppo_names_table function to
+            names_tables parameter.')
+    return(invisible(NULL))
   } else {
-  #create reusable variables to access EPPO API
-    eppocodes <- names_tables[[3]]$eppocode
+    #create reusable variables to access EPPO API
+    if (!use_raw_codes) {
+      eppocodes <- names_tables[[3]]$eppocode
+    } else {
+      eppocodes <- check_eppocodes(raw_eppocodes)
+    }
   #download data on categorization from EPPO and strore them as list of tables
+    if (is.null(eppocodes)) {
+      message("All provided eppocodes have incorrect stucture. Please provide
+              at least one valid eppocode.")
+      return(invisible(NULL))
+    }
     cat_list_table <- eppo_rest_download(eppocodes, "categorization", token)
     cat_tables <- setNames(vector("list", length(eppocodes)), eppocodes)
   #subsitute empty list elements with empty table so the eppocodes
@@ -220,13 +257,31 @@ eppo_tabletools_cat <- function(names_tables, token) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_taxo <- function(names_tables, token) {
+eppo_tabletools_taxo <- function(names_tables = NULL,
+                                 token, raw_eppocodes = NULL,
+                                 use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
     return(invisible(NULL))
+  } else if (use_raw_codes & is.null(raw_eppocodes)) {
+    message('Please provide character vector of eppocodes or set use_raw_codes
+            parameter to FALSE and parse result of eppo_names_table function to
+            names_tables parameter.')
+    return(invisible(NULL))
   } else {
-    eppocodes <- names_tables[[3]]$eppocode
+  #create reusable variables to access EPPO API
+    if (!use_raw_codes) {
+      eppocodes <- names_tables[[3]]$eppocode
+    } else {
+      eppocodes <- check_eppocodes(raw_eppocodes)
+    }
+  #download data on taxonomy from EPPO and strore them as list of tables
+    if (is.null(eppocodes)) {
+      message("All provided eppocodes have incorrect stucture. Please provide
+              at least one valid eppocode.")
+      return(invisible(NULL))
+    }
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
   #empty table to substitute
     empty_taxo_df <- data.frame(codeid = NA,
@@ -273,8 +328,28 @@ eppo_tabletools_taxo <- function(names_tables, token) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_distri <- function(names_tables) {
-  eppocodes <- names_tables[[3]]$eppocode
+eppo_tabletools_distri <- function(names_tables = NULL,
+                                   raw_eppocodes = NULL,
+                                   use_raw_codes = FALSE) {
+  if (use_raw_codes & is.null(raw_eppocodes)) {
+    message('Please provide character vector of eppocodes or set use_raw_codes
+            parameter to FALSE and parse result of eppo_names_table function to
+            names_tables parameter.')
+    return(invisible(NULL))
+  } else {
+    #create reusable variables to access EPPO API
+    if (!use_raw_codes) {
+      eppocodes <- names_tables[[3]]$eppocode
+    } else {
+      eppocodes <- check_eppocodes(raw_eppocodes)
+    }
+  }
+  #Download data on distribution and store them in list of tables
+  if (is.null(eppocodes)) {
+    message("All provided eppocodes have incorrect stucture. Please provide
+              at least one valid eppocode.")
+    return(invisible(NULL))
+  }
   distri_urls <- paste0('https://gd.eppo.int/taxon/',
                        eppocodes,'/download/distribution_csv')
   distri_lists <- eppo_csv_download(eppocodes)
@@ -321,17 +396,33 @@ eppo_tabletools_distri <- function(names_tables) {
 
 #' @rdname eppo_tabletools
 #' @export
-eppo_tabletools_pests <- function(names_tables, token) {
+eppo_tabletools_pests <- function(names_tables = NULL,
+                                  token, raw_eppocodes = NULL,
+                                  use_raw_codes = FALSE) {
   if (!all(inherits(token, c('pestr_token')))) {
     message('Your token argument is not of pestr_token class.
             Please provide token created with create_eppo_token function')
     return(invisible(NULL))
+  } else if (use_raw_codes & is.null(raw_eppocodes)) {
+    message('Please provide character vector of eppocodes or set use_raw_codes
+            parameter to FALSE and parse result of eppo_names_table function to
+            names_tables parameter.')
+    return(invisible(NULL))
   } else {
-  #create reusable variables to access EPPO API
-    eppocodes <- names_tables[[3]]$eppocode
+    #create reusable variables to access EPPO API
+    if (!use_raw_codes) {
+      eppocodes <- names_tables[[3]]$eppocode
+    } else {
+      eppocodes <- check_eppocodes(raw_eppocodes)
+    }
   #download data on pests from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows
   #to store them as long table
+    if (is.null(eppocodes)) {
+      message("All provided eppocodes have incorrect stucture. Please provide
+              at least one valid eppocode.")
+      return(invisible(NULL))
+    }
     pests_download <- eppo_rest_download(eppocodes, "pests", token)
   #empty table to substitute
     empty_pests_df <- data.frame(

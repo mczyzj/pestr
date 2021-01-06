@@ -12,21 +12,51 @@
 \usage{
 eppo_tabletools_names(names_tables)
 
-eppo_tabletools_hosts(names_tables, token)
+eppo_tabletools_hosts(
+  names_tables = NULL,
+  token,
+  raw_eppocodes = NULL,
+  use_raw_codes = FALSE
+)
 
-eppo_tabletools_cat(names_tables, token)
+eppo_tabletools_cat(
+  names_tables = NULL,
+  token,
+  raw_eppocodes = NULL,
+  use_raw_codes = FALSE
+)
 
-eppo_tabletools_taxo(names_tables, token)
+eppo_tabletools_taxo(
+  names_tables = NULL,
+  token,
+  raw_eppocodes = NULL,
+  use_raw_codes = FALSE
+)
 
-eppo_tabletools_distri(names_tables)
+eppo_tabletools_distri(
+  names_tables = NULL,
+  raw_eppocodes = NULL,
+  use_raw_codes = FALSE
+)
 
-eppo_tabletools_pests(names_tables, token)
+eppo_tabletools_pests(
+  names_tables = NULL,
+  token,
+  raw_eppocodes = NULL,
+  use_raw_codes = FALSE
+)
 }
 \arguments{
 \item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}
 
 \item{token}{An object containing EPPO API token created via
 {\link{create_eppo_token}}.}
+
+\item{raw_eppocodes}{A character vector of eppocodes. Use with caution, and ONLY
+when sure that provided eppocodes are correct.}
+
+\item{use_raw_codes}{logical. Default FALSE. Set TRUE if you want to provide
+eppocodes directly.}
 }
 \value{
 List containing two data frames. First is in a long format, and each
