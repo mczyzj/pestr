@@ -47,13 +47,13 @@ eppo_tabletools_pests(
 )
 }
 \arguments{
-\item{names_tables}{A list of tables created via {\link{eppo_names_tables}}.}
+\item{names_tables}{A list of tables created via \code{\link[=eppo_names_tables]{eppo_names_tables()}}.}
 
 \item{token}{An object containing EPPO API token created via
-{\link{create_eppo_token}}.}
+\code{\link[=create_eppo_token]{create_eppo_token()}}.}
 
-\item{raw_eppocodes}{A character vector of eppocodes. Use with caution, and ONLY
-when sure that provided eppocodes are correct.}
+\item{raw_eppocodes}{A character vector of eppocodes. Use with caution,
+and ONLY when sure that provided eppocodes are correct.}
 
 \item{use_raw_codes}{logical. Default FALSE. Set TRUE if you want to provide
 eppocodes directly.}
@@ -66,16 +66,68 @@ single cell for each preferred name.
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
-\code{eppo_tabletools_names} creates table with names -- preferred, common
+\code{eppo_tabletools_names} creates tables with names -- preferred, common
 and synonyms -- of pests. It is particularly useful for creating whole table
 with {\link{eppo_table_full}}, otherwise it might be more informative to use
 {\link{eppo_names_tables}} which provides additional information for your
 query.
-\code{eppo_tabletools_hosts} creates table with hosts of pests.
-\code{eppo_tabletools_cat} creates table with categorization of pests.
-\code{eppo_tabletools_taxo} creates table with taxonomy of pests.
-\code{eppo_tabletools_distri} creates table with distribution of pests --
-continent and country level only.
+\code{eppo_tabletools_hosts} creates tables with hosts of pests.
+\code{eppo_tabletools_cat} creates tables with categorization of pests.
+\code{eppo_tabletools_taxo} creates tables with taxonomy of pests/hosts.
+\code{eppo_tabletools_distri} creates tables with distribution of pests.
 \code{eppo_tabletools_pests} creates table with pests of host.
-All functions return both long tables and compact, human friendly tables.
+All functions return both long table and compact, human friendly table.
+}
+\examples{
+\dontrun{
+ ## the code below requires SQLite DB in the working directory
+ ## which can be downloaded with eppo_database_download function
+ test_names <- eppo_names_tables(c("Xylella", "Poacea"))
+ # get data on naming
+ eppo_tabletools_names(test_names)
+
+ ## below functions connect to EPPO Global Database or EPPO Global Services
+ ## they need connection to internet.
+
+ # get data on distribution
+ eppo_tabletools_distri(test_names)
+ # you can also get data using eppocodes directly
+ eppo_tabletools_distri(raw_eppocodes = c("XYLEFA", "1GRAF"),
+                        use_raw_codes = TRUE)
+
+ ## below functions, beside internet connection require also valid token that
+ ## can be obtained after free of charge registration at EPPO Data Services
+
+ # first create token variable:
+ create_eppo_token("paste_your_token_here")
+
+ # then use result of eppo_names_tables or raw eppocodes to query REST API
+ # get data on hosts
+ eppo_tabletools_hosts(test_names, eppo_token)
+ eppo_tabletools_hosts(token = eppo_token,
+                       raw_eppocodes = c("XYLEFA", "1GRAF"),
+                       use_raw_codes = TRUE)
+
+ # get data on categorization
+ eppo_tabletools_cat(test_names, eppo_token)
+ eppo_tabletools_cat(token = eppo_token,
+                       raw_eppocodes = c("XYLEFA", "1GRAF"),
+                       use_raw_codes = TRUE)
+
+ # get data on taxonomy
+ eppo_tabletools_taxo(test_names, eppo_token)
+ eppo_tabletools_taxo(token = eppo_token,
+                       raw_eppocodes = c("XYLEFA", "1GRAF"),
+                       use_raw_codes = TRUE)
+
+ # get data on pests
+ eppo_tabletools_pests(test_names, eppo_token)
+ eppo_tabletools_pests(token = eppo_token,
+                       raw_eppocodes = c("XYLEFA", "1GRAF"),
+                       use_raw_codes = TRUE)
+}
+}
+\seealso{
+\emph{EPPO Data services} \url{https://data.eppo.int/} and
+\emph{EPPO Global Database} \url{https://gd.eppo.int/}
 }
