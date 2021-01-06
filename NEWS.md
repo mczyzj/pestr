@@ -2,6 +2,7 @@
 
 ## Function updates
 
+* added "devel" on Ubuntu 18.04 to github actions.
 * `eppo_tabletool` functions now can use "raw" eppocodes instead of result of `eppo_names_tables` function result to query **EPPO Data Services** and **EPPO Global Database**. New functionality works with `raw_eppocodes` and 'use_raw_codes` parameters.
 
 # pestr 0.7.4
