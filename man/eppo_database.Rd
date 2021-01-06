@@ -28,13 +28,18 @@ establishes SQLite database connection
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
 \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 and informs user if it is outdated and should be downloaded.
-\code{eppo_database_download} downloads database in SQLite format directly.
-This might not work under Windows, since it automatically unzips the file,
-which is currently unavilable in Windows. When using Windows, please
-download the file directly from EPPO Data Services.
+\code{eppo_database_download} downloads database in \emph{SQLite} format directly.
+The downloaded file is \emph{zip} archive. On Linux this database will be
+extracted automatically. On Windows user will need to extract the file
+manually.
 \code{eppo_databse_connect} allows user to conect to SQLite database
 downloaded from EPPO Data Services.
 }
+\section{Manual download}{
+If you will, you can download database directly from
+\strong{EPPO Data Services} \url{https://data.eppo.int}
+}
+
 \examples{
 \dontrun{
 #to check if the db file exist in the directory (default working directory)

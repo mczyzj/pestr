@@ -4,28 +4,42 @@
 \alias{eppo_names_tables}
 \title{EPPO Data Services SQLite Database search tools}
 \arguments{
-\item{names_vector}{A vector with organism names (or part of the names) to be
-checked for existence in EPPO SQLite Database.}
+\item{names_vector}{A vector with organism or viruses names
+(or part of the names) to be checked for existence in EPPO SQLite Database.}
 
 \item{sqlConnection}{connection to SQLite EPPO Database. By default NULL;
 function will automatically connect to database with default credentials.}
 }
 \value{
-Check if provided names are present in EPPO SQLite Database, creates
+Check if provided names are present in EPPO SQLite Database. Creates
 list which contains: data frame with matching names in database and their
 codeids, character vector of names from \code{names_vector} which do not
 match any entry in database, data frame with preferred names and their
-codeids, and data frame containing all names matching codeids of preffered
+codeids, and data frame containing all names matching codeids of preferred
 names. Last data frame contains also column with preferred (binary),
-codeland (two letter character with language code), and EPPOcode.
+codelang (two letter character with language code), and EPPOcode.
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{eppo_names_table} checks if string (names or parts of the names)
 provided by user match any name in the EPPO database. If strings match any
 name in database, data frame with all names matching codeid, as well as
-preferred (binary), language and EPPOcode is returned. In order to use
-functions: \code{eppo_tabletools_names}, \code{eppo_tabletools_cat},
-\code{eppo_tabletools_hosts} or \code{eppo_tabletools_distribution}, you need
-to run this function first.
+preferred (binary), language and EPPOcode is returned.
+}
+\section{Using with other functions}{
+Output of the function might be parsed to functions:
+\itemize{
+\item \code{eppo_tabletools_names}
+\item \code{eppo_tabletools_cat}
+\item \code{eppo_tabletools_hosts}
+\item \code{eppo_tabletools_distribution}
+}
+}
+
+\examples{
+\dontrun{
+  ##This code needs SQLite dabatase in working directory
+  test_names <- c("Xylella", "dog", "leafhopper")
+  test_names_table <- eppo_names_table(test_names)
+}
 }

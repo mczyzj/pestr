@@ -1,14 +1,17 @@
 #' EPPO Data Services Database connection tools
 #'
 #' `r lifecycle::badge("stable")`
-#' \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
+#' \code{eppo_database_check} checks if there is a file *eppocodes.sqlite*
 #' and informs user if it is outdated and should be downloaded.
-#' \code{eppo_database_download} downloads database in SQLite format directly.
-#' This might not work under Windows, since it automatically unzips the file,
-#' which is currently unavilable in Windows. When using Windows, please
-#' download the file directly from EPPO Data Services.
+#' \code{eppo_database_download} downloads database in *SQLite* format directly.
+#' The downloaded file is *zip* archive. On Linux this database will be
+#' extracted automatically. On Windows user will need to extract the file
+#' manually.
 #' \code{eppo_databse_connect} allows user to conect to SQLite database
 #' downloaded from EPPO Data Services.
+#' @details # Manual download
+#' If you will, you can download database directly from
+#' **EPPO Data Services** \url{https://data.eppo.int}
 #'
 #' @param filepath A string with path where eppocodes.sqlite file is stored. By
 #'    default it points to working directory.
@@ -126,22 +129,31 @@ eppo_database_connect <- function(filepath = getwd(),
 #' \code{eppo_names_table} checks if string (names or parts of the names)
 #' provided by user match any name in the EPPO database. If strings match any
 #' name in database, data frame with all names matching codeid, as well as
-#' preferred (binary), language and EPPOcode is returned. In order to use
-#' functions: \code{eppo_tabletools_names}, \code{eppo_tabletools_cat},
-#' \code{eppo_tabletools_hosts} or \code{eppo_tabletools_distribution}, you need
-#' to run this function first.
+#' preferred (binary), language and EPPOcode is returned.
 #'
-#' @param names_vector A vector with organism names (or part of the names) to be
-#'    checked for existence in EPPO SQLite Database.
+#' @details # Using with other functions
+#' Output of the function might be parsed to functions:
+#' * \code{eppo_tabletools_names}
+#' * \code{eppo_tabletools_cat}
+#' * \code{eppo_tabletools_hosts}
+#' * \code{eppo_tabletools_distribution}
+#'
+#' @param names_vector A vector with organism or viruses names
+#'   (or part of the names) to be checked for existence in EPPO SQLite Database.
 #' @param sqlConnection connection to SQLite EPPO Database. By default NULL;
 #'    function will automatically connect to database with default credentials.
-#' @return Check if provided names are present in EPPO SQLite Database, creates
+#' @return Check if provided names are present in EPPO SQLite Database. Creates
 #'    list which contains: data frame with matching names in database and their
 #'    codeids, character vector of names from \code{names_vector} which do not
 #'    match any entry in database, data frame with preferred names and their
-#'    codeids, and data frame containing all names matching codeids of preffered
+#'    codeids, and data frame containing all names matching codeids of preferred
 #'    names. Last data frame contains also column with preferred (binary),
-#'    codeland (two letter character with language code), and EPPOcode.
+#'    codelang (two letter character with language code), and EPPOcode.
+#' @examples \dontrun{
+#'   ##This code needs SQLite dabatase in working directory
+#'   test_names <- c("Xylella", "dog", "leafhopper")
+#'   test_names_table <- eppo_names_table(test_names)
+#' }
 #' @name eppo_names_tables
 #' @export
 NULL

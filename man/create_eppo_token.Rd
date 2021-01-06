@@ -20,7 +20,7 @@ Global variable is shared between package functions.
 }
 \examples{
 \dontrun{
-create_eppo_token("12345678abcdef")
+  create_eppo_token("12345678abcdef")
 }
 }
 \seealso{

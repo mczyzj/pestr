@@ -11,7 +11,7 @@
 #' \url{https://data.eppo.int/}
 #' @examples
 #' \dontrun{
-#' create_eppo_token("12345678abcdef")
+#'   create_eppo_token("12345678abcdef")
 #' }
 #' @export
 create_eppo_token <- function(x) {
@@ -33,15 +33,15 @@ create_eppo_token <- function(x) {
 #' `r lifecycle::badge("stable")`
 #' \code{check_eppo_token} should be used after \code{create_eppo_token}
 #' to check if the token is correctly recognized by EPPO Data Sevices API.
-#' As a reference it uses link to Xylella fastidiosa hosts database -
-#' XYLEFA eppocode.
+#' As a reference it uses link to *Xylella fastidiosa* hosts database -
+#' **XYLEFA** eppocode.
 #' If token is recognized there will be no message. In other cases function will
 #' show following messages: No internet connection or Forbidden (HTTP 403).
 #'
 #' @param token object of class pestr_token.
 #' @return Silent NULL when there is no error, otherwise message.
 #' @seealso To obtain your free EPPO token please register
-#' \url{https://data.eppo.int/}
+#' to **EPPO Data Services** \url{https://data.eppo.int/}
 #' @examples
 #' \dontrun{
 #' check_eppo_token(eppo_token)

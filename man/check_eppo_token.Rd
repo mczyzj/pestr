@@ -16,8 +16,8 @@ Silent NULL when there is no error, otherwise message.
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
 \code{check_eppo_token} should be used after \code{create_eppo_token}
 to check if the token is correctly recognized by EPPO Data Sevices API.
-As a reference it uses link to Xylella fastidiosa hosts database -
-XYLEFA eppocode.
+As a reference it uses link to \emph{Xylella fastidiosa} hosts database -
+\strong{XYLEFA} eppocode.
 If token is recognized there will be no message. In other cases function will
 show following messages: No internet connection or Forbidden (HTTP 403).
 }
@@ -28,5 +28,5 @@ check_eppo_token(eppo_token)
 }
 \seealso{
 To obtain your free EPPO token please register
-\url{https://data.eppo.int/}
+to \strong{EPPO Data Services} \url{https://data.eppo.int/}
 }
