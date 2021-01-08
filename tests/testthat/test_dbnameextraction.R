@@ -39,4 +39,3 @@ test_that("Test that f returns empty tables and non empty vector of
   expect_equal(dim(eppo_names_tables('nonSenS12')[[4]]), c(0L, 5L))
 })
 
-# make S3 class, define print and summary methods
