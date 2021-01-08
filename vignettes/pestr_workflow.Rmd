@@ -19,24 +19,23 @@ library('dplyr')
 
 # Overview
 
-**pestr** Package is a set of functions and wrappers that allow painless and quick data retrival on pests and their hosts from [EPPO Data Services](https://data.eppo.int/). First of all it allow extraction of *scientific names* of organisms (and viruses), as well as *synonyms* and *common names* from SQLite database. Second, there are three functions in the package that use REST API to extract data on *hosts*, *categorization* and *taxonomy*. Lastly there is a function that downloads \*.csv files containing information on organisms (and viruses) distribution. Besides functions that deal with extracting data and putting them into tables in *human friendly* format, we support users with functions that allow to download (**this function works correctly only under LINUX**) and connect to file with SQLite database.
+`pestr` Package is a set of functions and wrappers that allow painless and quick data retrieval on pests and their hosts from [EPPO Data Services](https://data.eppo.int/) and [EPPO Global Database](https://gd.eppo.int/). First of all, it allows extraction of *scientific names* of organisms (and viruses), as well as *synonyms* and *common names* from *SQLite* database. The data base can be easily downloaded with `eppo_database_download()` function. Second, there are four functions in the package that use **REST API** to extract data on *hosts*, *categorization* and *taxonomy* and *pests*. Further, there is a function that downloads **data** *csv* files containing information on organisms (and viruses) distribution. Important feature is that the *csv* are **never saved onto hard drive**, instead they are directly used to create `data.frame` that can be assigned to a variable in **R**. 
+Beside above features, this package provides some other helper functions e.g. connecting to database or storing *EPPO token* as variable. 
 
 # Example workflow
 
-## Setting up `token` and connecting to **SQLite db**
-In order to start working with **pestr** package, you should register yourself (*free of charge*) for EPPO Data Services. Than you should run `create_eppo_token()` which will store your credentials in variable used by functions that connect to REST API.
+## Setting up `token` and connecting to *SQLite* database
+In order to start working with **pestr** package, you should register yourself (*free of charge*) to [EPPO Data Services](https://data.eppo.int/). Then run `create_eppo_token()` which will store your credentials in variable used by functions that connect to **REST API**.
 
-```{r eval = F}
-create_eppo_token('<<your_EPPO_token')
+```{r eval = FALSE}
+create_eppo_token('<<your_EPPO_token>>')
 ```
 
-Next if you are on **Linux** operating system you can run `eppo_database_download()` function that will automaticaly download archive with the **SQLite** file and extract it into your working directory (you can overide default behaviour).
+Next, you can run `eppo_database_download()` function that will download (by default to your **working directory**, which can be override with `filepath` argument) archive with the *SQLite* file. If you are on **Linux** operating system, file will be extract it into your working directory. On **Windows** you will be asked to extract the database file manually.
 
-```{r eval = F}
+```{r eval = FALSE}
 eppo_database_download()
 ```
-
-When working on **Windows** you can manually [download](https://data.eppo.int/files/sqlite.zip) and extract the archive.
 
 Last step of setup is to connect to database file, which can be easily done with `eppo_database_connect()` function.
 
@@ -44,69 +43,237 @@ Last step of setup is to connect to database file, which can be easily done with
 eppo_SQLite <- eppo_database_connect()
 ```
 
-After this three short steps you are ready to go.
+With this three short steps you are ready to go.
 
 ## Extracting tables with scientific, common and synonym names
 
-Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with
-partial names -- e.g. when you query for *Cydia packardi* you get infomation related to this species, while when you query for *Cydia* you get information on whole genus. Likewise when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can parse whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
+Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with partial names -- e.g. when you query for *Cydia packardi* you get information related to this species, while when you query for *Cydia* you get information on whole genus. Likewise, when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can parse whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
 
-```{r eval = F}
+```{r eval = FALSE}
 # Create vector of names that you are looking for
-pests_query <- c('Helicoverpa zea', 'Cydia')
+pests_query <- c('Cydia', "Triticum aestivum", "abcdef", "cadang")
 ```
 
-Than you should start with quering for names and assigning your results to a variable. This variable will contain `eppocodes` that are used by other functions to extract data from EPPO REST API. `eppo_names_tables()` takes two arguments: first is a vector of names to query the database, second is variable with connection to **SQLite** database.
+Than you should start with querying for names and assigning your results to a variable. This variable will contain `eppocodes` that are used by other functions to extract data from EPPO REST API. `eppo_names_tables()` takes two arguments: first is a vector of names to query the database, second is variable with connection to **SQLite** database.
 
-```{r eval = F}
+```{r eval = FALSE}
 pest_names <- eppo_names_tables(pests_query, eppo_SQLite)
+names(pest_names)
+#names that exist in database
+head(pest_example[[1]], 5)
+#names that were not found
+head(pest_example[[2]], 5)
+#preferred names for eppocodes from first table
+head(pest_example[[3]], 5)
+#all names that are associated to eppocodes from first data frame
+head(pest_example[[4]], 5)
 ```
 
-As a result you will get  list containing 4 tables:
-* df with names that are present in EPPO,
-* df with names that are not present in database
-* df with preferred names and eppo codes,
-* df with all associated names to eppocode from third df. 
+```{r eval = TRUE, echo = FALSE}
+names_example <- readRDS("vignette_mock_names.RDS")
+names(names_example)
+names_example[[1]] %>% 
+  head(5) %>%
+  knitr::kable(caption = "Names that exist in database", format = "html",
+               table.attr = "style='width:80%;'")
+names_example[[3]] %>%
+  head(5) %>%
+  knitr::kable(caption = 'Preferred names for eppocodes from first table',format = "html",
+               table.attr = "style='width:80%;'")
+names_example[[4]] %>%
+  head(5) %>%
+  knitr::kable(caption = 'All names that are associated to eppocodes from first data frame',format = "html",
+               table.attr = "style='width:80%;'")
+```
 
-**REMEMBER:** It is necessary to run it before other 'tabletools' functions since it extracts eppocodes that are used later by other functions.
+As a result you will get `list` containing 3 `data.frames` and `vector`:
 
-## EPPO *tabletools* functions to extract categorization, hosts, taxonomy and distribution
+* `exist_in_DB` -- `data.frame` with names that are present in **EPPO Data Services**;
+* `not_in_DB` -- `vector` with names that are not present in database;
+* `pref_names` -- `data.frame` with preferred names and `eppocodes`,
+* `all_associated_names` -- `data.frame` with all associated names to `eppocodes` from third `data.frame`. 
 
-This functions works separately from each other, thus there is no need to use all of them as well as ther is no need to use them in any particular order. Functions for categorization, hosts and taxonomy takes two arguments: a varibale containing result of `eppo_names_tables()` and variable with EPPO token. 
+**REMEMBER:** Other `eppo_tabletools_` functions use results of this function or raw eppocodes to access data from **EPPO Global Database** and **EPPO Data Services**.
 
-### categorization
-As result `eppo_tabletools_cat()` you will get list with two elements: first is a list of tables -- for each eppocode one categorisation table, second element is a single df with categorization for each eppocode condensed to single cell.
+## `eppo_tabletools_` functions to extract categorization, hosts, taxonomy, distribution and pests
 
-```{r eval = F}
+This functions works separately from each other, thus there is no need to use all of them. There is no need to use them in any particular order. Functions for categorization, hosts taxonomy and pests takes two arguments:
+
+* `names_table` -- variable containing result of `eppo_names_tables()`;
+* `token` -- variable created with `create_eppo_token()` 
+
+**OR** three arguments:
+
+* `token` -- same as above;
+* `raw_eppocodes` -- character vector of eppocodes (e.q. `c("XYLEFA", "ABIAL"));
+* `use_raw_codes` -- logical set to TRUE.
+
+### Categorization of pests
+
+As result `eppo_tabletools_cat()` you will get `list` with two elements:
+
+* `data.frame` with categorization tables
+* `data.frame` with categorization for each eppocode condensed to single cell.
+
+```{r eval = FALSE}
 pests_cat <- eppo_tabletools_cat(pest_names, eppo_token)
+#long format table
+head(pests_cat[[1]], 5)
+#comapct table with information for each eppocode condensed into one cell
+head(pests_cat[[2]],5)
 ```
 
-### hosts
-`eppo_tabletools_hosts()` as a result gives two tables: first is long table with all the data, for all pests combined. In second hosts are combined into single cell for each eppocode.
+```{r eval = TRUE, echo = FALSE}
+cat_example <- readRDS("vignette_mock_cat.RDS")
 
-```{r eval = F}
+cat_example[[1]] %>%
+  head(5) %>%
+  knitr::kable(caption = "Long format table with pests categorization")
+
+cat_example[[2]] %>%
+  head(5) %>%
+  knitr::kable(caption = "Compact table with condensed information on categorization")
+
+```
+
+If you will to limit the data received from **EPPO Data Services**, and you are confident that you know exactly what you are looking for, you can use *eppocodes* directly.
+
+```{r eval = FALSE}
+pests_cat <- eppo_tabletools_cat(token = eppo_token,
+                                 raw_eppocodes = c("LASPPA", "TRZAX", "CCCVD0"),
+                                 use_raw_codes = TRUE)
+pest_cat[[2]]
+```
+
+```{r eval = TRUE, echo = FALSE}
+cat_raw_example <- readRDS("vignette_raw_cat.RDS")
+cat_raw_example[[2]] %>%
+  knitr::kable(caption = "Limited results of using eppocodes LASPPA, TRZAX, CCCVD0")
+```
+
+### Hosts of pests
+
+`eppo_tabletools_hosts()` as a result returns a `list` of two `data.frame`:
+
+* long table format with all the data, for all pests combined;
+* with hosts are combined into single cell for each eppocode.
+
+```{r eval = FALSE}
 pests_hosts <- eppo_tabletools_hosts(pest_names, eppo_token)
+
+head(pests_hosts[[1]], 5)
+head(pests_hosts[[2]], 5)
 ```
 
-### taxonomy
-
-In the case of `eppo_tabletools_taxo()` you will also get a list with two elements. Fist is a list of taxonomy tables for each pest; second is table with 'main category' of each eppocode.
-
-```{r eval = F}
-pests_taxo <- eppo_tabletools_taxo(pest_names, eppo_token)
+```{r eval = TRUE, echo = FALSE}
+hosts_example <- readRDS("vignette_mock_hosts.RDS")
+hosts_example[[1]] %>%
+  head(5) %>%
+  knitr::kable(caption = "Long format table with pests hosts")
+hosts_example[[2]] %>%
+  head(5) %>%
+  knitr::kable(caption = "Compact table with condensed information on hosts")
 ```
 
-### distribution
-`eppo_tabletools_distri()` does not connect to REST API, but it downloads \*.csv files from EPPO. Thus it takes only one argument (since it does not need the EPPO token) -- a varibale containing result of `eppo_names_tables`. As a result a two element list. First one contains df of distribution for each eppocode, second contains single cell of distribution for each eppocode. The distribution data is grouped within cell by continent.
+### Taxonomy  of Pests and hosts
 
-```{r eval = F}
+`eppo_tabletools_taxo()` as other functions from this family returns a `list` with two `data.frame`:
+
+* fist is a long format taxonomy table;
+* second is table with *main category* of each eppocode.
+
+Suppose, that from previous name query we are interested only in viroids and viruses. As they usually have a *viroid* or *virus* phrase in their name, we can simply limit the query to certain eppocodes.
+
+
+```{r eval = FALSE}
+virs_eppocodes <- pest_names$all_associated_names %>%
+  dplyr::filter(grepl("viroid", fullname) | grepl("virus", fullname)) %>%
+  .[,5] %>% #eppocodes are in 5th column
+  unique()
+```
+
+We can now parse `virs_eppocodes` as `raw_eppocodes` argument, and in consequence receive taxonomy of viroids and viruses only. 
+```{r eval = FALSE}
+virs_taxonomy <- eppo_tabletools_taxo(token = eppo_token,
+                                      raw_eppocodes = virs_eppocodes,
+                                      use_raw_codes = TRUE)
+virs_taxonomy$long_table #you can also access list elements by their names
+virs_taxonomy$compact_table
+```
+
+```{r eval = TRUE, echo = FALSE}
+example_taxo <- readRDS("vignette_viroid_taxo.RDS")
+example_taxo$long_table %>%
+  knitr::kable(caption = "Long table of viruses and viroids taxonomy")
+example_taxo$compact_table %>%
+  knitr::kable(caption = "Compact table of viruses and viroids taxonomy")
+```
+
+### Pests of hosts 
+
+It is possible to obtain data on pests of particular hosts with function `eppo_tabletools_pests`. Lets say we want to know all the pests associated with *Abies alba* (eppocode: **ABIAL**).
+
+```{r eval = FALSE}
+abies_pests <- eppo_tabletools_pests(token = eppo_token,
+                                     raw_eppocodes = "ABIAL",
+                                     use_raw_codes = TRUE)
+head(abies_pests[[1]], 5)
+head(abies_pests[[2]], 5)
+```
+
+```{r eval = TRUE, echo = FALSE}
+example_pests <- readRDS("vignette_mock_pests.RDS")
+example_pests$long_table %>%
+  head(5) %>%
+  knitr::kable(caption = "Long table of Abies alba pests")
+example_pests$compact_table %>%
+  head(5) %>%
+  knitr::kable(caption = "Compact table of Abies alba pests")
+```
+
+### Distribution of pests
+
+`eppo_tabletools_distri()` does not connect to REST API, but it downloads information from \*.csv files directly from **EPPO Global Database**. As a consequence there is no `token` argument (since it does not need the EPPO token) -- a variabale containing result of `eppo_names_tables`.
+The function returns a two element `list`:
+
+* first one contains `dataframe` with distribution for organism/virus, including *invalid records and eradicated status*;
+* second contains single cell with condensed distribution for each eppocode, however including only *present* status.
+
+```{r eval = FALSE}
 pest_distri <- eppo_tabletools_distri(pest_names)
+head(pestr_distri[[1]], 5)
+head(pestr_distri[[2]], 5)
 ```
 
-## Whole condensed table in one shot:
+```{r evel = TRUE, echo = FALSE}
+example_distri <- readRDS("vignette_mock_distri.RDS")
+example_distri$long_table %>%
+  head(5) %>%
+  knitr::kable(caption = "Long table with distribution of pests")
+example_distri$compact_table %>%
+  head(5) %>%
+  knitr::kable(caption = "Compact table with distribution of pests")
+```
 
-If you want to make one table with all the infromation: names, categorization, hosts, distirbution and taxonomy -- condensed to one cell *per* pest, please use `eppo_table_full()` function that takes arguments: vector of names, **SQLite** connection and EPPO token. 
 
-```{r eval = F}
-eppo_fulltable <- eppo_table_full(pest_names, eppo_SQLite, eppo_token)
+## Whole condensed table in one shot (currently does not include `eppo_tabletools_pests`):
+
+Last, but not least, package offers a simple wrapper over above mentioned functions. If you want to make one table with all the informations: names, categorization, hosts, distribution and taxonomy -- condensed to one cell *per* pest, please use `eppo_table_full()` function that takes arguments: 
+
+* `names vector` -- a character vector of pests/hosts names;
+* `sqlConnection` -- a variable for *SQLite* connection (result of `eppo_database_connect`);
+* `token` -- an variable storing *EPPO token* (`eppo_token`. 
+
+```{r eval = FALSE}
+eppo_fulltable <- eppo_table_full(c("Meloidogyne ethiopica", "Crataegus mexicana"),
+                                  eppo_SQLite,
+                                  eppo_token)
+
+eppo_fulltable
+```
+
+```{r eval = TRUE, echo = FALSE}
+example_full_table <- readRDS("vignette_mock_full_table.RDS")
+example_full_table %>%
+  knitr::kable()
 ```

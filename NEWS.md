@@ -1,8 +1,12 @@
 # pestr 0.8.0
 
+## Vignettes
+
+* updated `petr workflow` vignette.
+
 ## New functions and updates
 
-* `eppo_tabletool` functions now can use "raw" eppocodes instead of result of `eppo_names_tables` function result to query **EPPO Data Services** and **EPPO Global Database**. New functionality works with `raw_eppocodes` and 'use_raw_codes` parameters.
+* `eppo_tabletools` functions now can use "raw" eppocodes instead of result of `eppo_names_tables` function result to query **EPPO Data Services** and **EPPO Global Database**. New functionality works with `raw_eppocodes` and 'use_raw_codes` parameters.
 * `msg_helpers` small wrapper over messages to reduce redundancy in code.
 
 ## Fixed issues and smaller functionalities
