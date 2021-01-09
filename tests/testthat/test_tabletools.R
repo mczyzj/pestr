@@ -415,10 +415,10 @@ test_that("Test that pest f works correctly", {
   test_pests <- tester_pest_func()
 
   expect_equal(test_pests[[2]]$eppocode, c("ABIAL", "TRZAC", "TRZAX", "TTLRI"))
-  expect_true(stringr::str_detect(test_pests[[2]]$pests[3],
-                                  "Listronotus bonariensis"))
-  expect_false(stringr::str_detect(test_pests[[2]]$pests[3],
-                                  "Listronotusbonariensis"))
+  expect_true(grepl("Listronotus bonariensis",
+                    test_pests[[2]]$pests[3]))
+  expect_false(grepl("Listronotusbonariensis",
+                     test_pests[[2]]$pests[3]))
   expect_true(all(test_pests[[1]]$labelclass %in% c("Incidental",
                                                     "Host",
                                                     "Major host",
