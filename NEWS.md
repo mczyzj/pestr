@@ -3,6 +3,7 @@
 ## Vignettes
 
 * updated `petr workflow` vignette.
+* updated `Example workflow of checking taxons affecting Abies alba` vignette.
 
 ## New functions and updates
 
@@ -13,6 +14,7 @@
 
 * updated documentation of functions, including examples, typos, etc.
 * added "devel" on Ubuntu 18.04 to github actions.
+* removed `stringr` and `DT` from Suggested dependencies as the are no longer in need.
 
 # pestr 0.7.4
 
