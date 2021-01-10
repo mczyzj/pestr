@@ -1,8 +1,11 @@
 Package: pestr
 Title: Interface to Download  Data on Pests from EPPO
 Version: 0.8.0
-Authors@R: person("Michal Jan", "Czyz", email = "m.czyz.j@gmail.com",
-  role = c("aut", "cre"))
+Authors@R: person(given = "Michal Jan",
+           family = "Czyz",
+           role = c("aut", "cre"),
+           email = "m.czyz.j@gmail.com",
+           comment = c(ORCID = "0000-0001-7156-4530")))
 Description: Set of tools to automatize extraction of data on pests from EPPO
     Data Services and EPPO Global Database and to put them into tables with
     human readable format. Those function use EPPO databes API, thus you first
