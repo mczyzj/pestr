@@ -11,11 +11,11 @@
   <!-- badges: end -->
 
 
-Functions included in this package allows users to painlessly connect to and extract data from EPPO Data Services. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access REST API.
+Functions included in this package allows users to painlessly connect to and extract data from **EPPO Data Services** / **EPPO Global Database**. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access **REST API**.
 
 ## Installation
 
-You can install and use **pestr** development version from GitHub as follows:
+You can install and use `pestr` development version from GitHub as follows:
 
 ```r
 devtools::install_github("mczyzj/pestr")
@@ -23,45 +23,44 @@ devtools::install_github("mczyzj/pestr")
 
 ## Overview and Usage
 
-Package include function that allow you to download SQLite database `eppo_database_download` (archive around 12 MB, after extraction around 45 MB). The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools` group return both:
+Package include function that allow you to download *SQLite* database `eppo_database_download` (archive around 12 MB, after extraction around 45 MB). The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools_` family return both:
 
 * table of raw results in so called *long format* (machine friendly) 
-* processed, compact table, that contain all infromation in one row per one pest.
+* processed, compact table, that contain all information in one row per one pest.
 
-Before using functions that connect to REST API (hosts, categorization, taxonomy and pests) you should execute `create_eppo_token()` function with string argument equal to your personal EPPO Data Services token. This function creates global variable `eppo_token` which should be parsed as an argument to functions that require `token` argument.
+Before using functions that connect to REST API (hosts, categorization, taxonomy and pests) you should execute `create_eppo_token` function with string argument equal to your personal EPPO Data Services token. This function creates global variable `eppo_token` which should be parsed as an argument to functions that require `token` argument.
 
-`eppo_table_full()` allow to execute all the functions and return compact table with information on names, hosts, categorization, distribution and taxonomy -- one row per one pest.
+`eppo_table_full` allow to execute all the functions and return compact table with information on names, hosts, categorization, distribution and taxonomy -- one row per one pest.
 
-Feel free to contribute to this package and report issues via GitHub or email.
+Feel free to contribute to this package and report issues via *GitHub* or *email*.
 
 ## Example workflow
 
-First you need to create token variable, use your eppo token from EPPO Data Services
+First you need to create token variable, use your *token* from **EPPO Data Services**.
 ```r
 create_eppo_token('<<your token>>')
 ```
 
 Than:
 
-* on LINUX: use function  to automatically download and unizp SQLite db from EPPO
+* on **LINUX**: use function  to automatically download and unizp *SQLite* db from **EPPO**
 ```r
 eppo_database_download()
 ```
 
-* on Windows: download SQLite db using 
+* on **Windows**: download *SQLite* db using: 
 ```r
-eppo_database_download()
+eppo_database_download() #by default it downloads to working directory
+#you can override this behaviour filepath argument
 ```
 and extract the file manually to project working directory.
 
 Put all the names that you are looking for into a vector, e.g.:
-
 ```r
-pests<- c(''Xylella', Cydia packardi', 'Drosophila suzuki')
+pests <- c(''Xylella', Cydia packardi', 'Drosophila suzuki')
 ```
 
 and make connection to database.
-
 ```r
 eppo_SQLite <- eppo_database_connect()
 ```
@@ -81,7 +80,7 @@ in result you will have list containing 4 tables:
 * `data frame` with preferred names and eppo codes **EPPO Data Services**;
 * `data frame` with all associated names to eppocode from third `data frame`. 
 
-It is necessary to run it before other 'tabletools' functions since it extracts eppocodes that are used later by other functions.
+You might parse results of this function directly to `eppo_tabletools_` to obtain data. Other way is to use *raw* eppocodes as argument (*this workflow is explained in Vignettes*).
 
 ### pests categorization
 
@@ -159,7 +158,5 @@ hosts_pests <- eppo_tabletools_taxo(hosts_names_tables, eppo_token)
 
 TODO:
 
-* Code comments
-* Add Vignettes
 * Internationalization
 * Connection to pestrPRA
