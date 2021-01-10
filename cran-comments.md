@@ -9,7 +9,8 @@ This is first submission to CRAN.
 * Microsoft Windows Server 2019 10.0.17763 (on github actions) R 4.0.3 R 3.6.3
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs. 
+There were no ERRORs, WARNINGs.
+There was one NOTE on win-builder regarding 'checking CRAN incoming feasibility'. 
 
 ## Downstream dependencies
 This is first submission, so there are no downstream dependencies.
