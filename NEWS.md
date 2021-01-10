@@ -12,7 +12,7 @@
 
 ## Fixed issues and smaller functionalities
 
-* updated documentation of functions, including examples, typos, etc.
+* updated documentation of functions, including examples, typos, etc. (#11)
 * added "devel" on Ubuntu 18.04 to github actions.
 * removed `stringr` and `DT` from Suggested dependencies as the are no longer in need.
 
@@ -20,40 +20,40 @@
 
 ## New and updated test.
 
-* updated sample database (on 2020-Jan-06).
+* updated sample database (on 2020-Jan-06).(#19)
 * updated `eppo_tabletools_hosts` test including changes in function behaviour.
-* if `eppo_token` is incorrect, functions return invisible `NULL`
+* if `eppo_token` is incorrect, functions return invisible `NULL`.(#18)
 
 ## Fixed issues and smaller functionalities
 
 * Updated description of usage in *README*.
-* Changed licence to MIT.
+* **Changed license to MIT.**
 * `eppo_tabletools_hosts` and `eppo_tabletools_pests` now include row with eppocode for which there is no data.
 
 # pestr 0.7.3
 ## New functions
 
-* `check_eppo_token` allows checking if eppo_token is correctly recognized by EPPO Data Services API.
-* `try_GET` and `eppo_try_urls` helper wrappers to fail gracefully.
-* Updated `eppo_json_wrapper` and `eppo_csv_download` helpers to fail gracefully.
+* `check_eppo_token` allows checking if `eppo_token` is correctly recognized by EPPO Data Services API.(#18)
+* `try_GET` and `eppo_try_urls` helper wrappers to fail gracefully. (#18)
+* Updated `eppo_json_wrapper` and `eppo_csv_download` helpers to fail gracefully.(#18)
 
 ## New and updated tests
 
 * Updated tests include mocking to support testing on CI and CRAN without using token, or connect to **EPPO API**, or download *csv* files.
-* **EPPO REST** responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.
+* **EPPO REST** responses are stored in RDS, so they can be mocked while testing if the creation of tables works correctly.(#19)
 * Now test are only checking if it `inherits` from `pestr_token` class.
-* mocked files and *SQLite* db is up to date on *04-Jan-2020*.
+* mocked files and *SQLite* db is up to date on *04-Jan-2020*.(#19)
 * Added tests for `eppo_tabletools_pests`.
 
 ## New vignettes
 
-* Vignette showing how to use output of `eppo_tabletools_pests()` to check taxonomy of pest infecting *Abies alba*.
+* Vignette showing how to use output of `eppo_tabletools_pests()` to check taxonomy of pest infecting *Abies alba*. (#8)
 
 ## Fixed issues and smaller functionalities
 
-* Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. #12
+* Encrypted token for tests is no longer needed for all functions besides API helper since functions are mocked. (#12)
 * Updated sample database.
-* Updated `tidyr::nest` and dplyr functions arguments.
+* Updated `tidyr::nest` and dplyr functions arguments. (#20 #16)
 * Deleted `dplyr` package from imports. Package now only uses `::` to access dplyr functions.
 * Deleted `pryr` for dependencies at it was only used to check if `eppo_token` is `S3` class. 
 * Deleted `RCurl` from dependencies since now package relies on `httr` and `curl` to connect with **REST API**, download *csv* files or download *SQLite* database.
@@ -189,6 +189,4 @@ needed for both test and function *FIXED*
 
 ## TODOs
 
-* Add vignettes.
 * `taxize` package can be helpful with correction of organism names.
-* Prepare package for *CRAN* submission.
