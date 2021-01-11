@@ -22,9 +22,3 @@ This is first submission, so there are no downstream dependencies.
 
 ## Vignettes
 * There are 9 'RDS' files that are mock ups of web queries that are used to demonstrate functions output in 'vignettes' directory.
-
-## Downloading files
-* 'eppo_database_download' function by default downloads 'zip' file to working directory. This behaviour might be changed with 'filepath' argument.
-
-## Fail gracefully
-* functions that are used to download or read information from web resources give messages instead of errors on fail. The wrappers are in 'eppo_api.R' file. 'eppo_database_download' and 'check_eppo_token' functions has own implementation in function body.
