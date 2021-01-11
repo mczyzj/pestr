@@ -63,8 +63,28 @@ eppo_database_download <- function(filepath = getwd()) {
                     sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
   link <- 'https://data.eppo.int/files/sqlite.zip'
   ### Try to download zipfile, if somethings wrong fail gracefully
-  eppo_database_helper(zipfile = zipfile, link = link)
+  #eppo_database_helper(zipfile = zipfile, link = link)
 
+  if (!isTRUE(eppo_database_check())){
+    print(link)
+    try_GET <- function(x, ...) {
+      tryCatch(
+        curl::curl_download(url = link, destfile = zipfile, mode = "wb", ...),
+        error = function(e) conditionMessage(e),
+        warning = function(w) conditionMessage(w)
+      )
+    }
+
+    # First check internet connection
+    if (!curl::has_internet()) {
+      message("No internet connection! \n")
+      return(invisible(NULL))
+    }
+    # Then print curl download status
+    resp <- try_GET(link)
+    message(resp)
+  }
+    # If file exists unpack
   if (file.exists(zipfile)) {
     if(.Platform$OS.type == 'windows') {
       message(msg_helper("db_win_unzip"))
@@ -72,7 +92,7 @@ eppo_database_download <- function(filepath = getwd()) {
       utils::unzip(zipfile, overwrite = T)
     }
   } else {
-      message(msg_helper("no_file"))
+      message(msg_helper("no_download"))
   }
 }
 

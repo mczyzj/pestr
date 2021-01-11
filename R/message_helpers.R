@@ -57,6 +57,9 @@ msg_helper <- function(x, ...) {
         as.character(file.info(...)$mtime),
       "\n",
       "You might consider updating."
+    ),
+    "no_download" = paste0(
+      'The file was not downloaded. Possible problem: cannot connect to server.'
     )
   )
 }
