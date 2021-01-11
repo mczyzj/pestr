@@ -22,7 +22,7 @@ msg_helper <- function(x, ...) {
       'parameter to FALSE and parse result of eppo_names_table function to\n',
       'names_tables parameter.'
     ),
-    "empty_querry" = paste0(
+    "empty_query" = paste0(
       'All provided eppocodes have incorrect stucture\n',
       'or the result of eppo_names_tables is empty.\n',
       'Please provide at least one valid eppocode.'

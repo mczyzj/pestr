@@ -109,7 +109,7 @@ eppo_tabletools_names <- function(names_tables) {
       eppocode = character(),
       Preferred_name = character(),
       Other_names = character())
-    message(msg_helper("empty_querry"))
+    message(msg_helper("empty_query"))
     return(list(long_table = preferred_table,
                 compact_table = compact_table))
   }
@@ -174,7 +174,7 @@ eppo_tabletools_hosts <- function(names_tables = NULL,
   #download data on hosts from EPPO and strore them as list, name each list
   #element with eppocode and bind sub-tables by rows to store them as long table
     if (is.null(eppocodes)) {
-      message(msg_helper("empty_querry"))
+      message(msg_helper("empty_query"))
       return(invisible(NULL))
     }
     hosts_download <- eppo_rest_download(eppocodes, "hosts", token)
@@ -241,7 +241,7 @@ eppo_tabletools_cat <- function(names_tables = NULL,
     }
   #download data on categorization from EPPO and strore them as list of tables
     if (is.null(eppocodes)) {
-      message(msg_helper("empty_querry"))
+      message(msg_helper("empty_query"))
       return(invisible(NULL))
     }
     cat_list_table <- eppo_rest_download(eppocodes, "categorization", token)
@@ -329,7 +329,7 @@ eppo_tabletools_taxo <- function(names_tables = NULL,
     }
   #download data on taxonomy from EPPO and strore them as list of tables
     if (is.null(eppocodes)) {
-      message(msg_helper("empty_querry"))
+      message(msg_helper("empty_query"))
       return(invisible(NULL))
     }
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
@@ -395,7 +395,7 @@ eppo_tabletools_distri <- function(names_tables = NULL,
   }
   #Download data on distribution and store them in list of tables
   if (is.null(eppocodes)) {
-    message(msg_helper("empty_querry"))
+    message(msg_helper("empty_query"))
     return(invisible(NULL))
   }
   distri_urls <- paste0('https://gd.eppo.int/taxon/',
@@ -470,7 +470,7 @@ eppo_tabletools_pests <- function(names_tables = NULL,
   #element with eppocode and bind sub-tables by rows
   #to store them as long table
     if (is.null(eppocodes)) {
-      message(msg_helper("empty_querry"))
+      message(msg_helper("empty_query"))
       return(invisible(NULL))
     }
     pests_download <- eppo_rest_download(eppocodes, "pests", token)
