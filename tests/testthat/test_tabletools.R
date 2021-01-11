@@ -13,6 +13,14 @@ test_that("Test that names f returns correct structure from database", {
   expect_is(result_names[[2]], 'data.frame')
 })
 
+test_that("Test that names f creates 0 row data frame when there are no
+          preffered names", {
+  testing_names <- eppo_names_tables('abcdefghij')
+  result_names <- eppo_tabletools_names(testing_names)
+  expect_equal(dim(result_names$long_table)[1], 0)
+  expect_equal(dim(result_names[[2]])[1], 0)
+})
+
 test_that("Test that names f creates correct long data frame", {
   testing_names <- eppo_names_tables('Xylella')
   result_names <- eppo_tabletools_names(testing_names)

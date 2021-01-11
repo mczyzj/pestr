@@ -99,6 +99,21 @@ eppo_tabletools_names <- function(names_tables) {
     dplyr::arrange(.data$Preferred_name,
                    dplyr::desc(.data$Name_type),
                    .data$Other_names)
+
+  # if the preffered table has no rows, terminate and return
+  # list with 0-row preffered data frame and 0-row compact data frame
+
+  if (dim(preferred_table)[1] == 0) {
+    compact_table <- data.frame(
+      codeid = character(),
+      eppocode = character(),
+      Preferred_name = character(),
+      Other_names = character())
+    message(msg_helper("empty_querry"))
+    return(list(long_table = preferred_table,
+                compact_table = compact_table))
+  }
+
   #temporary table nested by name type and other names, in next step
   #names will be collapsed to one cell per preffered name
   temp_table <- preferred_table %>%
