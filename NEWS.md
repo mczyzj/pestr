@@ -1,3 +1,14 @@
+# pestr 0.8.1
+
+## New functions and tests
+
+* `null_eppocodes` function checks if provided vector of eppocodes is empty, and returns `NULL` if needed. Function is tested. 
+
+## Fixed issues
+
+* `eppo_tabletools_` family functions now correctly handle results of `eppo_names_table`, when there are no valid eppocodes.
+* refactor and adjust `eppo_database_download` fail gracefully.
+
 # pestr 0.8.0
 
 ## Vignettes

@@ -23,8 +23,9 @@ msg_helper <- function(x, ...) {
       'names_tables parameter.'
     ),
     "empty_querry" = paste0(
-      'All provided eppocodes have incorrect stucture. Please provide\n',
-      'at least one valid eppocode.'
+      'All provided eppocodes have incorrect stucture\n',
+      'or the result of eppo_names_tables is empty.\n',
+      'Please provide at least one valid eppocode.'
     ),
     "no_db" = paste0(
       'There is no such database in location you provided.\n',

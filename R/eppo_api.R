@@ -159,3 +159,22 @@ check_eppocodes <- function(eppocodes) {
 
   return(correct_str)
 }
+
+#' EPPO change empty eppocodes to NULL
+#'
+#' Set of small wrappers and functions to help connecting with API and reuse
+#' among other package functions
+#'
+#' @param eppocodes character vector of eppocodes to be downloaded.
+#' @return List of CSV download results.
+#' @noRd
+
+null_eppocodes <- function(eppocodes) {
+
+  if(rlang::is_empty(eppocodes)) {
+    return(NULL)
+  } else {
+    return(eppocodes)
+  }
+
+}

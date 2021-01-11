@@ -150,7 +150,8 @@ eppo_tabletools_hosts <- function(names_tables = NULL,
   } else {
   #create reusable variables to access EPPO API
     if (!use_raw_codes) {
-      eppocodes <- names_tables[[3]]$eppocode
+      #substitute empty with null
+      eppocodes <- null_eppocodes(names_tables[[3]]$eppocode)
     } else {
       eppocodes <- check_eppocodes(raw_eppocodes)
     }
@@ -218,7 +219,8 @@ eppo_tabletools_cat <- function(names_tables = NULL,
   } else {
     #create reusable variables to access EPPO API
     if (!use_raw_codes) {
-      eppocodes <- names_tables[[3]]$eppocode
+      #substitute empty with null
+      eppocodes <- null_eppocodes(names_tables[[3]]$eppocode)
     } else {
       eppocodes <- check_eppocodes(raw_eppocodes)
     }
@@ -305,13 +307,14 @@ eppo_tabletools_taxo <- function(names_tables = NULL,
   } else {
   #create reusable variables to access EPPO API
     if (!use_raw_codes) {
-      eppocodes <- names_tables[[3]]$eppocode
+      #substitute empty with null
+      eppocodes <- null_eppocodes(names_tables[[3]]$eppocode)
     } else {
       eppocodes <- check_eppocodes(raw_eppocodes)
     }
   #download data on taxonomy from EPPO and strore them as list of tables
     if (is.null(eppocodes)) {
-      message("empty_querry")
+      message(msg_helper("empty_querry"))
       return(invisible(NULL))
     }
     taxo_list_table <- eppo_rest_download(eppocodes, "taxonomy", token)
@@ -369,7 +372,8 @@ eppo_tabletools_distri <- function(names_tables = NULL,
   } else {
     #create reusable variables to access EPPO API
     if (!use_raw_codes) {
-      eppocodes <- names_tables[[3]]$eppocode
+      #substitute empty with null
+      eppocodes <- null_eppocodes(names_tables[[3]]$eppocode)
     } else {
       eppocodes <- check_eppocodes(raw_eppocodes)
     }
@@ -442,7 +446,8 @@ eppo_tabletools_pests <- function(names_tables = NULL,
   } else {
     #create reusable variables to access EPPO API
     if (!use_raw_codes) {
-      eppocodes <- names_tables[[3]]$eppocode
+      #substitute empty with null
+      eppocodes <- null_eppocodes(names_tables[[3]]$eppocode)
     } else {
       eppocodes <- check_eppocodes(raw_eppocodes)
     }
