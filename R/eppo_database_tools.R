@@ -59,46 +59,20 @@ eppo_database_check <- function(filepath = getwd(),
 #' @rdname eppo_database
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
-  zipfile <- utils::capture.output(cat(filepath, 'eppocodes.zip',
-                                   sep = ifelse(.Platform$OS.type == 'windows',
-                                             "\\", "/")))
+  zipfile <- paste(filepath, 'eppocodes.zip',
+                    sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
   link <- 'https://data.eppo.int/files/sqlite.zip'
   ### Try to download zipfile, if somethings wrong fail gracefully
-  if (!isTRUE(eppo_database_check())){
-    print(link)
-    try_GET <- function(x, ...) {
-      tryCatch(
-        curl::curl_download(url = link, destfile = zipfile, mode = "wb", ...),
-        error = function(e) conditionMessage(e),
-        warning = function(w) conditionMessage(w)
-      )
-    }
+  eppo_database_helper(zipfile = zipfile, link = link)
 
-    # First check internet connection
-    if (!curl::has_internet()) {
-      message("No internet connection! \n")
-      return(invisible(NULL))
+  if (file.exists(zipfile)) {
+    if(.Platform$OS.type == 'windows') {
+      message(msg_helper("db_win_unzip"))
+    } else {
+      utils::unzip(zipfile, overwrite = T)
     }
-    # Then try for timeout problems
-    resp <- try_GET(link)
-    if (!inherits(resp, "response")) {
-      message(resp)
-      return(invisible(NULL))
-    }
-    # Then stop if status > 400
-    if (httr::http_error(resp)) {
-      httr::message_for_status(resp)
-      return(invisible(NULL))
-    }
-
-  #utils::download.file('https://data.eppo.int/files/sqlite.zip',
-  #                     destfile = zipfile)
-  }
-
-  if(.Platform$OS.type == 'windows') {
-    message(msg_helper("db_win_unzip"))
   } else {
-    utils::unzip(zipfile, overwrite = T)
+      message(msg_helper("no_file"))
   }
 }
 
