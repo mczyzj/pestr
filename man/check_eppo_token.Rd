@@ -15,7 +15,7 @@ Silent NULL when there is no error, otherwise message.
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
 \code{check_eppo_token} should be used after \code{create_eppo_token}
-to check if the token is correctly recognized by EPPO Data Sevices API.
+to check if the token is correctly recognized by EPPO Data Services API.
 As a reference it uses link to \emph{Xylella fastidiosa} hosts database -
 \strong{XYLEFA} eppocode.
 If token is recognized there will be no message. In other cases function will

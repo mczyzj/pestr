@@ -32,7 +32,7 @@ and informs user if it is outdated and should be downloaded.
 The downloaded file is \emph{zip} archive. On Linux this database will be
 extracted automatically. On Windows user will need to extract the file
 manually.
-\code{eppo_databse_connect} allows user to conect to SQLite database
+\code{eppo_database_connect} allows user to connect to SQLite database
 downloaded from EPPO Data Services.
 }
 \section{Manual download}{

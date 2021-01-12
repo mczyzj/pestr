@@ -3,10 +3,10 @@
 \docType{package}
 \name{pestr}
 \alias{pestr}
-\title{pestr: A package for retriving data from
+\title{pestr: A package for retrieving data from
 EPPO Data Services \url{https://data.eppo.int/}}
 \description{
 The pestr package provides function for downloading SQLite EPPO database,
-searching for pest names in SQLite database, and retiving all necessary data
-from EPPO Data Services API for selected pest names.
+searching for pest names in SQLite database, and retrieving all necessary
+data from EPPO Data Services API for selected pest names.
 }

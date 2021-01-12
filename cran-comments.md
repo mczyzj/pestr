@@ -1,5 +1,20 @@
 ## Release summary
-This is first submission to CRAN.
+This is a resubmission.
+
+## Feedbacks from previous submission: 
+
+```
+Thanks, we see:
+
+   The Title field should be in title case. Current version is:
+   'Interface to Download Data on Pests And Hosts from 'EPPO''
+   In title case that is:
+   'Interface to Download Data on Pests and Hosts from 'EPPO''
+
+Please fix and resubmit.
+```
+
+-> Title is now in correct title case.
 
 ## Test environments
 * local Ubuntu 18.04 install, R 4.0.3

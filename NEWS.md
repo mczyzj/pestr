@@ -32,7 +32,7 @@
 ## New and updated test.
 
 * updated sample database (on 2020-Jan-06).(#19)
-* updated `eppo_tabletools_hosts` test including changes in function behaviour.
+* updated `eppo_tabletools_hosts` test including changes in function behavior.
 * if `eppo_token` is incorrect, functions return invisible `NULL`.(#18)
 
 ## Fixed issues and smaller functionalities
@@ -98,7 +98,7 @@ Added *pestr Workflow* vignette with example usage of **pestr** package function
 
 # Fixed issues
 
-Added some formating to NEWS.md
+Added some formatting to NEWS.md
 
 # pestr 0.6.4
 
@@ -131,7 +131,7 @@ repeating names of some countries (e.g. *USA*, *China*).
 
 ## New functions
 
-* `eppo_table_full` -- joins comapct results of `eppo_names_tables()` and 
+* `eppo_table_full` -- joins compact results of `eppo_names_tables()` and 
 `eppo_tabletools` into one compact table.
 
 # pestr 0.5.0
@@ -176,10 +176,10 @@ table with hosts of each pest.
 * `eppo_database_connect()` -- connects to EPPO SQLite db;
 * `eppo_database_download()` -- downloads EPPO SQLite db from EPPO Data Services;
 * `eppo_names_tables()` -- checks if names in query exist in EPPO SQLite db and
-uses them to creat table with preferred and non-preferred names, synonyms, and
+uses them to create table with preferred and non-preferred names, synonyms, and
 common names in other languages;
 * `eppo_tabletools_names()` -- takes result of `eppo_names_tables()` and creates
-table with proper formating (names etc.) on long or condensed format;
+table with proper formatting (names etc.) on long or condensed format;
 
 ## Issues to solve
 
@@ -189,7 +189,7 @@ table with proper formating (names etc.) on long or condensed format;
 * Documentation (#10)
 * Additional tests (?) (#9)
 * Test for `eppo_tabletools_taxo` breaks -- function does not return correct
-values (namely tabel has only one row with NA) for compact table, however when
+values (namely table has only one row with NA) for compact table, however when
 run manually everything is O.K. (#9) -- Probably updating sample SQLite db for
 test will solve above issue *FIXED*
 * Add new list item - tables formatted in the same way as they are formatted

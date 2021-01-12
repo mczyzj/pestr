@@ -52,7 +52,7 @@ We can now look for all the existing pests of *Abies alba* that exists in [EPPO 
 
 You will need result of `eppo_names_tables` function as first argument and the second one is token -- which allows you to connect to **EPPO API**. You get it by registering to [EPPO Data Services](https://data.eppo.int) which is free of charge. You need to paste your token to `create_eppo_token` function - it will create variable in your `R Global Environment` that will be used among all `pestr` functions that connect to **EPPO API**. You need to do it just once per session. 
 
-### Quering with valide eppocode (or eppocodes)
+### Querying with valid eppocode (or eppocodes)
 
 `eppo_tabletools_pests` will take 3 arguments with this approach:
 
@@ -115,7 +115,7 @@ pests_eppocodes <- abies_alba_pests$long_table %>%
   unlist()
 ```
 
-Now, we can parse `pest_eppocodes` variable as `raw_eppocodes` arugument:
+Now, we can parse `pest_eppocodes` variable as `raw_eppocodes` argument:
 
 ```{r eval = FALSE, echo = TRUE}
 pests_taxonomy <- eppo_tabletools_taxo(token = eppo_token,

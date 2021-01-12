@@ -147,7 +147,7 @@ write.csv(eppo_fulltable, 'eppo_fulltable.csv')
 
 ### hosts pests
 
-Since the **EPPO Data Services** provides infomration on pest of particular host, you can easily access information with:
+Since the **EPPO Data Services** provides information on pest of particular host, you can easily access information with:
 
 ```r
 hosts <- c("Abies alba", "Triticum")
