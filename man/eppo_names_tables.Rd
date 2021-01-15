@@ -27,7 +27,7 @@ name in database, data frame with all names matching codeid, as well as
 preferred (binary), language and EPPOcode is returned.
 }
 \section{Using with other functions}{
-Output of the function might be parsed to functions:
+Output of the function might be passed to functions:
 \itemize{
 \item \code{eppo_tabletools_names}
 \item \code{eppo_tabletools_cat}

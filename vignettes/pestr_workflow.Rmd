@@ -27,13 +27,13 @@ Beside above features, this package provides some other helper functions e.g. co
 # Example workflow
 
 ## Setting up `token` and connecting to *SQLite* database
-In order to start working with **pestr** package, you should register yourself (*free of charge*) to [EPPO Data Services](https://data.eppo.int/). Then run `create_eppo_token` which will store your credentials in variable used by functions that connect to **REST API**.
+In order to start working with **pestr** package, you should register yourself (*free of charge*) to [EPPO Data Services](https://data.eppo.int/). Then run `create_eppo_token` and assign results to a variable which will be used by functions that connect to **REST API**.
 
 ```{r eval = FALSE}
-create_eppo_token('<<your_EPPO_token>>')
+eppo_token <- create_eppo_token('<<your_EPPO_token>>')
 ```
 
-Next, you can run `eppo_database_download` function that will download (by default to your **working directory**, which can be override with `filepath` argument) archive with the *SQLite* file. If you are on **Linux** operating system, file will be extract it into your working directory. On **Windows** you will be asked to extract the database file manually.
+Next, you can run `eppo_database_download` function that will download (by default to your **working directory**, which can be override with `filepath` argument) archive with the *SQLite* file. If you are on **Linux** operating system, file will be extracted into your working directory (or other directory provided in `filepath` argument). On **Windows** you will be asked to extract the database file manually.
 
 ```{r eval = FALSE}
 eppo_database_download()
@@ -140,7 +140,7 @@ cat_example[[2]] %>%
 
 ```
 
-If you will to limit the data received from **EPPO Data Services**, and you are confident that you know exactly what you are looking for, you can use eppocodes directly.
+If you will to limit the data received from **EPPO Data Services**, *and you are confident that you know exactly what you are looking for*, you can use eppocodes directly.
 
 ```{r eval = FALSE}
 pests_cat <- eppo_tabletools_cat(token = eppo_token,

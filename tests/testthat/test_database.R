@@ -1,6 +1,5 @@
 context("EPPO database connect")
 library("pestr")
-if (exists('sqlEppo')) rm(sqlEppo, envir = globalenv())
 
 test_that("Test that there is database", {
  expect_message(eppo_database_check())

@@ -56,14 +56,14 @@ test_that("Test that names f creates correct condensed data frame", {
 ##### EPPO TABLETOOLS HOSTS ####
 test_that("Test that hosts f checks if parsed arguments are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('abc123')
+  eppo_token <- create_eppo_token('abc123')
   expect_message(eppo_tabletools_hosts(testing_names, 'some chars'),
                  'Please provide token created with create_eppo_token function')
 })
 
  test_that("Test that hosts f returns correct structure from database", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   tester_host_func <- function() {
     mockr::with_mock(
@@ -85,7 +85,7 @@ test_that("Test that hosts f works correctly", {
  # skip('Only for use locally with proper token.') #comment out to test
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
                                        'Abies alba'))
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
   testing_hosts <- readRDS("mocked_hosts.RDS")
   eppocode <- testing_names[[3]]$eppocode
   names(testing_hosts) <- eppocode
@@ -141,7 +141,7 @@ test_that("Test that hosts f works correctly", {
 test_that("Test that categorization f checks if parsed arguments
           are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('abc123')
+  eppo_token <- create_eppo_token('abc123')
   expect_message(eppo_tabletools_cat(testing_names, 'some chars'),
                  'Please provide token created with create_eppo_token function')
 })
@@ -149,7 +149,7 @@ test_that("Test that categorization f checks if parsed arguments
 test_that("Test that categorization f returns correct structure
           from database", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   tester_cat_func <- function() {
     mockr::with_mock(
@@ -168,7 +168,7 @@ test_that("Test that categorization f returns correct structure
 test_that("Test that cat f works correctly", {
   testing_names <- eppo_names_tables(c('Cydia packardi', 'Tuta absoluta',
                                        'Abies alba'))
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
   eppocodes <- testing_names[[3]]$eppocode
   testing_cat <- readRDS("mocked_cat.RDS")
   names(testing_cat) <- eppocodes
@@ -238,7 +238,7 @@ test_that("Test that cat f works correctly", {
 test_that("Test that taxonomy f checks if parsed arguments
           are of proper class", {
   testing_names <- eppo_names_tables('Xylella')
-  create_eppo_token('abc123')
+  eppo_token <- create_eppo_token('abc123')
   expect_message(eppo_tabletools_taxo(testing_names, 'some chars'),
                            'Please provide token created with create_eppo_token function')
 })
@@ -249,7 +249,7 @@ test_that("Test that taxonomy f returns correct structure
                                      'Plasmodiophora brassicae', 'Abies alba',
                                      'Pantoea stewartii', 'Globodera pallida',
                                      'Phialophora cinerescens'))
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   tester_taxo_func <- function() {
     mockr::with_mock(
@@ -271,7 +271,7 @@ test_that("Test that taxonomy f works correctly", {
                                        'Pantoea stewartii', 'Globodera pallida',
                                        'Phialophora cinerescens'))
 
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   eppocodes <- testing_names[[3]]$eppocode
   testing_taxo <- readRDS("mocked_taxo.RDS")
@@ -390,7 +390,7 @@ test_that("Test that pests f returns correct structure
           from database", {
   testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
 
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <- create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   tester_pest_func <- function() {
     mockr::with_mock(
@@ -406,10 +406,8 @@ test_that("Test that pests f returns correct structure
   expect_is(test_pests[[2]], 'data.frame')
 })
 
-#rm(eppo_token, envir = globalenv())
-
 test_that("Test that pest f works correctly", {
-  create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
+  eppo_token <-create_eppo_token('e3ecef2dea564abec28e1181eb3b1b11') #artificial token
 
   testing_names <- eppo_names_tables(c('Triticum aestivum', 'Abies alba'))
 
