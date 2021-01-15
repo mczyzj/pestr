@@ -3,7 +3,7 @@
 #' Messages wrapper. Helps with printing nicely and reduces redundancy in code.
 #'
 #' @param x message code name.
-#' @param ... other parameters parsed to functions.
+#' @param ... other parameters passed to functions.
 #'
 #' @return String to be used by message functions.
 #' @noRd
@@ -19,7 +19,7 @@ msg_helper <- function(x, ...) {
     ),
     "wrong_arguments" = paste0(
       'Please provide character vector of eppocodes or set use_raw_codes\n',
-      'parameter to FALSE and parse result of eppo_names_table function to\n',
+      'parameter to FALSE and pass result of eppo_names_table function to\n',
       'names_tables parameter.'
     ),
     "empty_query" = paste0(

@@ -106,7 +106,7 @@ abies_alba_pests$long_table %>%
 
 ## Step 4 -- Number of taxons
 
-Obtaining number of pests taxons is not very complicated. Since we can use `eppocodes` directly, we can parse whole column to `eppo_tabletools_taxo` function, which will retrieve data on pests taxonomy.
+Obtaining number of pests taxons is not very complicated. Since we can use `eppocodes` directly, we can pass whole column to `eppo_tabletools_taxo` function, which will retrieve data on pests taxonomy.
 
 ```{r eval = TRUE, echo = TRUE}
 ### Extract eppocodes of pests
@@ -115,7 +115,7 @@ pests_eppocodes <- abies_alba_pests$long_table %>%
   unlist()
 ```
 
-Now, we can parse `pest_eppocodes` variable as `raw_eppocodes` argument:
+Now, we can pass `pest_eppocodes` variable as `raw_eppocodes` argument:
 
 ```{r eval = FALSE, echo = TRUE}
 pests_taxonomy <- eppo_tabletools_taxo(token = eppo_token,
