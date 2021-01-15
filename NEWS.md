@@ -8,6 +8,7 @@
 
 * `eppo_tabletools_` family functions now correctly handle results of `eppo_names_table`, when there are no valid eppocodes.
 * refactor and adjust `eppo_database_download` fail gracefully.
+* corrected typos in documentation
 
 # pestr 0.8.0
 

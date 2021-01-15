@@ -49,7 +49,7 @@ With this three short steps you are ready to go.
 
 ## Extracting tables with scientific, common and synonym names
 
-Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with partial names -- e.g. when you query for *Cydia packardi* you get information related to this species, while when you query for *Cydia* you get information on whole genus. Likewise, when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can parse whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
+Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with partial names -- e.g. when you query for *Cydia packardi* you get information related to this species, while when you query for *Cydia* you get information on whole genus. Likewise, when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can pass whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
 
 ```{r eval = FALSE}
 # Create vector of names that you are looking for
@@ -196,7 +196,7 @@ virs_eppocodes <- pest_names$all_associated_names %>%
   unique()
 ```
 
-We can now parse `virs_eppocodes` as `raw_eppocodes` argument, and in consequence receive taxonomy of viroids and viruses only. 
+We can now pass `virs_eppocodes` as `raw_eppocodes` argument, and in consequence receive taxonomy of viroids and viruses only. 
 ```{r eval = FALSE}
 virs_taxonomy <- eppo_tabletools_taxo(token = eppo_token,
                                       raw_eppocodes = virs_eppocodes,

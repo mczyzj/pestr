@@ -121,7 +121,7 @@ eppo_database_connect <- function(filepath = getwd(),
 #' preferred (binary), language and EPPOcode is returned.
 #'
 #' @details # Using with other functions
-#' Output of the function might be parsed to functions:
+#' Output of the function might be passed to functions:
 #' * \code{eppo_tabletools_names}
 #' * \code{eppo_tabletools_cat}
 #' * \code{eppo_tabletools_hosts}
