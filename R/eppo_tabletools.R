@@ -362,10 +362,14 @@ eppo_tabletools_taxo <- function(names_tables = NULL,
   #this might look better if the conditionals are exchanged with
   #case_when function
     for (j in 1:length(taxo_tables)) {
-      if(taxo_tables[[j]][1, 3] == 'Animalia') {
+      if(is.na(taxo_tables[[j]][1,1])) {
+        compact_table[j, 2] <- NA
+      } else if(taxo_tables[[j]][1, 3] == 'Animalia') {
         compact_table[j, 2] <- taxo_tables[[j]][2, 3]
       } else if (taxo_tables[[j]][1, 3] == 'Viruses and viroids') {
         compact_table[j, 2] <- taxo_tables[[j]][2, 3]
+    #  } else if (is.na(taxo_tables[[j]][1, 3])) {
+    #    compact_table[j, 2] <- "xyz"
       } else {
         compact_table[j, 2] <- taxo_tables[[j]][1, 3]
       }
