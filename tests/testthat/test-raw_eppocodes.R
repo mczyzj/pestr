@@ -7,7 +7,7 @@ test_that("raw eppocodes gives same results as eppocodes from DB", {
   skip_on_travis()
   skip_on_cran()
   skip('Only for use locally with proper token.') #comment out to check locally
-  create_eppo_token('')
+  eppo_token <- create_eppo_token('')
 
   #eppocodes raw
   test_full <- all_good <- c("XYLEFA", "ABIAL", "abial", "123456", "XYLEFAZ",

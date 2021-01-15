@@ -13,7 +13,7 @@ check_eppo_token(token)
 Silent NULL when there is no error, otherwise message.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{check_eppo_token} should be used after \code{create_eppo_token}
 to check if the token is correctly recognized by EPPO Data Services API.
 As a reference it uses link to \emph{Xylella fastidiosa} hosts database -
@@ -23,6 +23,7 @@ show following messages: No internet connection or Forbidden (HTTP 403).
 }
 \examples{
 \dontrun{
+eppo_token <- create_eppo_token("abcdef123456")
 check_eppo_token(eppo_token)
 }
 }

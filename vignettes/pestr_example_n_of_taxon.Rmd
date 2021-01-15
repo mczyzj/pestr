@@ -50,13 +50,13 @@ We can now look for all the existing pests of *Abies alba* that exists in [EPPO 
 
 ### With `eppo_names_tables` output as an argument:
 
-You will need result of `eppo_names_tables` function as first argument and the second one is token -- which allows you to connect to **EPPO API**. You get it by registering to [EPPO Data Services](https://data.eppo.int) which is free of charge. You need to paste your token to `create_eppo_token` function - it will create variable in your `R Global Environment` that will be used among all `pestr` functions that connect to **EPPO API**. You need to do it just once per session. 
+You will need result of `eppo_names_tables` function as first argument and the second one is token -- which allows you to connect to **EPPO API**. You get it by registering to [EPPO Data Services](https://data.eppo.int) which is free of charge. You need to paste your token to `create_eppo_token` function and assign the results to a variable (here we use `eppo_token`) that will be used among all `pestr` functions that connect to **EPPO API**. 
 
 ### Querying with valid eppocode (or eppocodes)
 
 `eppo_tabletools_pests` will take 3 arguments with this approach:
 
-* token -- a variable that store result of `create_eppo_token` (by default this is `eppo_token`);
+* token -- a variable that store result of `create_eppo_token`;
 * character vector of eppocodes (in this example **ABIAL**);
 * use_raw_codes -- logical value `TRUE`
 
@@ -64,7 +64,7 @@ Below code shows this in action:
 
 ```{r eval = FALSE, echo = TRUE}
 ### Firsr create eppo_token variable
-eppo_create_token("<place your eppo token here>")
+eppo_token <- eppo_create_token("<place your eppo token here>")
 
 ### For token argument, please use eppo_token
 abies_alba_pests <- eppo_tabletools_pests(token = eppo_token,

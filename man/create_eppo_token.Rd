@@ -10,13 +10,16 @@ create_eppo_token(x)
 \item{x}{A string.}
 }
 \value{
-Global variable with the token to access EPPO Data Services API.
+Token to access EPPO Data Services API in format recognized by
+\code{eppo_tabletools_*} functions.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
-\code{create_eppo_token} makes global variable eppo_token. It contains token
-of class string, that is needed to communicate with EPPO Data Services API.
-Global variable is shared between package functions.
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\code{create_eppo_token} makes token thats should be saved in a variable and
+used argument for \code{\link{eppo_tabletools_hosts}},
+\code{\link{eppo_tabletools_pests}}, \code{\link{eppo_tabletools_cat}} and
+\code{\link{eppo_tabletools_taxo}} functions. It contains token of class
+string, that is needed to communicate with EPPO Data Services API.
 }
 \examples{
 \dontrun{

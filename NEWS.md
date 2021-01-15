@@ -1,3 +1,10 @@
+# pestr 0.8.2
+
+## Function updates
+
+* `create_eppo_token` it does not create `Global variable` now. Instead user needs to assign it to a variable manually. This is also corrected in tests, vignettes and documentation.
+* `eppo_tabletools_taxo` now correctly handles eppocodes with correct structure, but otherwise invalid. I.e. It returns `NA` when the eppocode is not in the **EPPO Data Services** instead of breaking.
+
 # pestr 0.8.1
 
 ## New functions and tests
@@ -8,6 +15,7 @@
 
 * `eppo_tabletools_` family functions now correctly handle results of `eppo_names_table`, when there are no valid eppocodes.
 * refactor and adjust `eppo_database_download` fail gracefully.
+* corrected typos in documentation
 
 # pestr 0.8.0
 
