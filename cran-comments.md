@@ -1,7 +1,13 @@
 ## Release summary
 This is a resubmission.
 
-## Feedbacks from previous submission: 
+## Feedbacks from previous submission:
+
+```
+Please do not modifiy the .GlobalEnv by deleting objects. This is not
+allowed by the CRAN policies.
+```
+-> Corrected -- This error came from having side-effects of one of the functions, and deleting the variable from .GlobalEnv in the test. Now functions do not alter .GlobalEnv by themselves, neither do tests.
 
 ```
 Thanks, we see:
