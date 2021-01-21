@@ -3,6 +3,8 @@
 <img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align= "right" />
 
 <!-- badges: start -->
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/pestr)](https://cran.r-project.org/package=pestr)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/pestr?color=yellowgreen)](https://cran.r-project.org/package=pestr)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
