@@ -1,179 +1,246 @@
+
 # pestr
 
-<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align= "right" />
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align="right" alt="pestr package hexsticker" />
 
 <!-- badges: start -->
+
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/pestr)](https://cran.r-project.org/package=pestr)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/pestr?color=yellowgreen)](https://cran.r-project.org/package=pestr)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build
+Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
 [![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
-  <!-- badges: end -->
+<!-- badges: end -->
 
-
-Functions included in this package allows users to painlessly connect to and extract data from **EPPO Data Services** / **EPPO Global Database**. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access **REST API**.
+Functions included in this package allows users to painlessly connect to
+and extract data from **EPPO Data Services** / **EPPO Global Database**.
+Before you start using it you should register on: [EPPO Data
+Services](https://data.eppo.int/) and obtain your token to access **REST
+API**.
 
 ## Installation
 
-You can install and use `pestr` development version from GitHub as follows:
+You can install the released version of `pestr` from
+[CRAN](https://CRAN.R-project.org) with:
 
-```r
+``` r
+install.packages("pestr")
+```
+
+*OR* you can install and use `pestr` development version from
+[GitHub](https://github.com/mczyzj/pestr) with:
+
+``` r
+# install.packages("devtools")
 devtools::install_github("mczyzj/pestr")
 ```
 
 ## Overview and Usage
 
-Package include function that allow you to download *SQLite* database `eppo_database_download` (archive around 12 MB, after extraction around 45 MB). The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools_` family return both:
+Package include functions that allow you to download *SQLite* database
+`eppo_database_download` (archive around 12 MB, after extraction around
+45 MB). The database is needed for extracting eppocodes that are used in
+other functions from this package. Function included in
+`eppo_tabletools_` family return both:
 
-* table of raw results in so called *long format* (machine friendly) 
-* processed, compact table, that contain all information in one row per one pest.
+-   table of raw results in so called *long format* (machine friendly)
+-   processed, compact table, that contain all information in one row
+    per one pest.
 
-Before using functions that connect to REST API (hosts, categorization, taxonomy and pests) you should execute `create_eppo_token` function with string argument equal to your personal EPPO Data Services token. This function creates global variable `eppo_token` which should be parsed as an argument to functions that require `token` argument.
+Before using functions that connect to REST API (hosts, categorization,
+taxonomy and pests) you should execute `create_eppo_token` function with
+string argument equal to your personal EPPO Data Services token. This
+function creates global variable `eppo_token` which should be parsed as
+an argument to functions that require `token` argument.
 
-`eppo_table_full` allow to execute all the functions and return compact table with information on names, hosts, categorization, distribution and taxonomy -- one row per one pest.
+`eppo_table_full` allow to execute all the functions and return compact
+table with information on names, hosts, categorization, distribution and
+taxonomy – one row per one pest.
 
-Feel free to contribute to this package and report issues via *GitHub* or *email*.
+Feel free to contribute to this package and report issues via *GitHub*
+or *email*.
 
 ## Example workflow
 
-First you need to create token variable, use your *token* from **EPPO Data Services**.
-```r
-create_eppo_token('<<your token>>')
+First you need to create token variable, use your *token* from **EPPO
+Data Services**.
+
+``` r
+#make basic checks and store your EPPO token in a variable
+eppo_token <- pestr::create_eppo_token('<<your token>>')
 ```
 
 Than:
 
-* on **LINUX**: use function  to automatically download and unizp *SQLite* db from **EPPO**
-```r
-eppo_database_download()
+-   on **LINUX**: use function to automatically download and unizp
+    *SQLite* db from **EPPO**
+
+``` r
+#download SQLite databaase
+pestr::eppo_database_download()
 ```
 
-* on **Windows**: download *SQLite* db using: 
-```r
-eppo_database_download() #by default it downloads to working directory
+-   on **Windows**: download *SQLite* db using:
+
+``` r
+#by default it downloads to working directory
 #you can override this behaviour filepath argument
+pestr::eppo_database_download()
 ```
+
 and extract the file manually to project working directory.
 
 Put all the names that you are looking for into a vector, e.g.:
-```r
-pests <- c(''Xylella', Cydia packardi', 'Drosophila suzuki')
+
+``` r
+#use some pests names and store them in a variable
+pests <- c('Xylella', 'Cydia packardi', 'Drosophila suzuki')
 ```
 
-and make connection to database.
-```r
-eppo_SQLite <- eppo_database_connect()
+and make connection to database, as in code below:
+
+``` r
+# store SQL connection in a varibale
+eppo_SQLite <- pestr::eppo_database_connect()
 ```
 
-### pests names
+### names of pests
 
 Get pest names using:
 
-```r
-pests_names_tables <- eppo_names_tables(pests, eppo_SQLite)
+``` r
+# which names from pests variable can be found in SQLite database
+# results of this function might be used as an input for eppo_tabletools
+# funtions family
+pests_names_tables <- pestr::eppo_names_tables(pests, eppo_SQLite)
 ```
 
-in result you will have list containing 4 tables: 
+in result you will have list containing 4 tables:
 
-* `data frame` with names that are present in **EPPO Data Services**;
-* `data frame` with names that are not present **EPPO Data Services**;
-* `data frame` with preferred names and eppo codes **EPPO Data Services**;
-* `data frame` with all associated names to eppocode from third `data frame`. 
+-   `data frame` with names that are present in **EPPO Data Services**;
+-   `data frame` with names that are not present **EPPO Data Services**;
+-   `data frame` with preferred names and eppo codes **EPPO Data
+    Services**;
+-   `data frame` with all associated names to eppocode from third
+    `data frame`.
 
-You might parse results of this function directly to `eppo_tabletools_` to obtain data. Other way is to use *raw* eppocodes as argument (*this workflow is explained in Vignettes*).
+You might parse results of this function directly to `eppo_tabletools_`
+to obtain data. Other way is to use *raw* eppocodes as argument (*this
+workflow is explained in Vignettes*).
 
-### pests categorization
+### Categorization of pests
 
 Using:
 
-```r
-pests_cat <- eppo_tabletools_cat(pests_names_tables, eppo_token)
+``` r
+# check category of pests using results of eppo_names_tables
+pests_cat <- pestr::eppo_tabletools_cat(pests_names_tables, eppo_token)
 ```
 
-you will get as result you will get list with two elements:  
+you will get as result you will get list with two elements:
 
-* `data frame` with categorization tables for each eppocode in long format;
-* a single `data frame` with categorization for each eppocode condensed into a single cell.
+-   `data frame` with categorization tables for each eppocode in long
+    format;
+-   a single `data frame` with categorization for each eppocode
+    condensed into a single cell.
 
-### pest hosts
+### Hosts of pests
 
-```r
-pests_hosts <- eppo_tabletools_hosts(pests_names_tables, eppo_token)
+``` r
+# find hosts of pests using results of eppo_names_tables
+pests_hosts <- pestr::eppo_tabletools_hosts(pests_names_tables, eppo_token)
 ```
 
-result with two tables: 
+result with two tables:
 
-* first is a `data frame` in long format with all data for all pests; 
-* second is a `data frame` where hosts are combined into single cell for each eppocode.
+-   first is a `data frame` in long format with all data for all pests;
+-   second is a `data frame` where hosts are combined into single cell
+    for each eppocode.
 
-### pests taxonomy
+### Taxonomy of Pests and hosts
 
-To get taxonomy use: 
+To get taxonomy use:
 
-```r
-pests_taxo <- eppo_tabletools_taxo(pests_names_tables, eppo_token)
+``` r
+# get taxonomy of pests and hosts using results of eppo_names_tables
+pests_taxo <- pestr::eppo_tabletools_taxo(pests_names_tables, eppo_token)
 ```
 
 This function results are a list of two `data frames`:
 
-* first is a long format table; 
-* second is table with 'main category' of each eppocode.
+-   first is a long format table;
+-   second is table with ‘main category’ of each eppocode.
 
-### pest distribution
+### Distribution of pests
 
-The function extracting distribution from **EPPO Global Database** does not need `eppo_token`. It can be called like:
+The function extracting distribution from **EPPO Global Database** does
+not need `eppo_token`. It can be called like:
 
-```r
-pest_distri <- eppo_tabletools_distri(pests_names_tables)
+``` r
+# returns distribution of pests using results of eppo_names_tables
+pest_distri <- pestr::eppo_tabletools_distri(pests_names_tables)
 ```
 
 The result is a two element list:
 
-* first one contains `data frame` of distribution in long format;
-* second contains single cell of distribution for each eppocode.
+-   first one contains `data frame` of distribution in long format;
+-   second contains single cell of distribution for each eppocode.
 
-### pest names, categorization, distribution, taxonomy and hosts in one shot
+### Names, categorization, distribution, taxonomy and hosts of pests in one shot
+
 Whole condensed table in one shot:
 
-```r
-eppo_fulltable <- eppo_table_full(pests, eppo_SQLite, eppo_token)
+``` r
+# return condensed table with names, categorization, distribution, taxonomy and
+# hosts of pests
+eppo_fulltable <- pestr::eppo_table_full(pests, eppo_SQLite, eppo_token)
 ```
 
 which you can easily save as csv and use in a spreadsheet:
 
-```r
+``` r
 write.csv(eppo_fulltable, 'eppo_fulltable.csv')
 ```
 
-### hosts pests
+### Pests of hosts
 
-Since the **EPPO Data Services** provides information on pest of particular host, you can easily access information with:
+Since the **EPPO Data Services** provides information on pest of
+particular host, you can easily access information with:
 
-```r
+``` r
+#make vector with names of hosts
 hosts <- c("Abies alba", "Triticum")
 
-hosts_names_tables <- eppo_names_tables(pests, eppo_SQLite)
-hosts_pests <- eppo_tabletools_taxo(hosts_names_tables, eppo_token)
+# query SQLite database to obtain valid names of hosts
+hosts_names_tables <- pestr::eppo_names_tables(hosts, eppo_SQLite)
+
+# use results of previous query to find pests of hosts
+hosts_pests <- pestr::eppo_tabletools_pests(hosts_names_tables, eppo_token)
 ```
 
 ## *Please cite*
 
 Please, do remember to cite this package *AND* **EPPO** resources:
 
-```
+``` r
 #to get citation of pestr package
 citation("pestr")
 #to get citation of EPPO Global Database
-eppo_citation("global_database")
+pestr::eppo_citation("global_database")
 #to get citation of EPPO Data Services
-eppo_citation("data_services")
+pestr::eppo_citation("data_services")
 #shortcut to get citation of both EPPO resources
-eppo_citation("global_both")
+pestr::eppo_citation("global_both")
 ```
 
-TODO:
+**For more details on using `pestr` package please check vignettes.**
 
-* Internationalization
-* Connection to pestrPRA
+## TODO:
+
+-   Internationalization
+-   Connection to pestrPRA

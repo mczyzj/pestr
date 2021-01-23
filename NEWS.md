@@ -4,6 +4,14 @@
 
 * `eppo_citation` returns citation of **EPPO** resources in `bibtex` format.
 
+## Documentation updates
+
+* update `README`, correct typos, styling, add comments, *etc.*
+
+## Misc
+
+* new hex sticker
+
 # pestr 0.8.2
 
 ## Function updates
