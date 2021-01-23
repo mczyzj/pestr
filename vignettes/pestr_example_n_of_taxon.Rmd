@@ -20,8 +20,14 @@ knitr::opts_chunk$set(
   fig.height = 5
 )
 ```
+<!-- logo: start -->
+
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align="right" alt="pestr package hexsticker" style="border: 0px"/>
+
+<!-- logo: end -->
 
 ```{r setup}
+# Load packages
 library("pestr")
 library("dplyr")
 ```

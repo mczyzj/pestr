@@ -19,6 +19,17 @@ knitr::opts_chunk$set(
 library('dplyr')
 ```
 
+<!-- logo: start -->
+
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align="right" alt="pestr package hexsticker" style="border: 0px"/>
+
+<!-- logo: end -->
+
+```{r eval = FALSE}
+# Load packages
+library("pestr")
+```
+
 # Overview
 
 `pestr` Package is a set of functions and wrappers that allow painless and quick data retrieval on pests and their hosts from [EPPO Data Services](https://data.eppo.int/) and [EPPO Global Database](https://gd.eppo.int/). First of all, it allows extraction of *scientific names* of organisms (and viruses), as well as *synonyms* and *common names* from *SQLite* database. The data base can be easily downloaded with `eppo_database_download()` function. Second, there are four functions in the package that use **REST API** to extract data on *hosts*, *categorization* and *taxonomy* and *pests*. Further, there is a function that downloads **data** *csv* files containing information on organisms (and viruses) distribution. Important feature is that the *csv* are **never saved onto hard drive**, instead they are directly used to create `data.frame` that can be assigned to a variable in **R**. 
