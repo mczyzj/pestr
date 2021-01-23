@@ -158,6 +158,21 @@ hosts_names_tables <- eppo_names_tables(pests, eppo_SQLite)
 hosts_pests <- eppo_tabletools_taxo(hosts_names_tables, eppo_token)
 ```
 
+## *Please cite*
+
+Please, do remember to cite this package *AND* **EPPO** resources:
+
+```
+#to get citation of pestr package
+citation("pestr")
+#to get citation of EPPO Global Database
+eppo_citation("global_database")
+#to get citation of EPPO Data Services
+eppo_citation("data_services")
+#shortcut to get citation of both EPPO resources
+eppo_citation("global_both")
+```
+
 TODO:
 
 * Internationalization

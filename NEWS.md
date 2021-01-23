@@ -1,5 +1,9 @@
 # pestr (development version)
 
+## New functions
+
+* `eppo_citation` returns citation of **EPPO** resources in `bibtex` format.
+
 # pestr 0.8.2
 
 ## Function updates

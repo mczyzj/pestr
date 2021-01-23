@@ -2,6 +2,7 @@
 
 export(check_eppo_token)
 export(create_eppo_token)
+export(eppo_citation)
 export(eppo_database_check)
 export(eppo_database_connect)
 export(eppo_database_download)

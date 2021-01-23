@@ -61,6 +61,23 @@ msg_helper <- function(x, ...) {
     ),
     "no_download" = paste0(
       'The file was not downloaded. Possible problem: cannot connect to server.'
-    )
+    ),
+    "cite_length" = paste0(
+      "Cite argument has lenght != 1.\n",
+      "Please choose one of 'global_database' or 'data_services' or 'both'."
+    ),
+    "cite_arg" = paste0(
+      "Argument ", ..., " is incorrect.\n",
+      "Please choose one of 'global_database' or 'data_services' or 'both'."
+      ),
+    "wrong_output" = paste0(
+      "Please use character string for name of output."
+      ),
+    "cite_output" = paste0(
+      "Citation was saved to file ", ...
+      ),
+    "cite_remember" = paste0(
+      "\n\nPlease remember to adjust citation key, ",
+      "year and urldate field if needed")
   )
 }
