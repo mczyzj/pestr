@@ -290,5 +290,5 @@ eppo_fulltable
 ```{r eval = TRUE, echo = FALSE}
 example_full_table <- readRDS("vignette_mock_full_table.RDS")
 example_full_table %>%
-  knitr::kable()
+  knitr::kable(caption = "Full table with names, hosts, distribution, taxonomy and categorizatio of pests")
 ```
