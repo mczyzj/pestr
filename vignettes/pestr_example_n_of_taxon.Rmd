@@ -90,7 +90,7 @@ str(abies_alba_pests)
 
 The *long_table* element contains what we actually need for our analyses: *pest_eppocode* and *labelclass* columns. Lets start with latter.
 
-## Step 3 -- number of pests type
+## Step III -- number of pests type
 
 Pest types are stored in *labelclass* column. We will use few very basic `R` and `dplyr` package commands to check numbers we are interested in.
 
@@ -110,7 +110,7 @@ abies_alba_pests$long_table %>%
            col = "#AF0011", ylim = c(0, 30))
 ```
 
-## Step 4 -- Number of taxons
+## Step IV -- Number of taxons
 
 Obtaining number of pests taxons is not very complicated. Since we can use `eppocodes` directly, we can pass whole column to `eppo_tabletools_taxo` function, which will retrieve data on pests taxonomy.
 
