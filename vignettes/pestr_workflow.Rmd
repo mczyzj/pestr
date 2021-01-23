@@ -26,7 +26,7 @@ library('dplyr')
 <!-- logo: end -->
 
 ```{r eval = FALSE}
-# Load packages
+### Load packages
 library("pestr")
 ```
 
@@ -63,7 +63,7 @@ With this three short steps you are ready to go.
 Currently searching for pest names supports scientific names, synonyms and common names. By default search will work with partial names -- e.g. when you query for *Cydia packardi* you get information related to this species, while when you query for *Cydia* you get information on whole genus. Likewise, when you search for *Droso* you will get information on all species that contain *Droso* in their names. Moreover you can pass whole vector of terms in one shot, e.g. `c('Xylella', 'Cydia packardi', 'Droso')`.
 
 ```{r eval = FALSE}
-# Create vector of names that you are looking for
+### Create vector of names that you are looking for
 pests_query <- c('Cydia', "Triticum aestivum", "abcdef", "cadang")
 ```
 
@@ -72,13 +72,13 @@ Than you should start with querying for names and assigning your results to a va
 ```{r eval = FALSE}
 pest_names <- eppo_names_tables(pests_query, eppo_SQLite)
 names(pest_names)
-#names that exist in database
+### names that exist in database
 head(pest_example[[1]], 5)
-#names that were not found
+### names that were not found
 head(pest_example[[2]], 5)
-#preferred names for eppocodes from first table
+### preferred names for eppocodes from first table
 head(pest_example[[3]], 5)
-#all names that are associated to eppocodes from first data frame
+### all names that are associated to eppocodes from first data frame
 head(pest_example[[4]], 5)
 ```
 
@@ -132,9 +132,9 @@ As result `eppo_tabletools_cat` you will get `list` with two elements:
 
 ```{r eval = FALSE}
 pests_cat <- eppo_tabletools_cat(pest_names, eppo_token)
-#long format table
+### long format table
 head(pests_cat[[1]], 5)
-#comapct table with information for each eppocode condensed into one cell
+### comapct table with information for each eppocode condensed into one cell
 head(pests_cat[[2]],5)
 ```
 
@@ -203,7 +203,7 @@ Suppose, that from previous name query we are interested only in viroids and vir
 ```{r eval = FALSE}
 virs_eppocodes <- pest_names$all_associated_names %>%
   dplyr::filter(grepl("viroid", fullname) | grepl("virus", fullname)) %>%
-  .[,5] %>% #eppocodes are in 5th column
+  .[,5] %>% ## eppocodes are in 5th column
   unique()
 ```
 
@@ -212,7 +212,7 @@ We can now pass `virs_eppocodes` as `raw_eppocodes` argument, and in consequence
 virs_taxonomy <- eppo_tabletools_taxo(token = eppo_token,
                                       raw_eppocodes = virs_eppocodes,
                                       use_raw_codes = TRUE)
-virs_taxonomy$long_table #you can also access list elements by their names
+virs_taxonomy$long_table ## you can also access list elements by their names
 virs_taxonomy$compact_table
 ```
 
