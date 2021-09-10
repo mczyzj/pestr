@@ -1,5 +1,5 @@
 ---
-title: "Create tables for EPPO Pest Risk Analysis"
+title: "Create tables for EPPO Pest Risk Assessment"
 output:
   rmarkdown::html_vignette:
     css: alert_style.css
