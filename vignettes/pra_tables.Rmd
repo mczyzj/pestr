@@ -1,0 +1,112 @@
+---
+title: "Create tables for EPPO Pest Risk Analysis"
+output:
+  rmarkdown::html_vignette:
+    css: alert_style.css
+vignette: >
+  %\VignetteIndexEntry{Create tables for EPPO Pest Risk Assessment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.show = "hold",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+<!-- logo: start -->
+
+<img src="https://raw.githubusercontent.com/mczyzj/pestr/master/inst/figures/pestr-hex_center.png" width="250px" align="right" alt="pestr package hexsticker" style="border: 0px"/>
+
+<!-- logo: end -->
+
+```{r setup}
+### Load packages
+library("pestr")
+library("dplyr")
+```
+
+# Overview
+
+**EPPO** *Express Pest Risk Analysis* -- [PM5/5(1) Additional guidance](https://www.eppo.int/RESOURCES/eppo_standards/pm5_pra) -- requires information that can be easily obtained using `pestr` package functions. Particularly the information needed for *Stage 2. Pest Risk Assessment*:
+
+* **1. Taxonomy** -- `eppo_tabletools_taxo`, `eppo_names_tables`
+* **2. Pest overview** -- `eppo_tabletools_hosts`
+* **5. Regulatory status of the pest** -- `eppo_tabletools_cat`
+* **6. Distribution -- `eppo_tabletools_distri`**
+* **7. Host plants / habitats and their distribution in the PRA area**  -- `eppo_tabletools_hosts`
+
+For the purpose of this vignette, lets assume that you are working on well known pest -- *Anoplophora chinensis*. This beetle is know for it's voracious larvae which bore into the wood of living trees. More detailed info can be found at [EPPO Datasheet: Anoplophora chinensis](https://gd.eppo.int/taxon/ANOLCN/datasheet).
+
+<div class="alert alert-warning">
+
+**Please** bear in mind that the workflow presented in this vignette can be also adjusted to other *Pest Risk Analyses / Assessments* of other authorities with some basic knowledge on `R` tools like `dplyr`, `tidyr` or `stringr`. 
+
+</div>
+
+Prior to downloading data, please ensure that you set up variables.
+
+```{r eval = FALSE, echo = TRUE}
+### assign token to variable
+eppo_token <- create_eppo_token("<<your eppo token>>")
+### assign name to variable
+ac_name <- "Anoplophora chinensis"
+### assign eppocode to variable
+ac_eppocode <- "ANOLCN" 
+### assign database connection to variable
+eppoDB <- eppo_database_connect()
+```
+
+## Taxonomy and names of pest
+
+```{r eval = FALSE, echo = TRUE}
+ac_names_table <- eppo_names_tables(ac_name, eppo_DB)
+
+ac_other_names <- eppo_tabletools_names(ac_names_table) %>%
+  .[2] %>%
+  dplyr::select(Other_names) %>%
+  unlist()
+
+ac_taxonomy <- eppo_tabletools_taxo(
+  token = eppo_token,
+  raw_eppocodes = ac_eppocode,
+  use_raw_codes = TRUE
+  )
+```
+
+## Host of pest -- as text or as table
+
+```{r eval = FALSE, echo = TRUE}
+ac_hosts <- eppo_tabletools_hosts(
+  token = eppo_token,
+  raw_eppocodes = ac_eppocode,
+  use_raw_codes = TRUE
+  )
+```
+
+## Categorization table
+
+```{r eval = FALSE, echo = TRUE}
+ac_categorization <- eppo_tabletools_cat(
+  token = eppo_token,
+  raw_eppocodes = ac_eppocode,
+  use_raw_codes = TRUE
+  )
+```
+
+## Distribution of pest
+
+```{r eval = FALSE, echo = TRUE}
+ac_distribution <- eppo_tabletools_distri(
+  token = eppo_token,
+  raw_eppocodes = ac_eppocode,
+  use_raw_codes = TRUE
+  )
+```
