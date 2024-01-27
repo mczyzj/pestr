@@ -68,7 +68,7 @@ test_that("Test that hosts f checks if parsed arguments are of proper class", {
   tester_host_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, hosts, token) readRDS("mocked_hosts_xylella.RDS"),
-      eppo_tabletools_hosts(testing_names, eppo_token)
+      {eppo_tabletools_hosts(testing_names, eppo_token)}
     )
   }
 
@@ -108,7 +108,7 @@ test_that("Test that hosts f works correctly", {
   tester_host_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, hosts, token) readRDS("mocked_hosts.RDS"),
-      eppo_tabletools_hosts(testing_names, eppo_token)
+      {eppo_tabletools_hosts(testing_names, eppo_token)}
     )
   }
 
@@ -154,7 +154,7 @@ test_that("Test that categorization f returns correct structure
   tester_cat_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_cat_xylella.RDS"),
-      eppo_tabletools_cat(testing_names, eppo_token)
+      {eppo_tabletools_cat(testing_names, eppo_token)}
     )
   }
 
@@ -195,7 +195,7 @@ test_that("Test that cat f works correctly", {
   tester_cat_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_cat.RDS"),
-      eppo_tabletools_cat(testing_names, eppo_token)
+      {eppo_tabletools_cat(testing_names, eppo_token)}
     )
   }
 
@@ -254,7 +254,7 @@ test_that("Test that taxonomy f returns correct structure
   tester_taxo_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_taxo.RDS"),
-      eppo_tabletools_taxo(testing_names, eppo_token)
+      {eppo_tabletools_taxo(testing_names, eppo_token)}
     )
   }
 
@@ -288,7 +288,7 @@ test_that("Test that taxonomy f works correctly", {
   tester_taxo_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, categorization, token) readRDS("mocked_taxo.RDS"),
-      eppo_tabletools_taxo(testing_names, eppo_token)
+      {eppo_tabletools_taxo(testing_names, eppo_token)}
     )
   }
 
@@ -316,7 +316,7 @@ test_that("Test that distribution f returns correct structure
   tester_distri_func <- function() {
     mockr::with_mock(
       eppo_csv_download = function(eppocodes) readRDS("mocked_distri.RDS"),
-      eppo_tabletools_distri(testing_names)
+      {eppo_tabletools_distri(testing_names)}
     )
   }
 
@@ -342,7 +342,7 @@ test_that("Test that distribution f returns correct values
   tester_distri_func <- function() {
     mockr::with_mock(
       eppo_csv_download = function(eppocodes) readRDS("mocked_distri.RDS"),
-      eppo_tabletools_distri(testing_names)
+      {eppo_tabletools_distri(testing_names)}
     )
   }
 
@@ -395,7 +395,7 @@ test_that("Test that pests f returns correct structure
   tester_pest_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, pests, token) readRDS("mocked_pests.RDS"),
-      eppo_tabletools_pests(testing_names, eppo_token)
+      {eppo_tabletools_pests(testing_names, eppo_token)}
     )
   }
 
@@ -414,7 +414,7 @@ test_that("Test that pest f works correctly", {
   tester_pest_func <- function() {
     mockr::with_mock(
       eppo_rest_download = function(eppocodes, pests, token) readRDS("mocked_pests.RDS"),
-      eppo_tabletools_pests(testing_names, eppo_token)
+      {eppo_tabletools_pests(testing_names, eppo_token)}
     )
   }
 
