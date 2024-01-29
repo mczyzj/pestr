@@ -109,23 +109,33 @@ eppo_csv_download <- function(eppocodes) {
   # download csv files directly into list
   for (i in 1:length(distri_lists)) {
     distri_lists[[i]] <- eppo_try_urls(distri_urls[i]) %>%
-      httr::content(type = "text/csv",
-                    encoding = "UTF-8",
-                    col_types = readr::cols()) %>%
-      as.data.frame()
+      {suppressMessages(
+         httr::content(
+           ., type = "text/csv", encoding = "UTF-8", col_types = readr::cols()
+         ))} %>%
+         as.data.frame()
   }
+
   #If the eppo code was not recognized the file will be empty, with no correct
   #column names. Delete by substituting those wrong elements of the list
   #with NULL and print the wrong codes.
   for (i in names(distri_lists)) {
-    if (!all(names(distri_lists[[i]]) %in%
-             c("continent", "country", "state",
-               "country code", "state code", "Status"))) {
+    if (!all(
+      c(
+        "continent", "country", "state", "country code", "state code", "Status"
+      ) %in%
+      names(distri_lists[[i]]))
+      ) {
       message(msg_helper("no_distri", i))
       distri_lists[[i]] <- NULL
     } else {
-      colnames(distri_lists[[i]]) <- c("continent", "country", "state",
-                                       "country.code", "state.code", "Status")
+      distri_lists[[i]] <- select(
+        distri_lists[[i]],
+        "continent", "country", "state",
+        "country.code" = "country code", "state.code" = "state code", "Status"
+      )
+  #    colnames(distri_lists[[i]]) <- c("continent", "country", "state",
+   #                                    "country.code", "state.code", "Status")
     }
   }
   return(distri_lists)
