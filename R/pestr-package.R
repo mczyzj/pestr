@@ -10,5 +10,7 @@
 #' @importFrom stats setNames
 #' @docType package
 #' @name pestr
+#' @keywords internal
+"_PACKAGE"
 NULL
 utils::globalVariables(c("."))
