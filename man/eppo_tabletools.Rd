@@ -65,7 +65,7 @@ names. The second data frame contains coerced synonyms and other names to
 single cell for each preferred name.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 \code{eppo_tabletools_names} creates tables with names -- preferred, common
 and synonyms -- of pests. It is particularly useful for creating whole table
 with {\link{eppo_table_full}}, otherwise it might be more informative to use

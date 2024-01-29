@@ -14,7 +14,7 @@ Token to access EPPO Data Services API in format recognized by
 \code{eppo_tabletools_*} functions.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 \code{create_eppo_token} makes token thats should be saved in a variable and
 used argument for \code{\link{eppo_tabletools_hosts}},
 \code{\link{eppo_tabletools_pests}}, \code{\link{eppo_tabletools_cat}} and

@@ -23,7 +23,7 @@ Wraps results of function from \code{eppo_tabletools}, namely:
 {\link{eppo_tabletools_distri}} into one compact, human readable table.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 \code{eppo_table_full} creates table in human friendly format with data on
 pest preferred name, synonyms and common names, hosts, categorization,
 taxonomy and its distribution.

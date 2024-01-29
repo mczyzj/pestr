@@ -13,7 +13,7 @@ check_eppo_token(token)
 Silent NULL when there is no error, otherwise message.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 \code{check_eppo_token} should be used after \code{create_eppo_token}
 to check if the token is correctly recognized by EPPO Data Services API.
 As a reference it uses link to \emph{Xylella fastidiosa} hosts database -

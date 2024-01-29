@@ -20,7 +20,7 @@ names. Last data frame contains also column with preferred (binary),
 codelang (two letter character with language code), and EPPOcode.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 \code{eppo_names_table} checks if string (names or parts of the names)
 provided by user match any name in the EPPO database. If strings match any
 name in database, data frame with all names matching codeid, as well as

@@ -25,7 +25,7 @@ Checks if database file exist in directory, if it is outdated, and
 establishes SQLite database connection
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 and informs user if it is outdated and should be downloaded.
 \code{eppo_database_download} downloads database in \emph{SQLite} format directly.
