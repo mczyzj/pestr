@@ -59,8 +59,10 @@ eppo_database_check <- function(filepath = getwd(),
 #' @rdname eppo_database
 #' @export
 eppo_database_download <- function(filepath = getwd()) {
-  zipfile <- paste(filepath, 'eppocodes.zip',
-                    sep = ifelse(.Platform$OS.type == 'windows', "\\", "/"))
+  zipfile <- paste(
+    filepath, 'eppocodes.zip',
+    sep = ifelse(.Platform$OS.type == 'windows', "\\", "/")
+  )
   link <- 'https://data.eppo.int/files/sqlite.zip'
   ### Try to download zipfile, if somethings wrong fail gracefully
   #eppo_database_helper(zipfile = zipfile, link = link)
@@ -100,9 +102,10 @@ eppo_database_download <- function(filepath = getwd()) {
 #' @export
 eppo_database_connect <- function(filepath = getwd(),
                                   filename = 'eppocodes.sqlite') {
-  dbfile <- utils::capture.output(cat(filepath, filename,
-                                  sep = ifelse(.Platform$OS.type == 'windows',
-                                            "\\", "/")))
+  dbfile <- utils::capture.output(cat(
+      filepath, filename,
+      sep = ifelse(.Platform$OS.type == 'windows', "\\", "/")
+  ))
   if (file.exists(dbfile)) {
     message(msg_helper("db_connection"))
     return(RSQLite::dbConnect(RSQLite::SQLite(), dbname = dbfile))
@@ -154,42 +157,46 @@ eppo_names_tables <- function(names_vector, sqlConnection = NULL) {
   }
   #extract entries from SQLite db that match names in names_vector
   names_in_DB <- sqlConnection %>%
-    DBI::dbGetQuery(paste0(
-    'SELECT codeid, fullname FROM t_names WHERE fullname LIKE ',
-    paste(paste0("'%", names_vector, "%'"),
-          collapse = " OR fullname LIKE "))
-    )
+    DBI::dbGetQuery(
+      paste0(
+        'SELECT codeid, fullname FROM t_names WHERE fullname LIKE ',
+        paste(paste0("'%", names_vector, "%'"), collapse = " OR fullname LIKE ")
+    ))
   #intermediet list that checks if element of names_vector
   #match element in SQLite db
   test_list <- lapply(names_vector, grep, names_in_DB$fullname)
   #extracts EPPO codes for unique codeid, that will be used in next
   #step to match names from db to unique eppocode
   EPPOcodes <- sqlConnection %>%
-    DBI::dbGetQuery(paste0(
-    'SELECT codeid, eppocode FROM t_codes WHERE codeid IN (',
-    paste0(unique(names_in_DB$codeid), collapse = ', '), ')')
-    )
+    DBI::dbGetQuery(
+      paste0(
+        'SELECT codeid, eppocode FROM t_codes WHERE codeid IN (',
+         paste0(unique(names_in_DB$codeid), collapse = ', '), ')')
+      )
   #creates data frame with all names that match codeid from names_in_DB
   all_names <- sqlConnection %>%
-    DBI::dbGetQuery(paste0(
-    'SELECT codeid, fullname, preferred, codelang, status
-    FROM t_names WHERE codeid IN (',
-    paste(unique(names_in_DB$codeid),
-          collapse = ', '), ')')
+    DBI::dbGetQuery(
+      paste0(
+        'SELECT codeid, fullname, preferred, codelang, status
+         FROM t_names WHERE codeid IN (',
+         paste(unique(names_in_DB$codeid), collapse = ', '), ')'
+      )
     ) %>%
     dplyr::filter(.data$status == 'A')
 
-  return(list(exist_in_DB = data.frame(names_in_DB),
-              not_in_DB = names_vector[test_list %>% sapply(length) == 0],
-              pref_names = data.frame(
-                all_names %>%
-                  dplyr::filter(.data$preferred == 1) %>%
-                  dplyr::select(.data$codeid, .data$fullname) %>%
-                  dplyr::left_join(EPPOcodes, by = 'codeid')
-                ),
-              all_associated_names  = data.frame(
-                all_names %>%
-                  dplyr::select(-.data$status) %>%
-                  dplyr::left_join(EPPOcodes, by = 'codeid')))
-         )
+  return(list(
+    exist_in_DB = data.frame(names_in_DB),
+    not_in_DB = names_vector[test_list %>% sapply(length) == 0],
+    pref_names = data.frame(
+      all_names %>%
+        dplyr::filter(.data$preferred == 1) %>%
+        dplyr::select("codeid", "fullname") %>%
+        dplyr::left_join(EPPOcodes, by = 'codeid')
+      ),
+      all_associated_names  = data.frame(
+        all_names %>%
+          dplyr::select(-"status") %>%
+          dplyr::left_join(EPPOcodes, by = 'codeid')
+      )
+  ))
 }

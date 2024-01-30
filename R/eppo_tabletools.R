@@ -82,23 +82,28 @@ eppo_tabletools_names <- function(names_tables) {
   #intermediate table holding non preffered names with corrected headings
   other_table <- names_tables$all_associated_names %>%
     dplyr::filter(.data$preferred == 0) %>%
-    dplyr::select(.data$codeid, Other_names = .data$fullname, .data$codelang)
+    dplyr::select("codeid", "Other_names" = "fullname", "codelang")
   #long format table containing collumns for preffered names and accompanying
   #other names, also intermediate table that is a basis for a compact table
   preferred_table <- names_tables$all_associated_names %>%
     dplyr::filter(.data$preferred == 1) %>%
-    dplyr::select(.data$codeid, .data$eppocode,
-                  Preferred_name = .data$fullname) %>%
+    dplyr::select("codeid", "eppocode", "Preferred_name" = "fullname") %>%
     dplyr::left_join(other_table, by = 'codeid') %>%
-    dplyr::mutate(Name_type = ifelse(.data$codelang == 'la',
-                                     'Synonym', 'Other languages')) %>%
-    dplyr::mutate(dplyr::across(c(.data$Other_names, .data$codelang),
-                                ~ ifelse(is.na(.x), "none", (.x)))) %>%
-    dplyr::mutate(Name_type = ifelse(is.na(.data$Name_type),
-                                     "Preferred", .data$Name_type)) %>%
-    dplyr::arrange(.data$Preferred_name,
-                   dplyr::desc(.data$Name_type),
-                   .data$Other_names)
+    dplyr::mutate(
+      Name_type = ifelse(.data$codelang == 'la', 'Synonym', 'Other languages')
+    ) %>%
+    dplyr::mutate(
+      dplyr::across(
+        c(.data$Other_names, .data$codelang),
+        ~ ifelse(is.na(.x), "none", (.x))
+      )
+    ) %>%
+    dplyr::mutate(
+      Name_type = ifelse(is.na(.data$Name_type), "Preferred", .data$Name_type)
+    ) %>%
+    dplyr::arrange(
+      .data$Preferred_name, dplyr::desc(.data$Name_type), .data$Other_names
+    )
 
   # if the preffered table has no rows, terminate and return
   # list with 0-row preffered data frame and 0-row compact data frame
@@ -118,8 +123,7 @@ eppo_tabletools_names <- function(names_tables) {
   #names will be collapsed to one cell per preffered name
   temp_table <- preferred_table %>%
     dplyr::select(
-      .data$codeid, .data$eppocode,
-      .data$Preferred_name, .data$Other_names, .data$Name_type
+      "codeid", "eppocode", "Preferred_name", "Other_names", "Name_type"
       ) %>%
     tidyr::nest(data = c(.data$Name_type, .data$Other_names))
 
@@ -134,21 +138,20 @@ eppo_tabletools_names <- function(names_tables) {
       dplyr::mutate(temp_names = paste(.data$Name_type, .data$temp_names,
                                        sep = ': ')) %>%
       dplyr::ungroup() %>%
-      dplyr::select(.data$temp_names) %>%
-      dplyr::mutate(alt_names = paste(
-        .data$temp_names[1], .data$temp_names[2], sep = '; '),
+      dplyr::select("temp_names") %>%
+      dplyr::mutate(
+        alt_names = paste(.data$temp_names[1], .data$temp_names[2], sep = '; '),
         .keep = "none"
-        ) %>%
+      ) %>%
       dplyr::distinct() %>%
       gsub('; NA', '', .)
   }
 
   compact_table <- temp_table %>%
     dplyr::mutate(data = temp_Index) %>%
-    dplyr::rename(Other_names = .data$data)
+    dplyr::rename("Other_names" = "data")
 
-  return(list(long_table = preferred_table,
-              compact_table = compact_table))
+  return(list(long_table = preferred_table, compact_table = compact_table))
 }
 
 #' @rdname eppo_tabletools
@@ -198,25 +201,24 @@ eppo_tabletools_hosts <- function(names_tables = NULL,
     hosts_table <- lapply(hosts_download,
                           function(x) dplyr::bind_rows(x)) %>%
       dplyr::bind_rows(.id = 'pest_code') %>%
-      dplyr::rename(host_eppocode = .data$eppocode,
-                    eppocode      = .data$pest_code)
+      dplyr::rename(
+        "host_eppocode" = "eppocode", "eppocode" = "pest_code")
   #take long table and collapse all the host names into one string,
   #separated with names of host categories (major, minor, incidental etc.)
     compact_table <- hosts_table %>%
-      dplyr::select(.data$eppocode, .data$labelclass, .data$full_name) %>%
+      dplyr::select("eppocode", "labelclass", "full_name") %>%
       dplyr::group_by(.data$eppocode, .data$labelclass) %>%
       dplyr::mutate(hosts = paste0(.data$labelclass, ': ',
                                    paste(.data$full_name, collapse = ', '))) %>%
       dplyr::ungroup() %>%
-      dplyr::select(.data$eppocode, .data$hosts) %>%
+      dplyr::select("eppocode", "hosts") %>%
       dplyr::distinct() %>%
       dplyr::group_by(.data$eppocode) %>%
       dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
       dplyr::distinct() %>%
       dplyr::ungroup()
 
-    return(list(long_table = hosts_table,
-                compact_table = compact_table))
+    return(list(long_table = hosts_table, compact_table = compact_table))
   }
 }
 
@@ -285,7 +287,7 @@ eppo_tabletools_cat <- function(names_tables = NULL,
                                               .data$yr_del, '/',
                                               .data$yr_trans)) %>%
         tidyr::unnest(cols = .data$data) %>%
-        dplyr::select(.data$nomcontinent, .data$categorization) %>%
+        dplyr::select("nomcontinent", "categorization") %>%
         dplyr::group_by(.data$nomcontinent) %>%
         dplyr::mutate(categorization = paste(.data$categorization,
                                              collapse = '; ')) %>%
@@ -429,25 +431,26 @@ eppo_tabletools_distri <- function(names_tables = NULL,
   #one string per eppocode
   compact_table <- long_table %>%
     dplyr::filter(!grepl("Absent", .data$Status)) %>%
-    dplyr::select(.data$eppocode, .data$continent, .data$country) %>%
+    dplyr::select("eppocode", "continent", "country") %>%
     dplyr::group_by(.data$eppocode, .data$continent) %>%
     dplyr::distinct() %>%
-    dplyr::mutate(distribution = paste(.data$country,
-                                       collapse = ', ')) %>%
-    dplyr::mutate(distribution = paste(.data$continent,
-                                      .data$distribution,
-                                      sep = ': ')) %>%
+    dplyr::mutate(
+      distribution = paste(.data$country, collapse = ', ')
+    ) %>%
+    dplyr::mutate(
+      distribution = paste(.data$continent, .data$distribution, sep = ': ')
+    ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(.data$eppocode, .data$distribution) %>%
+    dplyr::select("eppocode", "distribution") %>%
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
-    dplyr::mutate(distribution = paste(.data$distribution,
-                                       collapse = '; ')) %>%
+    dplyr::mutate(
+      distribution = paste(.data$distribution, collapse = '; ')
+    ) %>%
     dplyr::distinct() %>%
     dplyr::ungroup()
 
-  return(list(long_table = long_table,
-              compact_table = compact_table))
+  return(list(long_table = long_table, compact_table = compact_table))
 }
 
 
@@ -498,24 +501,24 @@ eppo_tabletools_pests <- function(names_tables = NULL,
     pests_table <- lapply(pests_download,
                           function(x) dplyr::bind_rows(x)) %>%
       dplyr::bind_rows(.id = 'host_code') %>%
-      dplyr::rename(pests_eppocode = .data$eppocode,
-                    eppocode = .data$host_code)
+      dplyr::rename(
+        "pests_eppocode" = "eppocode", "eppocode" = "host_code"
+      )
   #take long table and colapse all the host names into one string,
   #separeted with names of host categories (major, minor, incidental etc.)
     compact_table <- pests_table %>%
       dplyr::group_by(.data$eppocode, .data$labelclass) %>%
-      dplyr::select(.data$eppocode, .data$labelclass, .data$fullname) %>%
+      dplyr::select("eppocode", "labelclass", "fullname") %>%
       dplyr::mutate(pests = paste(.data$fullname,
                                   collapse = ', ')) %>%
       dplyr::mutate(pests = paste0(.data$labelclass, ': ', .data$pests)) %>%
       dplyr::ungroup() %>%
-      dplyr::select(.data$eppocode, .data$pests) %>%
+      dplyr::select("eppocode", "pests") %>%
       dplyr::distinct() %>%
       dplyr::group_by(.data$eppocode) %>%
       dplyr::mutate(pests = paste(.data$pests, collapse = '; ')) %>%
       dplyr::distinct()
 
-    return(list(long_table = pests_table,
-                compact_table = compact_table))
+    return(list(long_table = pests_table, compact_table = compact_table))
   }
 }

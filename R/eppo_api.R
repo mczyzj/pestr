@@ -64,8 +64,10 @@ eppo_try_urls <- function(urls) {
 #' @noRd
 
 eppo_rest_download <- function(eppocodes, type, token) {
-  urls <-paste0('https://data.eppo.int/api/rest/1.0/taxon/',
-                      eppocodes, paste0("/", type), token)
+  urls <-paste0(
+    'https://data.eppo.int/api/rest/1.0/taxon/', eppocodes,
+    paste0("/", type), token
+  )
   lapply(urls, eppo_json_wrapper)
 }
 
@@ -101,8 +103,9 @@ eppo_json_wrapper <- function(urls) {
 #' @noRd
 
 eppo_csv_download <- function(eppocodes) {
-  distri_urls <- paste0('https://gd.eppo.int/taxon/',
-                        eppocodes,'/download/distribution_csv')
+  distri_urls <- paste0(
+    'https://gd.eppo.int/taxon/', eppocodes,'/download/distribution_csv'
+  )
 
   distri_lists <- stats::setNames(vector("list", length(eppocodes)), eppocodes)
 
@@ -119,6 +122,10 @@ eppo_csv_download <- function(eppocodes) {
   #If the eppo code was not recognized the file will be empty, with no correct
   #column names. Delete by substituting those wrong elements of the list
   #with NULL and print the wrong codes.
+  cols_to_select <- c(
+    "continent", "country", "state", "country code", "state code", "Status"
+  )
+
   for (i in names(distri_lists)) {
     if (!all(
       c(
@@ -129,13 +136,12 @@ eppo_csv_download <- function(eppocodes) {
       message(msg_helper("no_distri", i))
       distri_lists[[i]] <- NULL
     } else {
-      distri_lists[[i]] <- select(
-        distri_lists[[i]],
-        "continent", "country", "state",
-        "country.code" = "country code", "state.code" = "state code", "Status"
-      )
-  #    colnames(distri_lists[[i]]) <- c("continent", "country", "state",
-   #                                    "country.code", "state.code", "Status")
+      distri_lists[[i]] <- dplyr::select(
+        distri_lists[[i]],tidyselect::all_of(cols_to_select)
+      ) %>%
+        dplyr::rename(
+          "country.code" = "country code", "state.code" = "state code"
+        )
     }
   }
   return(distri_lists)

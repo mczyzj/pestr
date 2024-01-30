@@ -26,8 +26,9 @@ create_eppo_token <- function(x) {
     return(invisible(NULL))
   } else {
     character_token <- as.character(paste0('?authtoken=', character_token))
-    eppo_token <- structure(character_token,
-                             class = c('pestr_token', 'character'))
+    eppo_token <- structure(
+      character_token, class = c('pestr_token', 'character')
+    )
     return(eppo_token)
   }
 }
