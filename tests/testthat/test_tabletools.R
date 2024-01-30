@@ -277,13 +277,16 @@ test_that("Test that taxonomy f works correctly", {
   testing_taxo <- readRDS("mocked_taxo.RDS")
   names(testing_taxo) <- eppocodes
 
-  test_taxon_names <- data.frame(eppocode = c("HETDPA", "LASPPA", "PHIACI",
-                                              "PLADBR", "ABIAL", "CCCVD0",
-                                              "ERWIST", "PNTOIN"),
-                                 taxonomy = c("Nematoda", "Arthropoda", "Fungi",
-                                              "Protista", "Plantae", "Riboviria",
-                                              "Bacteria", "Bacteria"),
-                                 stringsAsFactors = FALSE)
+  test_taxon_names <- data.frame(
+    eppocode = c(
+      "HETDPA", "LASPPA", "PHIACI", "PLADBR", "ABIAL", "CCCVD0", "ERWIST",
+      "PNTOIN", "PNTOST"
+      ),
+    taxonomy = c(
+      "Nematoda", "Arthropoda", "Fungi", "Protista", "Plantae", "Viroids",
+      "Bacteria", "Bacteria", "Bacteria"
+    ), stringsAsFactors = FALSE
+  )
 
   tester_taxo_func <- function() {
     mockr::with_mock(
