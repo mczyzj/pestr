@@ -139,10 +139,8 @@ eppo_csv_download <- function(eppocodes) {
       distri_lists[[i]] <- dplyr::select(
         distri_lists[[i]], where(~ !(all(is.na(.)) | all(. == "")))
       ) %>%
-        dplyr::select(-"Status") %>%
-      #dplyr::select(distri_lists[[i]],tidyselect::all_of(cols_to_select))
-        dplyr::rename(
-          "country.code" = "country code", "state.code" = "state code", "Status" = "...6"
+        stats::setNames(
+          c("continent", "country", "state", "country code", "state code", "Status")
         )
     }
   }
