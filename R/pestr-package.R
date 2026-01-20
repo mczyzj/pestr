@@ -8,7 +8,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @importFrom stats setNames
-#' @docType package
+#' @importFrom tidyselect where
 #' @name pestr
 #' @keywords internal
 "_PACKAGE"
