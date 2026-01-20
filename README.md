@@ -5,16 +5,14 @@
 
 <!-- badges: start -->
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/pestr)](https://cran.r-project.org/package=pestr)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/pestr)](https://cran.r-project.org/package=pestr)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/pestr?color=yellowgreen)](https://cran.r-project.org/package=pestr)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build
-Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
-[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
+[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mczyzj/pestr?branch=master)
 <!-- badges: end -->
 
 Functions included in this package allows users to painlessly connect to
@@ -42,15 +40,17 @@ devtools::install_github("mczyzj/pestr")
 
 ## Overview and Usage
 
-Package include functions that allow you to download *SQLite* database
-`eppo_database_download` (archive around 12 MB, after extraction around
-45 MB). The database is needed for extracting eppocodes that are used in
-other functions from this package. Function included in
-`eppo_tabletools_` family return both:
+Due to recent changes in **EPPO Data Services** functions that allow you
+to download *SQLite* database are no longer available. RSQLite Database
+needs to be downloaded manaully from [EPPO Data
+Services](https://data.eppo.int) and extracted to working directory. The
+database is needed for extracting eppocodes that are used in other
+functions from this package. Function included in `eppo_tabletools_`
+family return both:
 
--   table of raw results in so called *long format* (machine friendly)
--   processed, compact table, that contain all information in one row
-    per one pest.
+- table of raw results in so called *long format* (machine friendly)
+- processed, compact table, that contain all information in one row per
+  one pest.
 
 Before using functions that connect to REST API (hosts, categorization,
 taxonomy and pests) you should execute `create_eppo_token` function with
@@ -75,25 +75,8 @@ Data Services**.
 eppo_token <- pestr::create_eppo_token('<<your token>>')
 ```
 
-Than:
-
--   on **LINUX**: use function to automatically download and unizp
-    *SQLite* db from **EPPO**
-
-``` r
-#download SQLite databaase
-pestr::eppo_database_download()
-```
-
--   on **Windows**: download *SQLite* db using:
-
-``` r
-#by default it downloads to working directory
-#you can override this behaviour filepath argument
-pestr::eppo_database_download()
-```
-
-and extract the file manually to project working directory.
+Download and extract the RSQLite file manually to project working
+directory.
 
 Put all the names that you are looking for into a vector, e.g.:
 
@@ -122,12 +105,12 @@ pests_names_tables <- pestr::eppo_names_tables(pests, eppo_SQLite)
 
 in result you will have list containing 4 tables:
 
--   `data frame` with names that are present in **EPPO Data Services**;
--   `data frame` with names that are not present **EPPO Data Services**;
--   `data frame` with preferred names and eppo codes **EPPO Data
-    Services**;
--   `data frame` with all associated names to eppocode from third
-    `data frame`.
+- `data frame` with names that are present in **EPPO Data Services**;
+- `data frame` with names that are not present **EPPO Data Services**;
+- `data frame` with preferred names and eppo codes **EPPO Data
+  Services**;
+- `data frame` with all associated names to eppocode from third
+  `data frame`.
 
 You might parse results of this function directly to `eppo_tabletools_`
 to obtain data. Other way is to use *raw* eppocodes as argument (*this
@@ -144,10 +127,10 @@ pests_cat <- pestr::eppo_tabletools_cat(pests_names_tables, eppo_token)
 
 you will get as result you will get list with two elements:
 
--   `data frame` with categorization tables for each eppocode in long
-    format;
--   a single `data frame` with categorization for each eppocode
-    condensed into a single cell.
+- `data frame` with categorization tables for each eppocode in long
+  format;
+- a single `data frame` with categorization for each eppocode condensed
+  into a single cell.
 
 ### Hosts of pests
 
@@ -158,9 +141,9 @@ pests_hosts <- pestr::eppo_tabletools_hosts(pests_names_tables, eppo_token)
 
 result with two tables:
 
--   first is a `data frame` in long format with all data for all pests;
--   second is a `data frame` where hosts are combined into single cell
-    for each eppocode.
+- first is a `data frame` in long format with all data for all pests;
+- second is a `data frame` where hosts are combined into single cell for
+  each eppocode.
 
 ### Taxonomy of Pests and hosts
 
@@ -173,8 +156,8 @@ pests_taxo <- pestr::eppo_tabletools_taxo(pests_names_tables, eppo_token)
 
 This function results are a list of two `data frames`:
 
--   first is a long format table;
--   second is table with ‘main category’ of each eppocode.
+- first is a long format table;
+- second is table with ‘main category’ of each eppocode.
 
 ### Distribution of pests
 
@@ -188,8 +171,8 @@ pest_distri <- pestr::eppo_tabletools_distri(pests_names_tables)
 
 The result is a two element list:
 
--   first one contains `data frame` of distribution in long format;
--   second contains single cell of distribution for each eppocode.
+- first one contains `data frame` of distribution in long format;
+- second contains single cell of distribution for each eppocode.
 
 ### Names, categorization, distribution, taxonomy and hosts of pests in one shot
 
@@ -242,5 +225,5 @@ pestr::eppo_citation("global_both")
 
 ## TODO:
 
--   Internationalization
--   Connection to pestrPRA
+- Internationalization
+- Connection to pestrPRA

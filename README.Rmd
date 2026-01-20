@@ -18,11 +18,10 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/pestr)](https://cran.r-project.org/package=pestr)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/pestr?color=yellowgreen)](https://cran.r-project.org/package=pestr)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/mczyzj/pestr.svg?branch=master)](https://travis-ci.com/mczyzj/pestr)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
-[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://codecov.io/gh/mczyzj/pestr)
+[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mczyzj/pestr?branch=master)
   <!-- badges: end -->
 
 Functions included in this package allows users to painlessly connect to and extract data from **EPPO Data Services** / **EPPO Global Database**. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access **REST API**.
@@ -44,7 +43,7 @@ devtools::install_github("mczyzj/pestr")
 
 ## Overview and Usage
 
-Package include functions that allow you to download *SQLite* database `eppo_database_download` (archive around 12 MB, after extraction around 45 MB). The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools_` family return both:
+Due to recent changes in **EPPO Data Services** functions that allow you to download *SQLite* database are no longer available. RSQLite Database needs to be downloaded manaully from [EPPO Data Services](https://data.eppo.int) and extracted to working directory. The database is needed for extracting eppocodes that are used in other functions from this package. Function included in `eppo_tabletools_` family return both:
 
 * table of raw results in so called *long format* (machine friendly) 
 * processed, compact table, that contain all information in one row per one pest.
@@ -64,26 +63,10 @@ First you need to create token variable, use your *token* from **EPPO Data Servi
 eppo_token <- pestr::create_eppo_token('<<your token>>')
 ```
 
-Than:
-
-* on **LINUX**: use function to automatically download and unizp *SQLite* db from **EPPO**
-
-```{r echo = TRUE, eval = FALSE}
-#download SQLite databaase
-pestr::eppo_database_download()
-```
-
-* on **Windows**: download *SQLite* db using:
-
-```{r echo = TRUE, eval = FALSE}
-#by default it downloads to working directory
-#you can override this behaviour filepath argument
-pestr::eppo_database_download()
-```
-
-and extract the file manually to project working directory.
+Download and extract the RSQLite file manually to project working directory.
 
 Put all the names that you are looking for into a vector, e.g.:
+
 ```{r echo = TRUE, eval = FALSE}
 #use some pests names and store them in a variable
 pests <- c('Xylella', 'Cydia packardi', 'Drosophila suzuki')
