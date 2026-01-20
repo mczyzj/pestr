@@ -28,10 +28,7 @@ establishes SQLite database connection
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 \code{eppo_database_check} checks if there is a file \emph{eppocodes.sqlite}
 and informs user if it is outdated and should be downloaded.
-\code{eppo_database_download} downloads database in \emph{SQLite} format directly.
-The downloaded file is \emph{zip} archive. On Linux this database will be
-extracted automatically. On Windows user will need to extract the file
-manually.
+\code{eppo_database_download} DEPRECATED.
 \code{eppo_database_connect} allows user to connect to SQLite database
 downloaded from EPPO Data Services.
 }
