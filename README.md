@@ -12,7 +12,6 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
-[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mczyzj/pestr?branch=master)
 <!-- badges: end -->
 
 Functions included in this package allows users to painlessly connect to

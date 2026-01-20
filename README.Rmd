@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![R-CMD-check](https://github.com/mczyzj/pestr/workflows/R-CMD-check/badge.svg)](https://github.com/mczyzj/pestr/actions)
-[![codecov](https://codecov.io/gh/mczyzj/pestr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mczyzj/pestr?branch=master)
   <!-- badges: end -->
 
 Functions included in this package allows users to painlessly connect to and extract data from **EPPO Data Services** / **EPPO Global Database**. Before you start using it you should register on: [EPPO Data Services](https://data.eppo.int/) and obtain your token to access **REST API**.
