@@ -42,7 +42,7 @@ test_that("Test that names f creates correct condensed data frame", {
     dplyr::filter(eppocode == 'LASPPA', preferred == 0) %>%
     dplyr::mutate(Other = ifelse(codelang == 'la', 'Synonym', 'Other languages')) %>%
     dplyr::arrange(desc(Other), fullname) %>%
-    dplyr::select(fullname, Other) %>%
+    dplyr::select("fullname", "Other") %>%
     dplyr::group_by(Other) %>%
     dplyr::mutate(Other_names = paste(fullname, collapse = ', ')) %>%
     dplyr::mutate(Other_names = paste(Other, Other_names, sep = ': ')) %>%
@@ -120,12 +120,12 @@ test_that("Test that hosts f works correctly", {
   ###test compact table values
 
   compact_names_test <- test_host_table %>%
-    dplyr::select(.data$eppocode, .data$labelclass, .data$full_name) %>%
+    dplyr::select("eppocode", "labelclass", "full_name") %>%
     dplyr::group_by(.data$eppocode, .data$labelclass) %>%
     dplyr::mutate(hosts = paste(.data$full_name, collapse = ', ')) %>%
     dplyr::mutate(hosts = paste0(.data$labelclass, ': ', .data$hosts)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(.data$eppocode, .data$hosts) %>%
+    dplyr::select("eppocode", "hosts") %>%
     dplyr::distinct() %>%
     dplyr::group_by(.data$eppocode) %>%
     dplyr::mutate(hosts = paste(.data$hosts, collapse = '; ')) %>%
@@ -217,7 +217,7 @@ test_that("Test that cat f works correctly", {
                                             'add/del/trans: ',
                                             yr_add, '/', yr_del, '/', yr_trans)) %>%
       tidyr::unnest(cols = .data$data) %>%
-      dplyr::select(.data$nomcontinent, .data$categorization) %>%
+      dplyr::select("nomcontinent", "categorization") %>%
       dplyr::group_by(.data$nomcontinent) %>%
       dplyr::mutate(categorization = paste(categorization, collapse = '; ')) %>%
       dplyr::distinct(categorization) %>%
