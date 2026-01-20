@@ -140,10 +140,10 @@ eppo_csv_download <- function(eppocodes) {
         distri_lists[[i]],
         "country", "state", "country code", "state code", "Status",
         where(~ !(all(is.na(.))))  #| all(. == "")
-      ) %>%
-      stats::setNames(
-        c("continent", "country", "state", "country code", "state code", "Status")
-      )
+      ) #%>%
+#      stats::setNames(
+#        c("continent", "country", "state", "country code", "state code", "Status")
+#      )
     }
   }
   return(distri_lists)
