@@ -1,3 +1,7 @@
+# pestr 0.8.4
+
+Fixed Readme files.
+
 # pestr 0.8.3
 
 ## New functions
