@@ -1,4 +1,4 @@
-# pestr (development version)
+# pestr 0.8.3
 
 ## New functions
 
@@ -12,6 +12,7 @@
 ## Misc
 
 * new hex sticker
+* update `select` syntax in functions and tests
 
 # pestr 0.8.2
 

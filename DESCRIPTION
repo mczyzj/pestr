@@ -1,6 +1,6 @@
 Package: pestr
 Title: Interface to Download Data on Pests and Hosts from 'EPPO'
-Version: 0.8.2.9000
+Version: 0.8.3
 Authors@R: person(given = "Michal Jan",
            family = "Czyz",
            role = c("aut", "cre"),
